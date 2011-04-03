@@ -17,7 +17,7 @@ public class MHPlayerListener extends PlayerListener {
     }
 
     @Override
-    public void onPlayerJoin(PlayerEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         if (homeList.homeExists(event.getPlayer().getName())) {
             homeList.orientPlayer(event.getPlayer());
         }
