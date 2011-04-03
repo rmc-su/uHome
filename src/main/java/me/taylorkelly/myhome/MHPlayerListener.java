@@ -2,7 +2,7 @@ package me.taylorkelly.myhome;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
