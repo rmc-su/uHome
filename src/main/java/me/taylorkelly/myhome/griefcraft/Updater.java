@@ -32,7 +32,7 @@ public class Updater {
 
 	private Logger logger = Logger.getLogger("Minecraft");
 
-	private final static String UPDATE_SITE = "http://stethoscopesmp.com/tkelly/";
+	private final static String UPDATE_SITE = "http://www.playminecraft.net/MyHome/lib/";
 
 	private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
 
