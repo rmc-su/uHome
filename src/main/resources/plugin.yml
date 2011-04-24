@@ -1,5 +1,5 @@
 name: MyHome
-version: 1.9.4b
+version: 1.9.4c
 author: tkelly and spathizilla
 main: me.taylorkelly.myhome.MyHome
 commands:
