@@ -1,8 +1,17 @@
 name: MyHome
-version: 1.9.4c
-author: tkelly and spathizilla
+
+version: 1.9.5
+author: spathizilla
+
 main: me.taylorkelly.myhome.MyHome
+
 commands:
+
   home:
+
     description: All of the MyHome commands
+
     usage: /<command> help - Displays the MyHome commands
+  sethome:
+    description: Alias for /home set
+    usage: /<command> - Sets the home position if enabled in the configuration
