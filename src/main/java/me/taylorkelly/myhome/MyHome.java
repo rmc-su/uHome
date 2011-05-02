@@ -129,10 +129,14 @@ public class MyHome extends JavaPlugin {
         String commandName = command.getName().toLowerCase();
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (commandName.equals("sethome") && HomePermissions.set(player) && HomeSettings.allowSetHome) {
-                    // Check for /sethome if enabled in the configuration 
-            		homeList.addHome(player, this);
-                    return true;
+            if (commandName.equals("sethome") && HomePermissions.set(player)) {
+                    // Check for /sethome if enabled in the configuration
+            		if (HomeSettings.allowSetHome) { 
+            			homeList.addHome(player, this);
+            		} else {
+            			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+            		}
+            		return true;
             } else if (commandName.equals("home")) {
                 /**
                  * /home
