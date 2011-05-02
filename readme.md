@@ -1,5 +1,8 @@
-MyHome
+MyHome - A home warp plugin for Bukkit and Minecraft 
 ===========
+
+Credits: Prior to 1.9.4, MyHome was made by Taylor Kelly (tkelly).
+A list of commands can be obtained in game with: /home help
 
 
 Compilation
