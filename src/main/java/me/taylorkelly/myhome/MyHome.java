@@ -129,8 +129,9 @@ public class MyHome extends JavaPlugin {
         String commandName = command.getName().toLowerCase();
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (commandName.equals("sethome") && HomePermissions.set(player) && HomeSettings.allowsethome) {
-                    homeList.addHome(player);
+            if (commandName.equals("sethome") && HomePermissions.set(player) && HomeSettings.allowSetHome) {
+                    // Check for /sethome if enabled in the configuration 
+            		homeList.addHome(player, this);
                     return true;
             } else if (commandName.equals("home")) {
                 /**
@@ -160,7 +161,7 @@ public class MyHome extends JavaPlugin {
                      * /home set
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("set") && HomePermissions.set(player)) {
-                    homeList.addHome(player);
+                    homeList.addHome(player, this);
                     /**
                      * /home delete
                      */

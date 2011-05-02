@@ -8,6 +8,7 @@ import java.util.List;
 
 import me.taylorkelly.myhome.timers.CoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;
+import me.taylorkelly.myhome.timers.SetHomeCoolDown;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -24,23 +25,29 @@ public class HomeList {
         homeList = WarpDataSource.getMap();
     }
 
-    public void addHome(Player player) {
-        if (homeList.containsKey(player.getName())) {
-            Home warp = homeList.get(player.getName());
-            warp.setLocation(player.getLocation());
-            WarpDataSource.moveWarp(warp);
-            player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+    public void addHome(Player player, Plugin plugin) {
+        if (!(SetHomeCoolDown.playerHasCooled(player))) {
+            player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + HomeSettings.coolDownSetHome + " secs before you can change your home.");
         } else {
-            Home warp = new Home(player);
-            homeList.put(player.getName(), warp);
-            WarpDataSource.addWarp(warp);
-            player.sendMessage(ChatColor.AQUA + "Successfully created your home");
-            if (HomePermissions.invite(player)) {
-                player.sendMessage("If you'd like to invite friends to it,");
-                player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
-            }
+        	if (homeList.containsKey(player.getName())) {
+        		Home warp = homeList.get(player.getName());
+        		warp.setLocation(player.getLocation());
+        		WarpDataSource.moveWarp(warp);
+        		player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+        		SetHomeCoolDown.addPlayer(player, plugin);
+        	} else {
+        		Home warp = new Home(player);
+        		homeList.put(player.getName(), warp);
+        		WarpDataSource.addWarp(warp);
+        		player.sendMessage(ChatColor.AQUA + "Successfully created your home");
+        		SetHomeCoolDown.addPlayer(player, plugin);
+        		if (HomePermissions.invite(player)) {
+        			player.sendMessage("If you'd like to invite friends to it,");
+        			player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
+        		}
+        	}
+        	MyHome.setCompass(player, player.getLocation());
         }
-        MyHome.setCompass(player, player.getLocation());
     }
 
     public void blindAdd(Home warp) {
