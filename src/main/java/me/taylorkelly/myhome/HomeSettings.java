@@ -14,6 +14,7 @@ public class HomeSettings {
     public static boolean warmUpNotify;
     public static boolean respawnToHome;
     public static boolean adminsObeyWarmsCools;
+    public static boolean allowsethome;
 
     public static void initialize(File dataFolder) {
         if(!dataFolder.exists()) {
@@ -29,6 +30,7 @@ public class HomeSettings {
         warmUpNotify = file.getBoolean("warmUpNotify", true, "Whether or not players will be notified after they've warmed up");
         respawnToHome = file.getBoolean("respawnToHome", true, "Whether or not players will respawn to their homes (false means to global spawn)");
         adminsObeyWarmsCools = file.getBoolean("adminsObeyWarmsCools", true, "Whether or not admins obey the WarmUp + CoolDown times (false means they don't)");
+        allowsethome = file.getBoolean("allowsethome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
         file.save();
     }
 }

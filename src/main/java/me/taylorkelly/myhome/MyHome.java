@@ -129,7 +129,10 @@ public class MyHome extends JavaPlugin {
         String commandName = command.getName().toLowerCase();
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (commandName.equals("home")) {
+            if (commandName.equals("sethome") && HomePermissions.set(player) && HomeSettings.allowsethome) {
+                    homeList.addHome(player);
+                    return true;
+            } else if (commandName.equals("home")) {
                 /**
                  * /home
                  */
