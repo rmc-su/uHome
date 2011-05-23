@@ -48,6 +48,7 @@ public class HomeList {
                         player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
                     }
                 }
+                player.sendMessage(HomeEconomy.amountToString(HomeSettings.setHomeCost) + " has been deducted from your account.");
                 MyHome.setCompass(player, player.getLocation());
             } else {
                 player.sendMessage("Setting a home requires: " + HomeSettings.setHomeCost + ". You have " + HomeEconomy.checkAccount(player.getName()));
@@ -90,6 +91,7 @@ public class HomeList {
                     //Economy Logic
                     if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE ) {
                         if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
+                            player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
                             WarmUp.addPlayer(player, warp, plugin);
                             CoolDown.addPlayer(player, plugin);
                         } else {
@@ -116,6 +118,7 @@ public class HomeList {
                 //Economy Logic
                 if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE) {
                     if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
+                        player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
                         WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
                         CoolDown.addPlayer(player, plugin);
                     } else {

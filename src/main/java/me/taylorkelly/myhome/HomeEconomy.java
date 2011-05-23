@@ -63,7 +63,15 @@ public class HomeEconomy {
         }
         return true;
     }
-
+    
+    public static String amountToString(double amount) {
+        if (handler == EconomyHandler.ICONOMY5) {
+            return iConomy.format(amount);
+        }
+        return null;
+        
+    }
+    
     public static EconomyHandler getHandler() {
         return handler;
     }
