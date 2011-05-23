@@ -29,7 +29,7 @@ public class HomeList {
     public void addHome(Player player, Plugin plugin) {
         if (!(SetHomeCoolDown.playerHasCooled(player))) {
             player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + HomeSettings.coolDownSetHome + " secs before you can change your home.");
-        } else if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE ) {
+        } else if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player) ) {
             if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.setHomeCost)) {
                 if (homeList.containsKey(player.getName())) {
                     Home warp = homeList.get(player.getName());
@@ -89,7 +89,7 @@ public class HomeList {
             if (warp.playerCanWarp(player)) {
                 if (CoolDown.playerHasCooled(player)) {
                     //Economy Logic
-                    if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE ) {
+                    if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player)) {
                         if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
                             player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
                             WarmUp.addPlayer(player, warp, plugin);
@@ -116,7 +116,7 @@ public class HomeList {
         if (homeList.containsKey(player.getName())) {
             if (CoolDown.playerHasCooled(player)) {
                 //Economy Logic
-                if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE) {
+                if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player) ) {
                     if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
                         player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
                         WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
