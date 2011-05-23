@@ -89,7 +89,7 @@ public class HomeList {
                 if (CoolDown.playerHasCooled(player)) {
                     //Economy Logic
                     if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE ) {
-                        if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.setHomeCost)) {
+                        if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
                             WarmUp.addPlayer(player, warp, plugin);
                             CoolDown.addPlayer(player, plugin);
                         } else {
@@ -115,7 +115,7 @@ public class HomeList {
             if (CoolDown.playerHasCooled(player)) {
                 //Economy Logic
                 if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE) {
-                    if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.setHomeCost)) {
+                    if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
                         WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
                         CoolDown.addPlayer(player, plugin);
                     } else {
