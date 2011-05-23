@@ -38,7 +38,7 @@ public class MyHome extends JavaPlugin {
         version = this.getDescription().getVersion();
 
         HomeSettings.initialize(getDataFolder());
-
+        
 
         updater = new Updater();
         try {
@@ -67,7 +67,8 @@ public class MyHome extends JavaPlugin {
 
         HomePermissions.initialize(getServer());
         HomeHelp.initialize(this);
-
+        HomeEconomy.initialize(getServer());
+        
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
 
@@ -132,7 +133,7 @@ public class MyHome extends JavaPlugin {
             if (commandName.equals("sethome") && HomePermissions.set(player)) {
                     // Check for /sethome if enabled in the configuration
             		if (HomeSettings.allowSetHome) { 
-            			homeList.addHome(player, this);
+            		    homeList.addHome(player, this);
             		} else {
             			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
             		}
@@ -257,6 +258,7 @@ public class MyHome extends JavaPlugin {
                     }
                 } else if (split.length == 1 && HomePermissions.homeOthers(player)) {
                     // TODO ChunkLoading
+                    
                     String playerName = split[0];
                     homeList.warpTo(playerName, player, this);
                 } else {
