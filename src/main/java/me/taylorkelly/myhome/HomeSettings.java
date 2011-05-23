@@ -16,6 +16,9 @@ public class HomeSettings {
     public static boolean adminsObeyWarmsCools;
     public static boolean allowSetHome;
     public static int coolDownSetHome;
+    public static boolean eConomyEnabled;
+    public static int setHomeCost;
+    public static int homeCost;
 
     public static void initialize(File dataFolder) {
         if(!dataFolder.exists()) {
@@ -33,6 +36,9 @@ public class HomeSettings {
         adminsObeyWarmsCools = file.getBoolean("adminsObeyWarmsCools", true, "Whether or not admins obey the WarmUp + CoolDown times (false means they don't)");
         allowSetHome = file.getBoolean("allowSetHome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
         coolDownSetHome = file.getInt("coolDownSetHome", 0, "The number of seconds between each use of /home set");
+        eConomyEnabled = file.getBoolean("eConomyEnabled", false, "Whether or not to hook into an eConomy plugin");
+        setHomeCost = file.getInt("setHomeCost", 0, "How much to charge the player for using /home set");
+        homeCost = file.getInt("homeCost", 0, "How much to charge a player for using /home");
         file.save();
     }
 }

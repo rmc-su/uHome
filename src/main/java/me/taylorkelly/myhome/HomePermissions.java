@@ -98,4 +98,7 @@ public class HomePermissions {
     public static boolean canPrivate(Player player) {
         return permission(player, "myhome.home.soc.private", true);
     }
+    public static boolean homeFree(Player player) {
+        return permission(player, "myhome.home.free", true);
+    }
 }
