@@ -160,7 +160,7 @@ public class MyHome extends JavaPlugin {
            			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
            		}
            		return true;
-            } else if (commandName.equals("home")) {
+            } else if (commandName.equals("home") || commandName.equals("myhome") || commandName.equals("mh")) {
                 /**
                  * /home
                  */

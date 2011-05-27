@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 public class HomePermissions {
 
     private enum PermissionHandler {
-        PERMISSIONSEX, PERMISSIONS, GROUPMANAGER, NONE
+        PERMISSIONSEX, PERMISSIONS, PERMISSIONS3, GROUPMANAGER, NONE
     }
     private static PermissionHandler handler;
     private static Plugin permissionPlugin;
@@ -35,8 +35,13 @@ public class HomePermissions {
             HomeLogger.info("Permissions enabled using: GroupManager v" + version);
         } else if (permissions != null) {
             permissionPlugin = permissions;
-            handler = PermissionHandler.PERMISSIONS;
             String version = permissions.getDescription().getVersion();
+            if(version.contains("3.")) {
+            	// This shouldn't make any difference according to the Permissions API
+            	handler = PermissionHandler.PERMISSIONS3;
+            } else {
+            	handler = PermissionHandler.PERMISSIONS;
+            }
             HomeLogger.info("Permissions enabled using: Permissions v" + version);
         } else {
             handler = PermissionHandler.NONE;
@@ -48,6 +53,8 @@ public class HomePermissions {
         switch (handler) {
             case PERMISSIONSEX:
     		    return ((PermissionsEx) permissionPlugin).getPermissionManager().has(player, permission);
+            case PERMISSIONS3:
+                return ((Permissions) permissionPlugin).getHandler().has(player, permission);
             case PERMISSIONS:
                 return ((Permissions) permissionPlugin).getHandler().has(player, permission);
             case GROUPMANAGER:
