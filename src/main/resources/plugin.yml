@@ -6,6 +6,7 @@ commands:
   home:
     description: All of the MyHome commands
     usage: /<command> help - Displays the MyHome commands
+    aliases: [mh,myhome]
   sethome:
     description: Alias for /home set
     usage: /<command> - Sets the home position if enabled in the configuration
