@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import me.taylorkelly.myhome.HomeEconomy.EconomyHandler;
 import me.taylorkelly.myhome.timers.CoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;
 import me.taylorkelly.myhome.timers.SetHomeCoolDown;
@@ -29,7 +28,7 @@ public class HomeList {
     public void addHome(Player player, Plugin plugin) {
         if (!(SetHomeCoolDown.playerHasCooled(player))) {
             player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + HomeSettings.coolDownSetHome + " secs before you can change your home.");
-        } else if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player) ) {
+        } else if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player) ) {
             if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.setHomeCost)) {
                 if (homeList.containsKey(player.getName())) {
                     Home warp = homeList.get(player.getName());
@@ -48,10 +47,10 @@ public class HomeList {
                         player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
                     }
                 }
-                player.sendMessage(HomeEconomy.amountToString(HomeSettings.setHomeCost) + " has been deducted from your account.");
+                player.sendMessage(HomeEconomy.formattedBalance(HomeSettings.setHomeCost) + " has been deducted from your account.");
                 MyHome.setCompass(player, player.getLocation());
             } else {
-                player.sendMessage("Setting a home requires: " + HomeSettings.setHomeCost + ". You have " + HomeEconomy.checkAccount(player.getName()));
+                player.sendMessage("Setting a home requires: " + HomeSettings.setHomeCost + ". You have " + HomeEconomy.balance(player.getName()));
                 return;
             }   
         } else {
@@ -88,14 +87,13 @@ public class HomeList {
             Home warp = homeList.get(name);
             if (warp.playerCanWarp(player)) {
                 if (CoolDown.playerHasCooled(player)) {
-                    //Economy Logic
-                    if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player)) {
+                    if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player)) {
                         if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
-                            player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
+                            player.sendMessage(HomeEconomy.formattedBalance(HomeSettings.homeCost) + " has been deducted from your account.");
                             WarmUp.addPlayer(player, warp, plugin);
                             CoolDown.addPlayer(player, plugin);
                         } else {
-                            player.sendMessage("Warping home requires: " + HomeSettings.homeCost + ". You have " + HomeEconomy.checkAccount(player.getName()));
+                            player.sendMessage("Warping home requires: " + HomeSettings.homeCost + ". You have " + HomeEconomy.balance(player.getName()));
                         }
                     } else {
                         WarmUp.addPlayer(player, warp, plugin);
@@ -115,14 +113,13 @@ public class HomeList {
     public void sendPlayerHome(Player player, Plugin plugin) {
         if (homeList.containsKey(player.getName())) {
             if (CoolDown.playerHasCooled(player)) {
-                //Economy Logic
-                if (HomeSettings.eConomyEnabled && HomeEconomy.getHandler() != EconomyHandler.NONE && !HomePermissions.homeFree(player) ) {
+                if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player) ) {
                     if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
-                        player.sendMessage(HomeEconomy.amountToString(HomeSettings.homeCost) + " has been deducted from your account.");
+                        player.sendMessage(HomeEconomy.formattedBalance(HomeSettings.homeCost) + " has been deducted from your account.");
                         WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
                         CoolDown.addPlayer(player, plugin);
                     } else {
-                        player.sendMessage("Warping home requires: " + HomeSettings.homeCost + ". You have " + HomeEconomy.checkAccount(player.getName()));
+                        player.sendMessage("Warping home requires: " + HomeSettings.homeCost + ". You have " + HomeEconomy.balance(player.getName()));
                     }
                 } else {
                     WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);

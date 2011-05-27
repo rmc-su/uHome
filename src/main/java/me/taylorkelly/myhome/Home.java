@@ -49,7 +49,7 @@ public class Home {
         this.z = creator.getLocation().getZ();
         this.yaw = Math.round(creator.getLocation().getYaw()) % 360;
         this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
-        this.publicAll = false;
+        this.publicAll = HomeSettings.homesArePublic;
         this.permissions = new ArrayList<String>();
         this.welcomeMessage = "Welcome to " + name + "'s home";
     }
@@ -64,7 +64,7 @@ public class Home {
         this.z = location.getZ();
         this.yaw = Math.round(location.getYaw()) % 360;
         this.pitch = Math.round(location.getPitch()) % 360;
-        this.publicAll = false;
+        this.publicAll = HomeSettings.homesArePublic;;
         this.permissions = new ArrayList<String>();
         this.welcomeMessage = "Welcome to " + name + "'s home";
     }

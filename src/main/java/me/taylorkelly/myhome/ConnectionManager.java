@@ -1,38 +1,45 @@
 
 package me.taylorkelly.myhome;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-
 public class ConnectionManager {
     private static Connection conn;
-    
-    public static Connection initialize(File dataFolder) {
+        
+    public static Connection initialize() {
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + dataFolder.getAbsolutePath() + "/homes.db");
-            conn.setAutoCommit(false);
-            return conn;
+        	if(HomeSettings.usemySQL == true) {
+        		Class.forName("com.mysql.jdbc.Driver");
+        		conn = DriverManager.getConnection(HomeSettings.mySQLconn, HomeSettings.mySQLuname, HomeSettings.mySQLpass);
+        		conn.setAutoCommit(false);
+        		return conn;
+        	} else {
+        		Class.forName("org.sqlite.JDBC");
+        		conn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + "/homes.db");
+        		conn.setAutoCommit(false);
+        		return conn;
+        	}
         } catch (SQLException ex) {
-            HomeLogger.severe("SQLite exception on initialize", ex);
+            HomeLogger.severe("SQL exception on initialize", ex);
         } catch (ClassNotFoundException ex) {
-            HomeLogger.severe("You need the SQLite library.", ex);
+            HomeLogger.severe("You need the SQLite/MySQL library.", ex);
         }
         return conn;
     }
 
     public static Connection getConnection() {
-        return conn;
+        if(conn == null) conn = initialize();
+      	return conn;
     }
 
     public static void closeConnection() {
         if(conn != null) {
             try {
                 conn.close();
+                conn = null;
             } catch (SQLException ex) {
                 HomeLogger.severe("Error on Connection close", ex);
             }

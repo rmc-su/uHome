@@ -40,7 +40,7 @@ public class Updater {
 	}
 
 	public void check() {
-		String[] paths = new String[] { "lib/sqlite.jar", "lib/" + getOSSpecificFileName() };
+		String[] paths = new String[] { "lib/sqlite.jar", "lib/" + getOSSpecificFileName(), "lib/mysql-connector-java-bin.jar" };
 
 		for (String path : paths) {
 			File file = new File(path);

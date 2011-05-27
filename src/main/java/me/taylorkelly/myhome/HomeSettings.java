@@ -6,7 +6,7 @@ import java.io.File;
 public class HomeSettings {
     
     private static final String settingsFile = "MyHome.settings";
-   
+    public static File dataDir;
     public static boolean compassPointer;
     public static int coolDown;
     public static boolean coolDownNotify;
@@ -16,10 +16,19 @@ public class HomeSettings {
     public static boolean adminsObeyWarmsCools;
     public static boolean allowSetHome;
     public static int coolDownSetHome;
+    public static boolean homesArePublic;
+    public static int bedsCanSethome;
+    public static boolean oneHomeAllWorlds;
+        
     public static boolean eConomyEnabled;
     public static int setHomeCost;
     public static int homeCost;
-
+    
+    public static boolean usemySQL;
+    public static String mySQLuname;
+    public static String mySQLpass;
+    public static String mySQLconn;
+    
     public static void initialize(File dataFolder) {
         if(!dataFolder.exists()) {
             dataFolder.mkdirs();
@@ -27,6 +36,8 @@ public class HomeSettings {
 
         File configFile  = new File(dataFolder, settingsFile);
         PropertiesFile file = new PropertiesFile(configFile);
+        dataDir = dataFolder;
+        
         compassPointer = file.getBoolean("compassPointer", true, "Whether or not users' compasses point to home");
         coolDown = file.getInt("coolDown", 0, "The number of seconds between when users can go to a home");
         warmUp = file.getInt("warmUp", 0, "The number of seconds after a user uses a home command before it takes them");
@@ -36,9 +47,21 @@ public class HomeSettings {
         adminsObeyWarmsCools = file.getBoolean("adminsObeyWarmsCools", true, "Whether or not admins obey the WarmUp + CoolDown times (false means they don't)");
         allowSetHome = file.getBoolean("allowSetHome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
         coolDownSetHome = file.getInt("coolDownSetHome", 0, "The number of seconds between each use of /home set");
+        homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
+        bedsCanSethome = file.getInt("bedsCanSethome", 0, "0 = Disabled, 1 = Using a bed will /sethome automatically, 2 = /sethome is disabled and can only be set by using a bed ");
+        oneHomeAllWorlds = file.getBoolean("oneHomeAllWorlds", true, "Only allow one home for all worlds on the server - False = one home per world");
+        
+        // Economy
         eConomyEnabled = file.getBoolean("eConomyEnabled", false, "Whether or not to hook into an eConomy plugin");
         setHomeCost = file.getInt("setHomeCost", 0, "How much to charge the player for using /home set");
         homeCost = file.getInt("homeCost", 0, "How much to charge a player for using /home");
+		
+        // MySQL
+        usemySQL = file.getBoolean("usemySQL", false, "MySQL usage --  true = use MySQL database / false = use SQLite");
+		mySQLconn = file.getString("mySQLconn", "jdbc:mysql://localhost:3306/minecraft", "MySQL Connection (only if using MySQL)");
+		mySQLuname = file.getString("mySQLuname", "root", "MySQL Username (only if using MySQL)");
+		mySQLpass = file.getString("mySQLpass", "password", "MySQL Password (only if using MySQL)");
+		
         file.save();
     }
 }

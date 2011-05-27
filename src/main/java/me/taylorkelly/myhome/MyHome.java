@@ -21,12 +21,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MyHome extends JavaPlugin {
 
     private MHPlayerListener playerListener;
+    private MHPluginListener pluginListener;
     private HomeList homeList;
     private boolean warning = false;
     public String name;
     public String version;
     private Updater updater;
-
+    
+    
     @Override
     public void onDisable() {
         ConnectionManager.closeConnection();
@@ -38,43 +40,59 @@ public class MyHome extends JavaPlugin {
         version = this.getDescription().getVersion();
 
         HomeSettings.initialize(getDataFolder());
-        
 
+        libCheck();
+        convertOldDB(getDataFolder());
+        if(!sqlCheck()) { return; }
+        
+        homeList = new HomeList(getServer());
+        playerListener = new MHPlayerListener(homeList, getServer(), this);
+        pluginListener = new MHPluginListener(this);
+
+        HomePermissions.initialize(getServer());
+        HomeHelp.initialize(this);
+        
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
+        
+        if(HomeSettings.bedsCanSethome != 0) {
+        	// We don't need this if the beds dont autosethome
+        	getServer().getPluginManager().registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
+        }
+       
+        HomeLogger.info(name + " " + version + " enabled");
+    }
+
+
+    private void libCheck(){
         updater = new Updater();
         try {
             updater.check();
             updater.update();
         } catch (Exception e) {
         }
-
-
-        File newDatabase = new File(getDataFolder(), "homes.db");
+    }
+    
+    private void convertOldDB(File df) {
+        File newDatabase = new File(df, "homes.db");
         File oldDatabase = new File("homes-warps.db");
         if (!newDatabase.exists() && oldDatabase.exists()) {
             updateFiles(oldDatabase, newDatabase);
         }
-
-        Connection conn = ConnectionManager.initialize(this.getDataFolder());
+    }
+    
+    private boolean sqlCheck() {
+        Connection conn = ConnectionManager.initialize();
         if (conn == null) {
             HomeLogger.severe("Could not establish SQL connection. Disabling MyHome");
             getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-
-        homeList = new HomeList(getServer());
-        playerListener = new MHPlayerListener(homeList, getServer());
-
-        HomePermissions.initialize(getServer());
-        HomeHelp.initialize(this);
-        HomeEconomy.initialize(getServer());
-        
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
-
-        HomeLogger.info(name + " " + version + " enabled");
+            return false;
+        } 
+        return true;
     }
-
+    
     private void updateFiles(File oldDatabase, File newDatabase) {
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
@@ -131,13 +149,17 @@ public class MyHome extends JavaPlugin {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (commandName.equals("sethome") && HomePermissions.set(player)) {
-                    // Check for /sethome if enabled in the configuration
-            		if (HomeSettings.allowSetHome) { 
-            		    homeList.addHome(player, this);
-            		} else {
-            			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
-            		}
+            	if(HomeSettings.bedsCanSethome == 2) { 
+            		player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
             		return true;
+            	}
+            	// Check for /sethome if enabled in the configuration
+           		if (HomeSettings.allowSetHome) { 
+           		    homeList.addHome(player, this);
+           		} else {
+           			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+           		}
+           		return true;
             } else if (commandName.equals("home")) {
                 /**
                  * /home
@@ -147,7 +169,11 @@ public class MyHome extends JavaPlugin {
                         homeList.sendPlayerHome(player, this);
                     } else {
                         player.sendMessage(ChatColor.RED + "You have no home :(");
-                        player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+                        if(HomeSettings.bedsCanSethome == 2) { 
+                    		player.sendMessage("You need to sleep in a bed to set a home");
+                    	} else {       
+                    		player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+                    	}
                     }
                     /**
                      * /home convert
@@ -166,7 +192,12 @@ public class MyHome extends JavaPlugin {
                      * /home set
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("set") && HomePermissions.set(player)) {
-                    homeList.addHome(player, this);
+                	if(HomeSettings.bedsCanSethome == 2) { 
+                		player.sendMessage("You can only set a home by sleeping in a bed");
+                		return true;
+                	} else {
+                		homeList.addHome(player, this);
+                	}
                     /**
                      * /home delete
                      */
