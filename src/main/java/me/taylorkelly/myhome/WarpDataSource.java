@@ -13,10 +13,11 @@ import java.util.logging.Logger;
 public class WarpDataSource {
 
     public final static String DATABASE = "jdbc:sqlite:homes-warps.db";
-    private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
+    private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
+    	    + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
             + "`world` varchar(32) NOT NULL DEFAULT '0'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` tinyint NOT NULL DEFAULT '0',"
             + "`z` DOUBLE NOT NULL DEFAULT '0'," + "`yaw` smallint NOT NULL DEFAULT '0'," + "`pitch` smallint NOT NULL DEFAULT '0',"
-            + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` varchar(150) NOT NULL DEFAULT '',"
+            + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` TEXT NOT NULL DEFAULT '',"
             + "`welcomeMessage` varchar(100) NOT NULL DEFAULT ''" + ");";
 
     public static void initialize() {
@@ -52,9 +53,9 @@ public class WarpDataSource {
     			Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
     			ret.put(name, warp);
     		}
-    		HomeLogger.info("[MYHOME]: " + size + " homes loaded");
+    		HomeLogger.info(size + " homes loaded");
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Load Exception");
+    		HomeLogger.severe("Home Load Exception");
     	} finally {
     		try {
     			if (statement != null) {
@@ -64,7 +65,7 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Load Exception (on close)");
+    			HomeLogger.severe("Home Load Exception (on close)");
     		}
     	}
     	return ret;
@@ -81,7 +82,7 @@ public class WarpDataSource {
     		}
     		return true;
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Table Check Exception", ex);
+    		HomeLogger.severe("Table Check Exception", ex);
     		return false;
     	} finally {
     		try {
@@ -89,7 +90,7 @@ public class WarpDataSource {
     				rs.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Table Check SQL Exception (on closing)");
+    			HomeLogger.severe("Table Check SQL Exception (on closing)");
     		}
     	}
     }
@@ -101,15 +102,23 @@ public class WarpDataSource {
     		st = conn.createStatement();
     		st.executeUpdate(HOME_TABLE);
     		conn.commit();
+    		
+    		if(HomeSettings.usemySQL){ 
+    			// We need to set auto increment on SQL.
+    			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
+    			st = conn.createStatement();
+    			st.executeUpdate(sql);
+    			conn.commit();
+    		}
     	} catch (SQLException e) {
-    		HomeLogger.severe("[MYHOME]: Create Table Exception", e);
+    		HomeLogger.severe("Create Table Exception", e);
     	} finally {
     		try {
     			if (st != null) {
     				st.close();
     			}
     		} catch (SQLException e) {
-    			HomeLogger.severe("[MYHOME]: Could not create the table (on close)");
+    			HomeLogger.severe("Could not create the table (on close)");
     		}
     	}
     }
@@ -134,14 +143,14 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Insert Exception", ex);
+    		HomeLogger.severe("Home Insert Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
     				ps.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Insert Exception (on close)", ex);
+    			HomeLogger.severe("Home Insert Exception (on close)", ex);
     		}
     	}
     }
@@ -157,7 +166,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Delete Exception", ex);
+    		HomeLogger.severe("Home Delete Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -167,7 +176,7 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Delete Exception (on close)", ex);
+    			HomeLogger.severe("Home Delete Exception (on close)", ex);
     		}
     	}
     }
@@ -183,7 +192,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Publicize Exception", ex);
+    		HomeLogger.severe("Home Publicize Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -193,7 +202,7 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Publicize Exception (on close)", ex);
+    			HomeLogger.severe("Home Publicize Exception (on close)", ex);
     		}
     	}
     }
@@ -210,7 +219,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Permissions Exception", ex);
+    		HomeLogger.severe("Home Permissions Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -220,7 +229,7 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Permissions Exception (on close)", ex);
+    			HomeLogger.severe("Home Permissions Exception (on close)", ex);
     		}
     	}
     }
@@ -242,7 +251,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Home Move Exception", ex);
+    		HomeLogger.severe("Home Move Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -252,14 +261,14 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("[MYHOME]: Home Move Exception (on close)", ex);
+    			HomeLogger.severe("Home Move Exception (on close)", ex);
     		}
     	}
     }
 
     public static void dbTblCheck() {
     	// Add future modifications to the table structure here
-    	
+
     }
 
     public static void updateDB(String test, String sql) {
@@ -275,7 +284,7 @@ public class WarpDataSource {
     		statement.executeQuery(test);
     		statement.close();
     	} catch(SQLException ex) {
-    		HomeLogger.info("[MYHOME]: Updating database");
+    		HomeLogger.info("Updating database");
     		// Failed the test so we need to execute the updates
     		try {
     			String[] query;
@@ -293,7 +302,7 @@ public class WarpDataSource {
     			conn.commit();
     			sqlst.close();
     		} catch (SQLException exc) {
-    			HomeLogger.severe("[MYHOME]: Failed to update the database to the new version - ", exc);
+    			HomeLogger.severe("Failed to update the database to the new version - ", exc);
     			ex.printStackTrace();
     		}	
     	}
@@ -301,8 +310,10 @@ public class WarpDataSource {
 
     public static void updateFieldType(String field, String type) {
     	try {
+    		// SQLite uses dynamic field typing so we dont need to process these.  
     		if (!HomeSettings.usemySQL) return;
-    		HomeLogger.info("[MYHOME]: Updating database");
+
+    		HomeLogger.info("Updating database");
     		
     		Connection conn = ConnectionManager.getConnection();
     		DatabaseMetaData meta = conn.getMetaData();
@@ -324,7 +335,7 @@ public class WarpDataSource {
     		}
     		colRS.close();
     	} catch(SQLException ex) {
-    		HomeLogger.severe("[MYHOME]: Failed to update the database to the new version - ", ex);
+    		HomeLogger.severe("Failed to update the database to the new version - ", ex);
     		ex.printStackTrace();
     	}
     }
