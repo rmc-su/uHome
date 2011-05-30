@@ -108,4 +108,7 @@ public class HomePermissions {
     public static boolean homeFree(Player player) {
         return permission(player, "myhome.home.free", true);
     }
+    public static boolean bedBypass(Player player) {
+        return permission(player, "myhome.home.bypass.bedsethome", true);
+    }
 }

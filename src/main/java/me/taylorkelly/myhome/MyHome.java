@@ -153,7 +153,7 @@ public class MyHome extends JavaPlugin {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (commandName.equals("sethome") && HomePermissions.set(player)) {
-            	if(HomeSettings.bedsCanSethome == 2) { 
+            	if(HomeSettings.bedsCanSethome == 2 && !HomePermissions.bedBypass(player) ) { 
             		player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
             		return true;
             	}
@@ -196,7 +196,7 @@ public class MyHome extends JavaPlugin {
                      * /home set
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("set") && HomePermissions.set(player)) {
-                	if(HomeSettings.bedsCanSethome == 2) { 
+                	if(HomeSettings.bedsCanSethome == 2 && !HomePermissions.bedBypass(player)) { 
                 		player.sendMessage("You can only set a home by sleeping in a bed");
                 		return true;
                 	} else {
