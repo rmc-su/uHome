@@ -31,7 +31,11 @@ public class MyHome extends JavaPlugin {
     
     @Override
     public void onDisable() {
-        ConnectionManager.closeConnection();
+        name = this.getDescription().getName();
+        version = this.getDescription().getVersion();
+
+    	ConnectionManager.closeConnection();
+        HomeLogger.info(name + " " + version + " disabled");
     }
 
     @Override
