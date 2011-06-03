@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -148,13 +149,22 @@ public class WarpDataSource {
     					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
     				}
     				
-    				slstatement.close;
-    				sqliteconn.close;
-    				sqliteconn = null;
+        			if (slstatement != null) {
+        				slstatement.close();
+        			}
+        			if (slset != null) {
+        				slset.close();
+        			}
+    				
+    				if (sqliteconn != null) {
+        				sqliteconn.close();
+    				}
     			}
     		}
     	} catch (SQLException e) {
     		HomeLogger.severe("Create Table Exception", e);
+        } catch (ClassNotFoundException e) {
+            HomeLogger.severe("You need the SQLite library.", e);
     	} finally {
     		try {
     			if (st != null) {
