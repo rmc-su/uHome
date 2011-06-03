@@ -34,6 +34,14 @@ Give your users myhome.home.soc.*, and they'll be able to do all of that.
     /home public - (myhome.home.soc.invite) - Makes your house public
     /home private - (myhome.home.soc.uninvite) - Makes your house private
 
+**...is Capitalistic**
+
+You might prefer to make your players pay to use /home and /sethome. MyHome is able to charge players for using these commands and the cost is defined by you in MyHome.settings. MyHome is able to connect with iCononmy 4, iConomy 5, BOSEconomy and EssentialsEco. 
+
+    (myhome.home.free.*) - Allow /sethome and /home usage for free
+    (myhome.home.free.sethome) - Allow /sethome usage for free
+    (myhome.home.free.home) - Allow /home usage for free
+
 **...is Restricting**
 
 You may be a server admin who doesn't want their users always /home'ing out of danger whenever they jolly-well-feel-like-it. MyHome allows you to set 'Warm Ups', 'Cool Downs', or both. You can set this in MyHome.settings. Or... if you don't care about these things, just leave their settings as default, which is off.
@@ -64,5 +72,6 @@ As an server administrator, your job is tough. MyHome works to make your job a l
     /home listall - (myhome.admin.home.list) - Allow admins to list all homes
     /home clear [playername] - (myhome.admin.home.delete) - Allow an admin to delete playername's home.
     /home convert - (myhome.admin.convert) - Converts the homes from homes.txt into the db
+    /home reload - (myhome.admin.reload) - Reload MyHome's configuration
 
 Transitioning from hMod? Have a homes.txt full of your users' homes? Use /home convert to import that into the MyHome database
