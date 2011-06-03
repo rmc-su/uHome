@@ -84,6 +84,10 @@ public class MyHome extends JavaPlugin {
         File oldDatabase = new File("homes-warps.db");
         if (!newDatabase.exists() && oldDatabase.exists()) {
             updateFiles(oldDatabase, newDatabase);
+            oldDatabase.renameTo(new File("homes-warps.db.old");
+        } else if (newDatabase.exists() && oldDatabase.exists()) {
+        	// We no longer need this file since homes.db exists
+        	oldDatabase.renameTo(new File("homes-warps.db.old");
         }
     }
     
