@@ -46,14 +46,23 @@ SetHome Cool Downs is the amount of time which must pass between the uses of the
 
 For now, Warm Ups and both Cool Downs are global, but once the Bukkit permissions/groups get more fleshed out, MH will have per user/group Warm Ups and Cool Downs.
 
+    (myhome.bypass.cooldown) - Permission to bypass /home cooldowns
+    (myhome.bypass.warmup) - Permission to bypass /home warmup
+    (myhome.bypass.sethomecool) - Permission to bypass /sethome cooldown
+
 Some server administrators may prefer that where players sleep should be considered their home. They have the option to make sleeping in a bed function as /sethome and also to disable the /sethome command to force sleeping. 
+
+    (myhome.bypass.bedsethome) - Permission to use /sethome when bed usage is forced.
 
 **...is Helpful**
 
-As an server administrator, your job is tough. MyHome works to make your job a little easier (within it's domain). As an administrator, you can warp to everyone's home. You can also bypass the cooldown and warmup limits set upon your users if you'd like; check in the MyHome.settings.
+As an server administrator, your job is tough. MyHome works to make your job a little easier (within it's domain). As an administrator, you can warp to any home when given the permission to do so. You can also bypass the cooldown and warmup limits set upon your users and also the forcing of beds to /sethome.
+
+    (myhome.admin.*) - Has access to all admin commands in MyHome
+    (myhome.bypass.*) - Bypass all limits (cooldowns, warmups and bed usage etc)
+    (myhome.admin.home.any) - Admin can /home to anyone's home.
+    /home listall - (myhome.admin.home.list) - Allow admins to list all homes
+    /home clear [playername] - (myhome.admin.home.delete) - Allow an admin to delete playername's home.
+    /home convert - (myhome.admin.convert) - Converts the homes from homes.txt into the db
 
 Transitioning from hMod? Have a homes.txt full of your users' homes? Use /home convert to import that into the MyHome database
-
-    (myhome.admin) - Is an admin over MyHome.
-    /home convert - (myhome.convert) - Converts the homes from homes.txt into the db
-
