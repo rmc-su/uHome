@@ -148,7 +148,7 @@ public class WarpDataSource {
     				}
     				HomeLogger.info("Imported " + size + " homes from " + sqlitedb);
     				HomeLogger.info("Renaming " + sqlitedb + " to " +sqlitedb + ".old");
-    				if (!sqlitefile.renameTo(new File(sqlitedb + ".old"))) {
+    				if (!sqlitefile.renameTo(new File(HomeSettings.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
     					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
     				}
     				
