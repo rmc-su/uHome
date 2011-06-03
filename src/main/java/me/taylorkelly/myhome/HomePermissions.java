@@ -65,7 +65,32 @@ public class HomePermissions {
                 return defaultPerm;
         }
     }
-
+    
+    public static int integer(Player player, String permission, int defaultPerm) {
+    	int value;
+    	switch (handler) {
+            case PERMISSIONSEX:
+            	String val = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(player.getName()).getOptionValue(permission, player.getWorld().getName());
+            	if (val.isEmpty()) { value = -1; } else { value = Integer.parseInt(val); }
+            case PERMISSIONS3:
+                value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(player.getWorld().getName(), player.getName(), permission);
+            case PERMISSIONS:
+            	value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(player.getWorld().getName(), player.getName(), permission);
+            case GROUPMANAGER:
+            	value = ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).getPermissionInteger(player.getName(), permission);
+            case NONE:
+                value = defaultPerm;
+            default:
+                value = defaultPerm;
+        }
+    	if(value < 0) {
+    		return defaultPerm;
+    	} else {
+    		return value;
+    	}
+    }
+    
+    
     public static boolean isAdmin(Player player) {
         return permission(player, "myhome.admin", player.isOp());
     }
