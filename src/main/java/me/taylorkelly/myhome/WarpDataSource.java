@@ -14,12 +14,12 @@ import java.util.logging.Logger;
 
 public class WarpDataSource {
 
-    public final static String sqlitedb = "homes.db";
+    public final static String sqlitedb = "/homes.db";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
     	    + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
             + "`world` varchar(32) NOT NULL DEFAULT '0'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` tinyint NOT NULL DEFAULT '0',"
             + "`z` DOUBLE NOT NULL DEFAULT '0'," + "`yaw` smallint NOT NULL DEFAULT '0'," + "`pitch` smallint NOT NULL DEFAULT '0',"
-            + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` TEXT NOT NULL DEFAULT '',"
+            + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` TEXT,"
             + "`welcomeMessage` varchar(100) NOT NULL DEFAULT ''" + ");";
 
     public static void initialize() {
@@ -102,6 +102,7 @@ public class WarpDataSource {
     private static void createTable() {
     	Statement st = null;
     	try {
+    		HomeLogger.info("Creating Database...");
     		Connection conn = ConnectionManager.getConnection();
     		st = conn.createStatement();
     		st.executeUpdate(HOME_TABLE);
@@ -110,6 +111,7 @@ public class WarpDataSource {
     		if(HomeSettings.usemySQL){ 
     			// We need to set auto increment on SQL.
     			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
+    			HomeLogger.info("Modifying database for MySQL support");
     			st = conn.createStatement();
     			st.executeUpdate(sql);
     			conn.commit();
@@ -117,6 +119,7 @@ public class WarpDataSource {
     			// Check for old homes.db and import to mysql
     			File sqlitefile = new File(HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
     			if (!sqlitefile.exists()) {
+    				HomeLogger.info("Could not find old " + sqlitedb);
     				return;
     			} else {
     				HomeLogger.info("Trying to import homes from homes.db");
