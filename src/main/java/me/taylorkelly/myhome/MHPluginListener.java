@@ -22,7 +22,7 @@ public class MHPluginListener extends ServerListener {
 		if(!this.Methods.hasMethod()){
 			if(this.Methods.setMethod(event.getPlugin())){
 				HomeEconomy.economy = this.Methods.getMethod();
-				HomeLogger.info(HomeEconomy.economy.getName() + " version " + HomeEconomy.economy.getVersion() + " loaded.");
+				HomeLogger.info("Connected to " + HomeEconomy.economy.getName() + " v" + HomeEconomy.economy.getVersion() + " for economy support.");
 			}
 		}	
 	}
