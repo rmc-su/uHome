@@ -120,10 +120,10 @@ public class WarpDataSource {
     			} else {
     				HomeLogger.info("Trying to import homes from homes.db");
     				Class.forName("org.sqlite.JDBC");
-    				sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
+    				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
-    				slstatement = sqliteconn.createStatement();
-    				slset = slstatement.executeQuery("SELECT * FROM homeTable");
+    				Statement slstatement = sqliteconn.createStatement();
+    				ResultSet slset = slstatement.executeQuery("SELECT * FROM homeTable");
 
     				int size = 0;
     				while (slset.next()) {
@@ -140,7 +140,7 @@ public class WarpDataSource {
     					String permissions = slset.getString("permissions");
     					String welcomeMessage = slset.getString("welcomeMessage");
     					Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
-    					this.addWarp(warp);
+    					addWarp(warp);
     				}
     				HomeLogger.info("Imported " + size + " homes from " + sqlitedb);
     				HomeLogger.info("Renaming " + sqlitedb + " to " +sqlitedb + ".old");
