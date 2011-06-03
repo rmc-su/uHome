@@ -49,7 +49,7 @@ public class WarpDataSource {
     			double z = set.getDouble("z");
     			int yaw = set.getInt("yaw");
     			int pitch = set.getInt("pitch");
-    			boolean publicAll = set.getBoolean("publicAll");
+    			int publicAll = set.getInt("publicAll");
     			String permissions = set.getString("permissions");
     			String welcomeMessage = set.getString("welcomeMessage");
     			Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
@@ -140,7 +140,7 @@ public class WarpDataSource {
     					double z = slset.getDouble("z");
     					int yaw = slset.getInt("yaw");
     					int pitch = slset.getInt("pitch");
-    					boolean publicAll = slset.getBoolean("publicAll");
+    					int publicAll = slset.getInt("publicAll");
     					String permissions = slset.getString("permissions");
     					String welcomeMessage = slset.getString("welcomeMessage");
     					Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
@@ -193,7 +193,7 @@ public class WarpDataSource {
     		ps.setDouble(6, warp.z);
     		ps.setInt(7, warp.yaw);
     		ps.setInt(8, warp.pitch);
-    		ps.setBoolean(9, warp.publicAll);
+    		ps.setInt(9, warp.publicAll);
     		ps.setString(10, warp.permissionsString());
     		ps.setString(11, warp.welcomeMessage);
     		ps.executeUpdate();
@@ -237,13 +237,13 @@ public class WarpDataSource {
     	}
     }
 
-    public static void publicizeWarp(Home warp, boolean publicAll) {
+    public static void publicizeWarp(Home warp, int publicAll) {
     	PreparedStatement ps = null;
     	ResultSet set = null;
     	try {
     		Connection conn = ConnectionManager.getConnection();
     		ps = conn.prepareStatement("UPDATE homeTable SET publicAll = ? WHERE id = ?");
-    		ps.setBoolean(1, publicAll);
+    		ps.setInt(1, publicAll);
     		ps.setInt(2, warp.index);
     		ps.executeUpdate();
     		conn.commit();

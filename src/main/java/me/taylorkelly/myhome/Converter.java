@@ -56,7 +56,7 @@ public class Converter {
                     ps.setDouble(6, warp.z);
                     ps.setInt(7, warp.yaw);
                     ps.setInt(8, warp.pitch);
-                    ps.setBoolean(9, warp.publicAll);
+                    ps.setInt(9, warp.publicAll);
                     ps.setString(10, warp.permissionsString());
                     ps.setString(11, warp.welcomeMessage);
                     ps.addBatch();

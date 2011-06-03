@@ -15,13 +15,13 @@ public class Home {
     public double z;
     public int yaw;
     public int pitch;
-    public boolean publicAll;
+    public int publicAll;
     public String welcomeMessage;
     public ArrayList<String> permissions;
     public static int nextIndex = 1;
     Location getLocation;
 
-    public Home(int index, String name, String world, double x, int y, double z, int yaw, int pitch, boolean publicAll, String permissions, String welcomeMessage) {
+    public Home(int index, String name, String world, double x, int y, double z, int yaw, int pitch, int publicAll, String permissions, String welcomeMessage) {
         this.index = index;
         this.name = name;
         this.world = world;
@@ -49,7 +49,7 @@ public class Home {
         this.z = creator.getLocation().getZ();
         this.yaw = Math.round(creator.getLocation().getYaw()) % 360;
         this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
-        this.publicAll = HomeSettings.homesArePublic;
+        this.publicAll = HomeSettings.homesArePublic ? 1 : 0;
         this.permissions = new ArrayList<String>();
         this.welcomeMessage = "Welcome to " + name + "'s home";
     }
@@ -64,7 +64,7 @@ public class Home {
         this.z = location.getZ();
         this.yaw = Math.round(location.getYaw()) % 360;
         this.pitch = Math.round(location.getPitch()) % 360;
-        this.publicAll = HomeSettings.homesArePublic;;
+        this.publicAll = HomeSettings.homesArePublic ? 1 : 0;
         this.permissions = new ArrayList<String>();
         this.welcomeMessage = "Welcome to " + name + "'s home";
     }
@@ -100,7 +100,7 @@ public class Home {
         if (HomePermissions.isAdmin(player)) {
             return true;
         }
-        return publicAll;
+        return (publicAll == 1) ? true : false;  
     }
 
     public void warp(Player player, Server server) {

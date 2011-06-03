@@ -149,8 +149,8 @@ public class HomeList {
     public void privatize(Player player) {
         if (homeList.containsKey(player.getName())) {
             Home warp = homeList.get(player.getName());
-            warp.publicAll = false;
-            WarpDataSource.publicizeWarp(warp, false);
+            warp.publicAll = 0;
+            WarpDataSource.publicizeWarp(warp, 0);
             player.sendMessage(ChatColor.AQUA + "You have privatized your home");
             if (HomePermissions.invite(player)) {
                 player.sendMessage("If you'd like to invite others to it,");
@@ -164,8 +164,8 @@ public class HomeList {
     public void publicize(Player player) {
         if (homeList.containsKey(player.getName())) {
             Home warp = homeList.get(player.getName());
-            warp.publicAll = true;
-            WarpDataSource.publicizeWarp(warp, true);
+            warp.publicAll = 1;
+            WarpDataSource.publicizeWarp(warp, 1);
             player.sendMessage(ChatColor.AQUA + "You have publicized your home.");
         } else {
             player.sendMessage(ChatColor.RED + "You have no home to publicize :(");
@@ -184,7 +184,7 @@ public class HomeList {
                 warp.invite(inviteeName);
                 WarpDataSource.updatePermissions(warp);
                 player.sendMessage(ChatColor.AQUA + "You have invited " + inviteeName + " to your home");
-                if (warp.publicAll) {
+                if (warp.publicAll == 1) {
                     player.sendMessage(ChatColor.RED + "But your home is still public!");
                 }
                 Player match = server.getPlayer(inviteeName);
@@ -210,7 +210,7 @@ public class HomeList {
                 warp.uninvite(inviteeName);
                 WarpDataSource.updatePermissions(warp);
                 player.sendMessage(ChatColor.AQUA + "You have uninvited " + inviteeName + " from your home");
-                if (warp.publicAll) {
+                if (warp.publicAll == 1) {
                     player.sendMessage(ChatColor.RED + "But your home is still public.");
                 }
                 Player match = server.getPlayer(inviteeName);
