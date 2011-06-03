@@ -152,6 +152,9 @@ public class MyHome extends JavaPlugin {
         String commandName = command.getName().toLowerCase();
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            /**
+             * /Sethome support
+             */
             if (commandName.equals("sethome") && HomePermissions.set(player)) {
             	if(HomeSettings.bedsCanSethome == 2 && !HomePermissions.bedBypass(player) ) { 
             		player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
@@ -164,6 +167,9 @@ public class MyHome extends JavaPlugin {
            			player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
            		}
            		return true;
+            /**
+             * Start of /home
+             */
             } else if (commandName.equals("home") || commandName.equals("myhome") || commandName.equals("mh")) {
                 /**
                  * /home
@@ -180,6 +186,12 @@ public class MyHome extends JavaPlugin {
                     	}
                     }
                     /**
+                     *  /home reload
+                     */
+                } else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && HomePermissions.isAdmin(player)) {
+                	HomeSettings.initialize(getDataFolder());
+                	player.sendMessage("[MyHome] Reloading config");
+                   /**
                      * /home convert
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("convert") && HomePermissions.isAdmin(player)) {
