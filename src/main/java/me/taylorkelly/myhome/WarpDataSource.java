@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class WarpDataSource {
 
-    public final static String DATABASE = "jdbc:sqlite:homes-warps.db";
+    public final static String sqlitedb = "homes.db";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
     	    + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
             + "`world` varchar(32) NOT NULL DEFAULT '0'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` tinyint NOT NULL DEFAULT '0',"
@@ -96,6 +96,8 @@ public class WarpDataSource {
     	}
     }
 
+
+
     private static void createTable() {
     	Statement st = null;
     	try {
@@ -103,43 +105,53 @@ public class WarpDataSource {
     		st = conn.createStatement();
     		st.executeUpdate(HOME_TABLE);
     		conn.commit();
-    		
+
     		if(HomeSettings.usemySQL){ 
     			// We need to set auto increment on SQL.
     			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
     			st = conn.createStatement();
     			st.executeUpdate(sql);
     			conn.commit();
-    			
-    			// Check for old homes.db
-    			HomeLogger.info("Importing homes from homes.db");
-        		Class.forName("org.sqlite.JDBC");
-        		sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + "/homes.db");
-        		sqliteconn.setAutoCommit(false);
-        		slstatement = sqliteconn.createStatement();
-        		slset = slstatement.executeQuery("SELECT * FROM homeTable");
-        		
-        		int size = 0;
-        		while (slset.next()) {
-        			size++;
-        			int index = set.getInt("id");
-        			String name = set.getString("name");
-        			String world = set.getString("world");
-        			double x = set.getDouble("x");
-        			int y = set.getInt("y");
-        			double z = set.getDouble("z");
-        			int yaw = set.getInt("yaw");
-        			int pitch = set.getInt("pitch");
-        			boolean publicAll = set.getBoolean("publicAll");
-        			String permissions = set.getString("permissions");
-        			String welcomeMessage = set.getString("welcomeMessage");
-        			Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
-        			this.addWarp(warp);
-        		}
-        		HomeLogger.info("Imported " + size + " homes from homes.db");
-        		slstatement.close;
-        		sqliteconn.close;
-        		sqliteconn = null;
+
+    			// Check for old homes.db and import to mysql
+    			File sqlitefile = new File(HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
+    			if (!sqlitefile.exists()) {
+    				return;
+    			} else {
+    				HomeLogger.info("Trying to import homes from homes.db");
+    				Class.forName("org.sqlite.JDBC");
+    				sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
+    				sqliteconn.setAutoCommit(false);
+    				slstatement = sqliteconn.createStatement();
+    				slset = slstatement.executeQuery("SELECT * FROM homeTable");
+
+    				int size = 0;
+    				while (slset.next()) {
+    					size++;
+    					int index = slset.getInt("id");
+    					String name = slset.getString("name");
+    					String world = slset.getString("world");
+    					double x = slset.getDouble("x");
+    					int y = slset.getInt("y");
+    					double z = slset.getDouble("z");
+    					int yaw = slset.getInt("yaw");
+    					int pitch = slset.getInt("pitch");
+    					boolean publicAll = slset.getBoolean("publicAll");
+    					String permissions = slset.getString("permissions");
+    					String welcomeMessage = slset.getString("welcomeMessage");
+    					Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
+    					this.addWarp(warp);
+    				}
+    				HomeLogger.info("Imported " + size + " homes from " + sqlitedb);
+    				HomeLogger.info("Renaming " + sqlitedb + " to " +sqlitedb + ".old");
+    				if (!sqlitefile.renameTo(new File(sqlitedb + ".old"))) {
+    					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
+    				}
+    				
+    				slstatement.close;
+    				sqliteconn.close;
+    				sqliteconn = null;
+    			}
     		}
     	} catch (SQLException e) {
     		HomeLogger.severe("Create Table Exception", e);
@@ -241,7 +253,7 @@ public class WarpDataSource {
     public static void updatePermissions(Home warp) {
     	PreparedStatement ps = null;
     	ResultSet set = null;
-    	
+
     	try {
     		Connection conn = ConnectionManager.getConnection();
     		ps = conn.prepareStatement("UPDATE homeTable SET permissions = ? WHERE id = ?");
@@ -268,7 +280,7 @@ public class WarpDataSource {
     public static void moveWarp(Home warp) {
     	PreparedStatement ps = null;
     	ResultSet set = null;
-    	
+
     	try {
     		Connection conn = ConnectionManager.getConnection();
     		ps = conn.prepareStatement("UPDATE homeTable SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
@@ -345,7 +357,7 @@ public class WarpDataSource {
     		if (!HomeSettings.usemySQL) return;
 
     		HomeLogger.info("Updating database");
-    		
+
     		Connection conn = ConnectionManager.getConnection();
     		DatabaseMetaData meta = conn.getMetaData();
 
