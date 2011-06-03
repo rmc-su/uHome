@@ -2,6 +2,7 @@ package me.taylorkelly.myhome;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -109,6 +110,36 @@ public class WarpDataSource {
     			st = conn.createStatement();
     			st.executeUpdate(sql);
     			conn.commit();
+    			
+    			// Check for old homes.db
+    			HomeLogger.info("Importing homes from homes.db");
+        		Class.forName("org.sqlite.JDBC");
+        		sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + "/homes.db");
+        		sqliteconn.setAutoCommit(false);
+        		slstatement = sqliteconn.createStatement();
+        		slset = slstatement.executeQuery("SELECT * FROM homeTable");
+        		
+        		int size = 0;
+        		while (slset.next()) {
+        			size++;
+        			int index = set.getInt("id");
+        			String name = set.getString("name");
+        			String world = set.getString("world");
+        			double x = set.getDouble("x");
+        			int y = set.getInt("y");
+        			double z = set.getDouble("z");
+        			int yaw = set.getInt("yaw");
+        			int pitch = set.getInt("pitch");
+        			boolean publicAll = set.getBoolean("publicAll");
+        			String permissions = set.getString("permissions");
+        			String welcomeMessage = set.getString("welcomeMessage");
+        			Home warp = new Home(index, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage);
+        			this.addWarp(warp);
+        		}
+        		HomeLogger.info("Imported " + size + " homes from homes.db");
+        		slstatement.close;
+        		sqliteconn.close;
+        		sqliteconn = null;
     		}
     	} catch (SQLException e) {
     		HomeLogger.severe("Create Table Exception", e);
