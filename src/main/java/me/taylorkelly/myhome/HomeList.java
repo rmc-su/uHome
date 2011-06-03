@@ -28,7 +28,7 @@ public class HomeList {
     public void addHome(Player player, Plugin plugin) {
         if (!(SetHomeCoolDown.playerHasCooled(player))) {
             player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + HomeSettings.coolDownSetHome + " secs before you can change your home.");
-        } else if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player) ) {
+        } else if (HomeSettings.eConomyEnabled && !HomePermissions.setHomeFree(player) ) {
             if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.setHomeCost)) {
                 if (homeList.containsKey(player.getName())) {
                     Home warp = homeList.get(player.getName());
@@ -85,7 +85,7 @@ public class HomeList {
         name = matches.getMatch(name);
         if (homeList.containsKey(name)) {
             Home warp = homeList.get(name);
-            if (warp.playerCanWarp(player)) {
+            if (warp.playerCanWarp(player) || HomePermissions.adminAnyHome(player)) {
                 if (CoolDown.playerHasCooled(player)) {
                     if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player)) {
                         if (HomeEconomy.chargePlayer(player.getName(), HomeSettings.homeCost)) {
@@ -143,6 +143,17 @@ public class HomeList {
             player.sendMessage(ChatColor.AQUA + "You have deleted your home");
         } else {
             player.sendMessage(ChatColor.RED + "You have no home to delete :(");
+        }
+    }
+    
+    public void clearHome(String srchplayer, Player player) {
+        if (homeList.containsKey(srchplayer)) {
+            Home warp = homeList.get(srchplayer);
+            homeList.remove(srchplayer);
+            WarpDataSource.deleteWarp(warp);
+            player.sendMessage(ChatColor.AQUA + "You have deleted "+player+"'s home");
+        } else {
+            player.sendMessage(ChatColor.RED + "There is no home for " + player);
         }
     }
 
@@ -238,6 +249,17 @@ public class HomeList {
         }
     }
 
+    public void listall(Player player) {
+        ArrayList<Home> results = allHomes();
+
+        if (results.size() == 0) {
+            player.sendMessage(ChatColor.RED + "There are no homes.");
+        } else {
+            player.sendMessage(ChatColor.AQUA + "There are the following Homes:");
+            player.sendMessage(results.toString().replace("[", "").replace("]", ""));
+        }
+    }
+    
     public void ilist(Player player) {
         if (homeList.containsKey(player.getName())) {
             Home warp = homeList.get(player.getName());
@@ -251,6 +273,14 @@ public class HomeList {
         }
     }
 
+    private ArrayList<Home> allHomes() {
+        ArrayList<Home> results = new ArrayList<Home>();
+        for (Home home : homeList.values()) {
+                results.add(home);
+        }
+        return results;
+    }
+    
     private ArrayList<Home> homesInvitedTo(Player player) {
         ArrayList<Home> results = new ArrayList<Home>();
         for (Home home : homeList.values()) {

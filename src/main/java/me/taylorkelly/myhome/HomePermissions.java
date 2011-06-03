@@ -94,7 +94,15 @@ public class HomePermissions {
     public static boolean isAdmin(Player player) {
         return permission(player, "myhome.admin", player.isOp());
     }
-
+    public static boolean adminDeleteHome(Player player) {
+        return permission(player, "myhome.admin.home.delete", player.isOp());
+    }
+    public static boolean adminAnyHome(Player player) {
+        return permission(player, "myhome.admin.home.any", player.isOp());
+    }
+    public static boolean adminListHome(Player player) {
+        return permission(player, "myhome.admin.home.list", player.isOp());
+    }
     public static boolean home(Player player) {
         return permission(player, "myhome.home.basic.home", true);
     }
@@ -130,8 +138,11 @@ public class HomePermissions {
     public static boolean canPrivate(Player player) {
         return permission(player, "myhome.home.soc.private", true);
     }
+    public static boolean setHomeFree(Player player) {
+        return permission(player, "myhome.home.free.sethome", true);
+    }
     public static boolean homeFree(Player player) {
-        return permission(player, "myhome.home.free", true);
+        return permission(player, "myhome.home.free.home", true);
     }
     public static boolean bedBypass(Player player) {
         return permission(player, "myhome.home.bypass.bedsethome", true);

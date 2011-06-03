@@ -228,7 +228,7 @@ public class MyHome extends JavaPlugin {
                      * /home delete
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("delete") && HomePermissions.delete(player)) {
-                    homeList.deleteHome(player);
+                	homeList.deleteHome(player);
                     /**
                      * /home list
                      */
@@ -239,6 +239,11 @@ public class MyHome extends JavaPlugin {
                      */
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("ilist") && HomePermissions.list(player)) {
                     homeList.ilist(player);
+                    /**
+                     * /home listall
+                     */
+                } else if (split.length == 1 && split[0].equalsIgnoreCase("listall") && HomePermissions.adminListHome(player)) {
+                    homeList.listall(player);
                     /**
                      * /home private
                      */
@@ -255,6 +260,11 @@ public class MyHome extends JavaPlugin {
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("point") && HomeSettings.compassPointer) {
                     homeList.orientPlayer(player);
                     /**
+                     *  /home delete [player]
+                     */
+                } else if (split.length == 2 && split[0].equalsIgnoreCase("clear") && HomePermissions.adminDeleteHome(player)) {
+                	homeList.clearHome(split[1], player);
+                	/**
                      * /home invite <player>
                      */
                 } else if (split.length == 2 && split[0].equalsIgnoreCase("invite") && HomePermissions.invite(player)) {
@@ -273,9 +283,24 @@ public class MyHome extends JavaPlugin {
                     /**
                      * /home <name>
                      */
+                } else if (split.length == 2 && split[0].equalsIgnoreCase("help")) {
+                	if(split[1].equalsIgnoreCase("admin")) {
+                		ArrayList<String> messages = new ArrayList<String>();
+                        messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "MyHome Admin Commands" + ChatColor.RED + " -----");
+                        messages.add(ChatColor.RED + "/home convert" + ChatColor.WHITE + "  -  Convert a homes.txt file.");
+                        if(HomePermissions.adminDeleteHome(player)) {
+                			messages.add(ChatColor.RED + "/home clear [playername]" + ChatColor.WHITE + "  -  Clear playername's home");
+                		}
+                        if(HomePermissions.adminListHome(player)) {
+                			messages.add(ChatColor.RED + "/home listall" + ChatColor.WHITE + "  -  List all Homes");
+                		}
+                        for (String message : messages) {
+                            player.sendMessage(message);
+                        }
+                	}
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("help")) {
                     ArrayList<String> messages = new ArrayList<String>();
-                    messages.add(ChatColor.RED + "-------------------- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " --------------------");
+                    messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
                     if (HomePermissions.home(player)) {
                         messages.add(ChatColor.RED + "/home" + ChatColor.WHITE + "  -  Go home young chap!");
                     }
@@ -310,6 +335,7 @@ public class MyHome extends JavaPlugin {
                     if (HomeSettings.compassPointer) {
                         messages.add(ChatColor.RED + "/home point" + ChatColor.WHITE + "  -  Points your compass home");
                     }
+
                     for (String message : messages) {
                         player.sendMessage(message);
                     }

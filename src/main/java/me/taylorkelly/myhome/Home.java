@@ -97,9 +97,7 @@ public class Home {
         if (permissions.contains(player.getName())) {
             return true;
         }
-        if (HomePermissions.isAdmin(player)) {
-            return true;
-        }
+
         return (publicAll == 1) ? true : false;  
     }
 
