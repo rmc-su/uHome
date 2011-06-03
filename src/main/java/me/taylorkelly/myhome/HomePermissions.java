@@ -89,10 +89,10 @@ public class HomePermissions {
     		return value;
     	}
     }
-    
-    
-    public static boolean isAdmin(Player player) {
-        return permission(player, "myhome.admin", player.isOp());
+    // --------------------------------------------
+    // Admin Permissions
+    public static boolean adminReloadConfig(Player player) {
+        return permission(player, "myhome.admin.reload", player.isOp());
     }
     public static boolean adminDeleteHome(Player player) {
         return permission(player, "myhome.admin.home.delete", player.isOp());
@@ -100,41 +100,39 @@ public class HomePermissions {
     public static boolean adminAnyHome(Player player) {
         return permission(player, "myhome.admin.home.any", player.isOp());
     }
+    public static boolean adminConvert(Player player) {
+        return permission(player, "myhome.admin.convert", player.isOp());
+    }
     public static boolean adminListHome(Player player) {
         return permission(player, "myhome.admin.home.list", player.isOp());
     }
+
+    // --------------------------------------------
+    // User permissions
     public static boolean home(Player player) {
         return permission(player, "myhome.home.basic.home", true);
     }
-
     public static boolean set(Player player) {
         return permission(player, "myhome.home.basic.set", true);
     }
-
     public static boolean delete(Player player) {
         return permission(player, "myhome.home.basic.delete", true);
     }
-
     public static boolean list(Player player) {
         return permission(player, "myhome.home.soc.list", true);
     }
-
     public static boolean homeOthers(Player player) {
         return permission(player, "myhome.home.soc.others", true);
     }
-
     public static boolean invite(Player player) {
         return permission(player, "myhome.home.soc.invite", true);
     }
-
     public static boolean uninvite(Player player) {
         return permission(player, "myhome.home.soc.uninvite", true);
     }
-
     public static boolean canPublic(Player player) {
         return permission(player, "myhome.home.soc.public", true);
     }
-
     public static boolean canPrivate(Player player) {
         return permission(player, "myhome.home.soc.private", true);
     }
@@ -144,7 +142,19 @@ public class HomePermissions {
     public static boolean homeFree(Player player) {
         return permission(player, "myhome.home.free.home", true);
     }
+
+    // -----------------------------------
+    // Bypass Permissions
     public static boolean bedBypass(Player player) {
-        return permission(player, "myhome.home.bypass.bedsethome", true);
+        return permission(player, "myhome.bypass.bedsethome", true);
+    }
+    public static boolean bypassCooling(Player player) {
+        return permission(player, "myhome.bypass.cooldown", player.isOp());
+    }
+    public static boolean bypassWarming(Player player) {
+        return permission(player, "myhome.bypass.warmup", player.isOp());
+    }
+    public static boolean bypassSHCooling(Player player) {
+        return permission(player, "myhome.bypass.sethomecool", player.isOp());
     }
 }

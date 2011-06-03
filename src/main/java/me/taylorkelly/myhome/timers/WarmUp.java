@@ -15,7 +15,7 @@ public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
 
     public static void addPlayer(Player player, Home home, Plugin plugin) {
-        if (!HomeSettings.adminsObeyWarmsCools && HomePermissions.isAdmin(player)) {
+        if (HomePermissions.bypassWarming(player)) {
             home.warp(player, plugin.getServer());
             return;
         }

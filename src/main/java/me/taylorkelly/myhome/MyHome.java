@@ -198,13 +198,13 @@ public class MyHome extends JavaPlugin {
                     /**
                      *  /home reload
                      */
-                } else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && HomePermissions.isAdmin(player)) {
+                } else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && HomePermissions.adminReloadConfig(player)) {
                 	HomeSettings.initialize(getDataFolder());
                 	player.sendMessage("[MyHome] Reloading config");
                    /**
                      * /home convert
                      */
-                } else if (split.length == 1 && split[0].equalsIgnoreCase("convert") && HomePermissions.isAdmin(player)) {
+                } else if (split.length == 1 && split[0].equalsIgnoreCase("convert") && HomePermissions.adminConvert(player)) {
                     if (!warning) {
                         player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.WHITE + "Only use a copy of homes.txt.");
                         player.sendMessage("This will delete the homes.txt it uses");
@@ -283,21 +283,6 @@ public class MyHome extends JavaPlugin {
                     /**
                      * /home <name>
                      */
-                } else if (split.length == 2 && split[0].equalsIgnoreCase("help")) {
-                	if(split[1].equalsIgnoreCase("admin")) {
-                		ArrayList<String> messages = new ArrayList<String>();
-                        messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "MyHome Admin Commands" + ChatColor.RED + " -----");
-                        messages.add(ChatColor.RED + "/home convert" + ChatColor.WHITE + "  -  Convert a homes.txt file.");
-                        if(HomePermissions.adminDeleteHome(player)) {
-                			messages.add(ChatColor.RED + "/home clear [playername]" + ChatColor.WHITE + "  -  Clear playername's home");
-                		}
-                        if(HomePermissions.adminListHome(player)) {
-                			messages.add(ChatColor.RED + "/home listall" + ChatColor.WHITE + "  -  List all Homes");
-                		}
-                        for (String message : messages) {
-                            player.sendMessage(message);
-                        }
-                	}
                 } else if (split.length == 1 && split[0].equalsIgnoreCase("help")) {
                     ArrayList<String> messages = new ArrayList<String>();
                     messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
@@ -335,7 +320,16 @@ public class MyHome extends JavaPlugin {
                     if (HomeSettings.compassPointer) {
                         messages.add(ChatColor.RED + "/home point" + ChatColor.WHITE + "  -  Points your compass home");
                     }
-
+                    if(HomePermissions.adminConvert(player)) {
+                    	messages.add(ChatColor.RED + "/home convert" + ChatColor.WHITE + "  -  Convert a homes.txt file.");
+                    }
+                    if(HomePermissions.adminDeleteHome(player)) {
+            			messages.add(ChatColor.RED + "/home clear [playername]" + ChatColor.WHITE + "  -  Clear playername's home");
+            		}
+                    if(HomePermissions.adminListHome(player)) {
+            			messages.add(ChatColor.RED + "/home listall" + ChatColor.WHITE + "  -  List all Homes");
+            		}
+                    
                     for (String message : messages) {
                         player.sendMessage(message);
                     }

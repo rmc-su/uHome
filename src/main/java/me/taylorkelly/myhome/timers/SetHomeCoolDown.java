@@ -14,7 +14,7 @@ public class SetHomeCoolDown {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
 
     public static void addPlayer(Player player, Plugin plugin) {
-        if (!HomeSettings.adminsObeyWarmsCools && HomePermissions.isAdmin(player)) {
+        if (HomePermissions.bypassSHCooling(player)) {
             return;
         }
         if (HomeSettings.coolDownSetHome > 0) {
