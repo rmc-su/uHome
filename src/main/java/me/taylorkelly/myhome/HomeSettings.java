@@ -19,7 +19,8 @@ public class HomeSettings {
     public static boolean homesArePublic;
     public static int bedsCanSethome;
     public static boolean oneHomeAllWorlds;
-        
+    public static boolean loadChunks; 
+    
     public static boolean eConomyEnabled;
     public static int setHomeCost;
     public static int homeCost;
@@ -50,6 +51,7 @@ public class HomeSettings {
         homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
         bedsCanSethome = file.getInt("bedsCanSethome", 0, "0 = Disabled, 1 = Using a bed will /sethome automatically, 2 = /sethome is disabled and can only be set by using a bed ");
         oneHomeAllWorlds = file.getBoolean("oneHomeAllWorlds", true, "Only allow one home for all worlds on the server - False = one home per world");
+        loadChunks = file.getBoolean("loadChunks", false, "Force sending of the chunk which people teleport to - default: false");
         
         // Economy
         eConomyEnabled = file.getBoolean("eConomyEnabled", false, "Whether or not to hook into an eConomy plugin");
