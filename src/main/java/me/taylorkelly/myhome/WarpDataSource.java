@@ -15,7 +15,7 @@ public class WarpDataSource {
     public final static String DATABASE = "jdbc:sqlite:homes-warps.db";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
     	    + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
-            + "`world` varchar(32) NOT NULL DEFAULT '0'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` tinyint NOT NULL DEFAULT '0',"
+            + "`world` varchar(32) NOT NULL DEFAULT 'world'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` tinyint NOT NULL DEFAULT '0',"
             + "`z` DOUBLE NOT NULL DEFAULT '0'," + "`yaw` smallint NOT NULL DEFAULT '0'," + "`pitch` smallint NOT NULL DEFAULT '0',"
             + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` TEXT NOT NULL DEFAULT '',"
             + "`welcomeMessage` varchar(100) NOT NULL DEFAULT ''" + ");";
