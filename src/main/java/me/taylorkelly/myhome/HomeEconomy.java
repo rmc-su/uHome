@@ -14,7 +14,7 @@ public class HomeEconomy {
 			economy.getAccount(name).subtract(amount);
 			return true;
 		} else {
-			HomeLogger.warning("[MYHOME] - Could not fetch economy details for " + name);
+			HomeLogger.warning("Could not fetch economy details for " + name);
 			return false;
 		}
 	}

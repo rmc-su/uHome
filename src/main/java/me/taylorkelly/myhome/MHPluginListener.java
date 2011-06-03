@@ -22,7 +22,7 @@ public class MHPluginListener extends ServerListener {
 		if(!this.Methods.hasMethod()){
 			if(this.Methods.setMethod(event.getPlugin())){
 				HomeEconomy.economy = this.Methods.getMethod();
-				HomeLogger.info("[MYHOME] " + HomeEconomy.economy.getName() + " version " + HomeEconomy.economy.getVersion() + " loaded.");
+				HomeLogger.info(HomeEconomy.economy.getName() + " version " + HomeEconomy.economy.getVersion() + " loaded.");
 			}
 		}	
 	}
@@ -33,7 +33,7 @@ public class MHPluginListener extends ServerListener {
 			Boolean check = this.Methods.checkDisabled(event.getPlugin());
 			if(check) {
 				this.Methods = null;
-				HomeLogger.info("[MYHOME] Payment method was disabled. No longer accepting payments.");
+				HomeLogger.info("Payment method was disabled. No longer accepting payments.");
 			}
 		}
 	}
