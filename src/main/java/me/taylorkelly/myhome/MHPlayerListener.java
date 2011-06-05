@@ -9,7 +9,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.Material;
 
 public class MHPlayerListener extends PlayerListener {
 
@@ -37,6 +40,17 @@ public class MHPlayerListener extends PlayerListener {
     	}
     }
 
+    @Override
+    public void onPlayerInteract(PlayerInteractEvent event) {
+    	if(event.isCancelled()) return;
+    	if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    	if(HomeSettings.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
+    		if(HomeSettings.bedsCanSethome != 0) {
+        		homeList.addHome(event.getPlayer(), plugin);
+        	}
+    	}
+    }
+    
     @Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		World world = event.getPlayer().getWorld();

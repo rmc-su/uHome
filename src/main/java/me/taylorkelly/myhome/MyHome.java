@@ -66,12 +66,15 @@ public class MyHome extends JavaPlugin {
         	// We dont need to register for teleporting if we dont want to load chunks.
         	getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
         }
-        
-        if(HomeSettings.bedsCanSethome != 0) {
-        	// We don't need this if the beds dont autosethome
-        	getServer().getPluginManager().registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
+               
+        if(HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
+        	// We don't need this if the beds cannot be used during the day
+        	getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
+        } else if(!HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
+        	// We don't need this if the beds dont sethome
+            getServer().getPluginManager().registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
         }
-       
+        
         HomeLogger.info(name + " " + version + " enabled");
     }
 
