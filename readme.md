@@ -31,8 +31,8 @@ Give your users myhome.home.soc.*, and they'll be able to do all of that.
     /home ilist - (myhome.home.soc.list) - Displays who can visit your home
     /home invite <name> - (myhome.home.soc.invite) - Invites <name> to your house
     /home uninvite <name> - (myhome.home.soc.uninvite) - Uninvites <name> to your house
-    /home public - (myhome.home.soc.invite) - Makes your house public
-    /home private - (myhome.home.soc.uninvite) - Makes your house private
+    /home public - (myhome.home.soc.public) - Makes your house public
+    /home private - (myhome.home.soc.private) - Makes your house private
 
 **...is Capitalistic**
 
