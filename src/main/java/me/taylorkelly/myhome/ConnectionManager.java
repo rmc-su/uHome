@@ -32,7 +32,12 @@ public class ConnectionManager {
 
     public static Connection getConnection() {
         if(conn == null) conn = initialize();
-      	return conn;
+        try {
+        	if(!conn.isValid(10)) conn = initialize();
+        } catch (SQLException ex) {
+        	HomeLogger.severe("Failed to check SQL status", ex);
+        }
+        return conn;
     }
 
     public static void closeConnection() {
