@@ -52,7 +52,7 @@ public class Converter {
                     ps.setString(2, warp.name);
                     ps.setString(3, warp.world);
                     ps.setDouble(4, warp.x);
-                    ps.setInt(5, warp.y);
+                    ps.setDouble(5, warp.y);
                     ps.setDouble(6, warp.z);
                     ps.setInt(7, warp.yaw);
                     ps.setInt(8, warp.pitch);

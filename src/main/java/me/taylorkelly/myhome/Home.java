@@ -11,7 +11,7 @@ public class Home {
     public String name;
     public String world;
     public double x;
-    public int y;
+    public double y;
     public double z;
     public int yaw;
     public int pitch;
@@ -21,7 +21,7 @@ public class Home {
     public static int nextIndex = 1;
     Location getLocation;
 
-    public Home(int index, String name, String world, double x, int y, double z, int yaw, int pitch, int publicAll, String permissions, String welcomeMessage) {
+    public Home(int index, String name, String world, double x, double y, double z, int yaw, int pitch, int publicAll, String permissions, String welcomeMessage) {
         this.index = index;
         this.name = name;
         this.world = world;
@@ -39,7 +39,7 @@ public class Home {
         nextIndex++;
     }
 
-    public Home(Player creator) {
+    public Home(Player creator) { 
         this.index = nextIndex;
         nextIndex++;
         this.name = creator.getName();
