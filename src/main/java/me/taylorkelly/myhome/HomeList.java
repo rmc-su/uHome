@@ -151,9 +151,9 @@ public class HomeList {
             Home warp = homeList.get(srchplayer);
             homeList.remove(srchplayer);
             WarpDataSource.deleteWarp(warp);
-            player.sendMessage(ChatColor.AQUA + "You have deleted "+player+"'s home");
+            player.sendMessage(ChatColor.AQUA + "You have deleted "+srchplayer+"'s home");
         } else {
-            player.sendMessage(ChatColor.RED + "There is no home for " + player);
+            player.sendMessage(ChatColor.RED + "There is no home for " + srchplayer);
         }
     }
 
