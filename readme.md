@@ -42,6 +42,13 @@ You might prefer to make your players pay to use /home and /sethome. MyHome is a
     (myhome.home.free.sethome) - Allow /sethome usage for free
     (myhome.home.free.home) - Allow /home usage for free
 
+You can now set per user and per group costs for for both /home and /sethome. These are done by setting an option for that user/group in your permissions plugin.
+
+    (myhome.costs.home) - The cost to use /home
+    (myhome.costs.sethome) - The cost to use /sethome
+    
+These costs can be set to be in addition to the global costs defined in the configuration also.
+
 **...is Restricting**
 
 You may be a server admin who doesn't want their users always /home'ing out of danger whenever they jolly-well-feel-like-it. MyHome allows you to set 'Warm Ups', 'Cool Downs', or both. You can set this in MyHome.settings. Or... if you don't care about these things, just leave their settings as default, which is off.
@@ -52,11 +59,17 @@ Cool Downs are the amount of time between which players can use the /home comman
 
 SetHome Cool Downs is the amount of time which must pass between the uses of the /sethome command.
 
-For now, Warm Ups and both Cool Downs are global, but once the Bukkit permissions/groups get more fleshed out, MH will have per user/group Warm Ups and Cool Downs.
-
     (myhome.bypass.cooldown) - Permission to bypass /home cooldowns
     (myhome.bypass.warmup) - Permission to bypass /home warmup
     (myhome.bypass.sethomecool) - Permission to bypass /sethome cooldown
+
+You can now set per user and per group cooldown and warmups for both /home and /sethome. These are done by setting an option for that user/group in your permissions plugin.
+
+    (myhome.timer.cooldown) - The cooldown timer to use after a player uses /home
+    (myhome.timer.warmup) - The warmup timer to use before a player is sent /home
+    (myhome.timer.sethome) - The cooldown timer to use between allowing /sethome
+
+These times can be set to be in addition to the global warmup/cooldown periods defined in the configuration.
 
 Some server administrators may prefer that where players sleep should be considered their home. They have the option to make sleeping in a bed function as /sethome and also to disable the /sethome command to force sleeping. 
 
