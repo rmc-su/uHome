@@ -3,9 +3,7 @@ package me.taylorkelly.myhome;
 import ru.tehkode.permissions.bukkit.*;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import org.anjocaido.groupmanager.GroupManager;
-
 import me.taylorkelly.myhome.HomeLogger;
-
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -70,7 +68,7 @@ public class HomePermissions {
     	int value;
     	switch (handler) {
             case PERMISSIONSEX:
-            	value = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(player.getName()).getOptionIngeger(permission, player.getWorld().getName(), -1);
+            	value = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(player.getName()).getOptionIngeger(permission, player.getWorld().getName(), defaultPerm);
             case PERMISSIONS3:
                 value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(player.getWorld().getName(), player.getName(), permission);
             case PERMISSIONS:
