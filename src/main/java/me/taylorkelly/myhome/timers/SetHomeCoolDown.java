@@ -21,8 +21,18 @@ public class SetHomeCoolDown {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
+            
+            int timer;
+        	if (HomeSettings.timerByPerms) {
+				timer = HomePermissions.integer(player, "myhome.timer.sethome", HomeSettings.coolDownSetHome);
+				if(HomeSettings.additionalTime) {
+					timer += HomeSettings.coolDownSetHome;
+				}
+			} else {
+				timer = HomeSettings.coolDownSetHome;
+			}
 
-            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new CoolSHTask(player), HomeSettings.coolDownSetHome * 20);
+            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new CoolSHTask(player), timer * 20);
             players.put(player.getName(), taskIndex);
         }
     }

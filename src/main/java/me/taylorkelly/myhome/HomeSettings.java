@@ -14,6 +14,8 @@ public class HomeSettings {
 	//public static boolean adminsObeyWarmsCools;
 	public static boolean allowSetHome;
 	public static int coolDownSetHome;
+	public static boolean timerByPerms;
+	public static boolean additionalTime;
 	public static boolean homesArePublic;
 	public static int bedsCanSethome;
 	public static boolean bedsDuringDay;
@@ -49,6 +51,8 @@ public class HomeSettings {
 		//adminsObeyWarmsCools = file.getBoolean("adminsObeyWarmsCools", true, "Whether or not admins obey the WarmUp + CoolDown times (false means they don't)");
 		allowSetHome = file.getBoolean("allowSetHome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
 		coolDownSetHome = file.getInt("coolDownSetHome", 0, "Global: The number of seconds between each use of /home set");
+		timerByPerms = file.getBoolean("timerByPerms", false, "Should cooldown/warmup timers be dictated by settings in a permissions plugin - Per user/group");
+		additionalTime = file.getBoolean("additionalTime", false, "Should group/user timers be IN ADDITION to the global timers");
 		homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
 		bedsCanSethome = file.getInt("bedsCanSethome", 0, "0 = Disabled, 1 = Using a bed will /sethome automatically, 2 = /sethome is disabled and can only be set by using a bed ");
 		bedsDuringDay = file.getBoolean("bedsDuringDay", false, "Whether beds can be used to /sethome during the day without sleeping in them. bedsCanSethome enables using beds.");

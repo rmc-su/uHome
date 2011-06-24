@@ -24,10 +24,23 @@ public class WarmUp {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
-            if (HomeSettings.warmUpNotify && HomeSettings.warmUp > 0) {
-                player.sendMessage(ChatColor.RED + "You will have to warm up for " + HomeSettings.warmUp + " secs");
+            
+            int timer;
+        	if (HomeSettings.timerByPerms) {
+				timer = HomePermissions.integer(player, "myhome.timer.warmup", HomeSettings.warmUp);
+				if(HomeSettings.additionalTime) {
+					timer += HomeSettings.warmUp;
+				}
+			} else {
+				timer = HomeSettings.warmUp;
+			}
+            
+            if (HomeSettings.warmUpNotify && timer > 0) {
+                player.sendMessage(ChatColor.RED + "You will have to warm up for " + timer + " secs");
             }
-            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), HomeSettings.warmUp*20);
+
+            
+            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer*20);
             players.put(player.getName(), taskIndex);
         } else {
             home.warp(player, plugin.getServer());
@@ -39,7 +52,16 @@ public class WarmUp {
     }
 
     private static void sendPlayer(Player player, Home home, Server server) {
-        if (HomeSettings.warmUpNotify && HomeSettings.warmUp > 0)
+        int timer;
+    	if (HomeSettings.timerByPerms) {
+			timer = HomePermissions.integer(player, "myhome.timer.warmup", HomeSettings.warmUp);
+			if(HomeSettings.additionalTime) {
+				timer += HomeSettings.warmUp;
+			}
+		} else {
+			timer = HomeSettings.warmUp;
+		}
+    	if (HomeSettings.warmUpNotify && timer > 0)
             player.sendMessage(ChatColor.RED + "You have warmed up! Sending you /home");
         home.warp(player, server);
     }
