@@ -70,8 +70,7 @@ public class HomePermissions {
     	int value;
     	switch (handler) {
             case PERMISSIONSEX:
-            	String val = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(player.getName()).getOptionValue(permission, player.getWorld().getName());
-            	if (val.isEmpty()) { value = -1; } else { value = Integer.parseInt(val); }
+            	value = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(player.getName()).getOptionIngeger(permission, player.getWorld().getName(), -1);
             case PERMISSIONS3:
                 value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(player.getWorld().getName(), player.getName(), permission);
             case PERMISSIONS:
