@@ -110,7 +110,7 @@ public class Home {
 			player.sendMessage(ChatColor.RED + "Uh oh. The world with that home doesn't exist!");
 		} else {
 			Location location = new Location(currWorld, x, y, z, yaw, pitch);
-			player.teleportTo(location);
+			player.teleport(location);
 			player.sendMessage(ChatColor.AQUA + this.welcomeMessage);
 		}
 	}
