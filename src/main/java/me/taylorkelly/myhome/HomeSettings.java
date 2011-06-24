@@ -23,7 +23,9 @@ public class HomeSettings {
 	public static boolean eConomyEnabled;
 	public static int setHomeCost;
 	public static int homeCost;
-
+	public static boolean costByPerms;
+	public static boolean additionalCosts;
+	
 	public static boolean usemySQL;
 	public static String mySQLuname;
 	public static String mySQLpass;
@@ -39,14 +41,14 @@ public class HomeSettings {
 		dataDir = dataFolder;
 
 		compassPointer = file.getBoolean("compassPointer", true, "Whether or not users' compasses point to home");
-		coolDown = file.getInt("coolDown", 0, "The number of seconds between when users can go to a home");
-		warmUp = file.getInt("warmUp", 0, "The number of seconds after a user uses a home command before it takes them");
+		coolDown = file.getInt("coolDown", 0, "Global: The number of seconds between when users can go to a home");
+		warmUp = file.getInt("warmUp", 0, "Global: The number of seconds after a user uses a home command before it takes them");
 		coolDownNotify = file.getBoolean("coolDownNotify", false, "Whether or not players will be notified after they've cooled down");
 		warmUpNotify = file.getBoolean("warmUpNotify", true, "Whether or not players will be notified after they've warmed up");
 		respawnToHome = file.getBoolean("respawnToHome", true, "Whether or not players will respawn to their homes (false means to global spawn)");
 		//adminsObeyWarmsCools = file.getBoolean("adminsObeyWarmsCools", true, "Whether or not admins obey the WarmUp + CoolDown times (false means they don't)");
 		allowSetHome = file.getBoolean("allowSetHome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
-		coolDownSetHome = file.getInt("coolDownSetHome", 0, "The number of seconds between each use of /home set");
+		coolDownSetHome = file.getInt("coolDownSetHome", 0, "Global: The number of seconds between each use of /home set");
 		homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
 		bedsCanSethome = file.getInt("bedsCanSethome", 0, "0 = Disabled, 1 = Using a bed will /sethome automatically, 2 = /sethome is disabled and can only be set by using a bed ");
 		bedsDuringDay = file.getBoolean("bedsDuringDay", false, "Whether beds can be used to /sethome during the day without sleeping in them. bedsCanSethome enables using beds.");
@@ -55,8 +57,10 @@ public class HomeSettings {
 
 		// Economy
 		eConomyEnabled = file.getBoolean("eConomyEnabled", false, "Whether or not to hook into an eConomy plugin");
-		setHomeCost = file.getInt("setHomeCost", 0, "How much to charge the player for using /home set");
-		homeCost = file.getInt("homeCost", 0, "How much to charge a player for using /home");
+		setHomeCost = file.getInt("setHomeCost", 0, "Global: How much to charge the player for using /home set");
+		homeCost = file.getInt("homeCost", 0, "Global: How much to charge a player for using /home");
+		costByPerms = file.getBoolean("costByPerms", false, "Should costs be dictated by settings in a permissions plugin - Per user/group costs");
+		additionalCosts = file.getBoolean("additionalCosts", false, "Should group/user costs be IN ADDITION to the global costs");
 
 		// MySQL
 		usemySQL = file.getBoolean("usemySQL", false, "MySQL usage --  true = use MySQL database / false = use SQLite");
