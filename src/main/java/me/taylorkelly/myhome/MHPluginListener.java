@@ -4,15 +4,11 @@ import com.nijikokun.register.payment.Methods;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.ServerListener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 
 public class MHPluginListener extends ServerListener {
 	private Methods Methods = null;
-	private Plugin plugin;
 
-	public MHPluginListener(Plugin plugin) {
-		this.plugin = plugin;
+	public MHPluginListener() {
 		if(HomeSettings.eConomyEnabled) {
 			this.Methods = new Methods();
 		}

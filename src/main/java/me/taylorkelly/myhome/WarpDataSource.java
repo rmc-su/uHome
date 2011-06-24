@@ -9,18 +9,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class WarpDataSource {
-
     public final static String sqlitedb = "/homes.db";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
-    	    + "`id` INTEGER PRIMARY KEY," + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
-            + "`world` varchar(32) NOT NULL DEFAULT '0'," + "`x` DOUBLE NOT NULL DEFAULT '0'," + "`y` DOUBLE NOT NULL DEFAULT '0',"
-            + "`z` DOUBLE NOT NULL DEFAULT '0'," + "`yaw` smallint NOT NULL DEFAULT '0'," + "`pitch` smallint NOT NULL DEFAULT '0',"
-            + "`publicAll` boolean NOT NULL DEFAULT '0'," + "`permissions` TEXT,"
-            + "`welcomeMessage` varchar(100) NOT NULL DEFAULT ''" + ");";
+    	    + "`id` INTEGER PRIMARY KEY," 
+    	    + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
+            + "`world` varchar(32) NOT NULL DEFAULT '0'," 
+            + "`x` DOUBLE NOT NULL DEFAULT '0'," 
+            + "`y` DOUBLE NOT NULL DEFAULT '0',"
+            + "`z` DOUBLE NOT NULL DEFAULT '0'," 
+            + "`yaw` smallint NOT NULL DEFAULT '0'," 
+            + "`pitch` smallint NOT NULL DEFAULT '0',"
+            + "`publicAll` boolean NOT NULL DEFAULT '0'," 
+            + "`permissions` TEXT,"
+            + "`welcomeMessage` varchar(100) NOT NULL DEFAULT ''" 
+            + ");";
 
     public static void initialize() {
     	if (!tableExists()) {
@@ -151,23 +155,23 @@ public class WarpDataSource {
     				if (!sqlitefile.renameTo(new File(HomeSettings.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
     					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
     				}
-    				
-        			if (slstatement != null) {
-        				slstatement.close();
-        			}
-        			if (slset != null) {
-        				slset.close();
-        			}
-    				
+
+    				if (slstatement != null) {
+    					slstatement.close();
+    				}
+    				if (slset != null) {
+    					slset.close();
+    				}
+
     				if (sqliteconn != null) {
-        				sqliteconn.close();
+    					sqliteconn.close();
     				}
     			}
     		}
     	} catch (SQLException e) {
     		HomeLogger.severe("Create Table Exception", e);
-        } catch (ClassNotFoundException e) {
-            HomeLogger.severe("You need the SQLite library.", e);
+    	} catch (ClassNotFoundException e) {
+    		HomeLogger.severe("You need the SQLite library.", e);
     	} finally {
     		try {
     			if (st != null) {
@@ -379,7 +383,7 @@ public class WarpDataSource {
     		while (colRS.next()) {
     			String colName = colRS.getString("COLUMN_NAME");
     			String colType = colRS.getString("TYPE_NAME");
-    			
+
     			if (colName.equals(field) && !colType.equals(type))
     			{
     				Statement stm = conn.createStatement();

@@ -16,42 +16,40 @@ import org.bukkit.Material;
 
 public class MHPlayerListener extends PlayerListener {
 
-    private HomeList homeList;
-    private Server server;
-    private Plugin plugin;
+	private HomeList homeList;
+	private Plugin plugin;
 
-    public MHPlayerListener(HomeList homeList, Server server, Plugin plugin) {
-        this.homeList = homeList;
-        this.server = server;
-        this.plugin = plugin;
-    }
+	public MHPlayerListener(HomeList homeList, Plugin plugin) {
+		this.homeList = homeList;
+		this.plugin = plugin;
+	}
 
-    @Override
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        if (homeList.homeExists(event.getPlayer().getName())) {
-            homeList.orientPlayer(event.getPlayer());
-        }
-    }
-    
-    @Override
-    public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
-    	if(HomeSettings.bedsCanSethome != 0) {
-    		homeList.addHome(event.getPlayer(), plugin);
-    	}
-    }
+	@Override
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		if (homeList.homeExists(event.getPlayer().getName())) {
+			homeList.orientPlayer(event.getPlayer());
+		}
+	}
 
-    @Override
-    public void onPlayerInteract(PlayerInteractEvent event) {
-    	if(event.isCancelled()) return;
-    	if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-    	if(HomeSettings.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
-    		if(HomeSettings.bedsCanSethome != 0) {
-        		homeList.addHome(event.getPlayer(), plugin);
-        	}
-    	}
-    }
-    
-    @Override
+	@Override
+	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
+		if(HomeSettings.bedsCanSethome != 0) {
+			homeList.addHome(event.getPlayer(), plugin);
+		}
+	}
+
+	@Override
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if(event.isCancelled()) return;
+		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+		if(HomeSettings.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
+			if(HomeSettings.bedsCanSethome != 0) {
+				homeList.addHome(event.getPlayer(), plugin);
+			}
+		}
+	}
+
+	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if(HomeSettings.loadChunks) {
 			World world = event.getPlayer().getWorld();
@@ -61,15 +59,15 @@ public class MHPlayerListener extends PlayerListener {
 			world.refreshChunk(x, z);
 		}
 	}
-    
-    @Override
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (HomeSettings.respawnToHome && homeList.homeExists(event.getPlayer().getName())) {
-            Location location = homeList.getHomeFor(event.getPlayer()).getLocation(server);
-            if (location != null) {
-                event.setRespawnLocation(location);
-                homeList.orientPlayer(event.getPlayer());
-            }
-        }
-    }
+
+	@Override
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		if (HomeSettings.respawnToHome && homeList.homeExists(event.getPlayer().getName())) {
+			Location location = homeList.getHomeFor(event.getPlayer()).getLocation(plugin.getServer());
+			if (location != null) {
+				event.setRespawnLocation(location);
+				homeList.orientPlayer(event.getPlayer());
+			}
+		}
+	}
 }
