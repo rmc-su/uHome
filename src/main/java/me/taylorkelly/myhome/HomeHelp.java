@@ -21,9 +21,9 @@ class HomeHelp {
 			helpPlugin.registerCommand("home ilist", "List the people invited to your home", plugin, "myhome.home.soc.list");
 			helpPlugin.registerCommand("home public", "Makes your home public", plugin, "myhome.home.soc.public");
 			helpPlugin.registerCommand("home private", "Makes your home private", plugin, "myhome.home.soc.private");
-			HomeLogger.info("'Help' support enabled.");
+			HomeLogger.info("Help plugin support enabled.");
 		} else {
-			HomeLogger.warning("'Help' isn't detected. No /help support.");
+			HomeLogger.warning("Help plugin not detected. Only providing help via /home help.");
 		}
 	}
 }
