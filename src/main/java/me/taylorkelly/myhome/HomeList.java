@@ -221,10 +221,20 @@ public class HomeList {
 				if (warp.publicAll == 1) {
 					player.sendMessage(ChatColor.RED + "But your home is still public!");
 				}
-				Player match = server.getPlayer(inviteeName);
-				if (match != null) {
-					match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
-					match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
+				
+				Player match = null;
+				List<Player> matches = server.matchPlayer(inviteeName);
+				if(!matches.isEmpty()) {
+					for (Player i : matches) {
+						if (i.getName().equalsIgnoreCase(inviteeName)) {
+							match = i;
+						}
+					}
+
+					if (match != null) {
+						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
+						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
+					}
 				}
 			}
 		} else {
@@ -247,9 +257,19 @@ public class HomeList {
 				if (warp.publicAll == 1) {
 					player.sendMessage(ChatColor.RED + "But your home is still public.");
 				}
-				Player match = server.getPlayer(inviteeName);
-				if (match != null) {
-					match.sendMessage(ChatColor.RED + "You've been uninvited to " + player.getName() + "'s home. Sorry.");
+				Player match = null;
+				List<Player> matches = server.matchPlayer(inviteeName);
+				if(!matches.isEmpty()) {
+					for (Player i : matches) {
+						if (i.getName().equalsIgnoreCase(inviteeName)) {
+							match = i;
+						}
+					}
+
+					if (match != null) {
+						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
+						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
+					}
 				}
 			}
 		} else {
