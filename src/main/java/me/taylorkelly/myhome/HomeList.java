@@ -19,6 +19,7 @@ public class HomeList {
 	public HomeList(Server server) {
 		WarpDataSource.initialize();
 		homeList = WarpDataSource.getMap();
+		this.server = server;
 	}
 
 	public void addHome(Player player, Plugin plugin) {
@@ -221,21 +222,12 @@ public class HomeList {
 				if (warp.publicAll == 1) {
 					player.sendMessage(ChatColor.RED + "But your home is still public!");
 				}
-				
-				Player match = null;
-				List<Player> matches = server.matchPlayer(inviteeName);
-				if(!matches.isEmpty()) {
-					for (Player i : matches) {
-						if (i.getName().equalsIgnoreCase(inviteeName)) {
-							match = i;
-						}
-					}
-
-					if (match != null) {
+				for (Player match : server.getOnlinePlayers()) {
+					if (match.getName().equalsIgnoreCase(inviteeName)) {
 						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
 						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
 					}
-				}
+				}	
 			}
 		} else {
 			player.sendMessage(ChatColor.RED + "You have no home to invite people to :(");
@@ -257,20 +249,12 @@ public class HomeList {
 				if (warp.publicAll == 1) {
 					player.sendMessage(ChatColor.RED + "But your home is still public.");
 				}
-				Player match = null;
-				List<Player> matches = server.matchPlayer(inviteeName);
-				if(!matches.isEmpty()) {
-					for (Player i : matches) {
-						if (i.getName().equalsIgnoreCase(inviteeName)) {
-							match = i;
-						}
-					}
-
-					if (match != null) {
+				for (Player match : server.getOnlinePlayers()) {
+					if (match.getName().equalsIgnoreCase(inviteeName)) {
 						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
 						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
 					}
-				}
+				}	
 			}
 		} else {
 			player.sendMessage(ChatColor.RED + "You have no home to uninvite people from :(");
