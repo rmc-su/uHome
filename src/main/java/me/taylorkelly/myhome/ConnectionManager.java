@@ -44,8 +44,15 @@ public class ConnectionManager {
 	public static void closeConnection() {
 		if(conn != null) {
 			try {
-				conn.close();
-				conn = null;
+				if(HomeSettings.usemySQL){
+					if(conn.isValid(10)) {
+						conn.close();
+					}
+					conn = null;
+				} else {
+					conn.close();
+					conn = null;
+				}
 			} catch (SQLException ex) {
 				HomeLogger.severe("Error on Connection close", ex);
 			}
