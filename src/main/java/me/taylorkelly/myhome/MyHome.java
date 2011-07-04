@@ -58,7 +58,7 @@ public class MyHome extends JavaPlugin {
 		HomeHelp.initialize(this);
 
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
 
