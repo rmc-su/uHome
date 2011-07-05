@@ -339,7 +339,7 @@ public class HomeList {
 		for (int i = 0; i < names.size(); i++) {
 			String currName = names.get(i);
 			Home warp = homeList.get(currName);
-			if (warp.playerCanWarp(player)) {
+			if (warp.playerCanWarp(player) || HomePermissions.adminAnyHome(player)) {
 				if (warp.name.equalsIgnoreCase(name)) {
 					exactMatches.add(warp);
 				} else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
