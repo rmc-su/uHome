@@ -21,6 +21,7 @@ import org.bukkit.plugin.PluginManager;
 
 public class MyHome extends JavaPlugin {
 	private MHPlayerListener playerListener;
+	private MHEntityListener entityListener;
 	private MHPluginListener pluginListener;
 	private HomeList homeList;
 	private boolean warning = false;
@@ -52,6 +53,7 @@ public class MyHome extends JavaPlugin {
 
 		homeList = new HomeList(getServer());
 		playerListener = new MHPlayerListener(homeList, this);
+		entityListener = new MHEntityListener(this);
 		pluginListener = new MHPluginListener();
 
 		HomePermissions.initialize(getServer());
@@ -65,6 +67,11 @@ public class MyHome extends JavaPlugin {
 		if(HomeSettings.loadChunks) {
 			// We dont need to register for teleporting if we dont want to load chunks.
 			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+		}
+		
+		if(HomeSettings.abortOnDamage != 0) {
+			// We dont need this if we're not aborting warmups for combat.
+			pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
 		}
 
 		if(HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {

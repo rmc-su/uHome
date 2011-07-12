@@ -66,6 +66,15 @@ public class WarmUp {
         home.warp(player, server);
     }
 
+    public static void cancelWarming(Player player, Plugin plugin) {
+    	if(!HomePermissions.bypassWarmupAbort(player)) {
+    		if (players.containsKey(player.getName())) {
+    			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
+    		}
+    		player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+    	}
+    }
+    
     private static class WarmTask implements Runnable {
         private Player player;
         private Home home;

@@ -155,4 +155,7 @@ public class HomePermissions {
 	public static boolean bypassSHCooling(Player player) {
 		return permission(player, "myhome.bypass.sethomecool", player.isOp());
 	}
+	public static boolean bypassWarmupAbort(Player player) {
+		return permission(player, "myhome.bypass.dmgaborting", player.isOp());
+	}
 }
