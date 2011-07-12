@@ -3,7 +3,6 @@ package me.taylorkelly.myhome.timers;
 import java.util.HashMap;
 
 import me.taylorkelly.myhome.Home;
-import me.taylorkelly.myhome.HomeLogger;
 import me.taylorkelly.myhome.HomePermissions;
 import me.taylorkelly.myhome.HomeSettings;
 
