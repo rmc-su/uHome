@@ -238,8 +238,6 @@ public class MyHome extends JavaPlugin {
 					/**
 					 * /home delete
 					 */
-				} else if (split.length == 1 && split[0].equalsIgnoreCase("wutimer") && HomePermissions.delete(player)) {
-					player.sendMessage("Warm up timer: " + WarmUp.getTimer(player));
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("delete") && HomePermissions.delete(player)) {
 					homeList.deleteHome(player);
 					/**
