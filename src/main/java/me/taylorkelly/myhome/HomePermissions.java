@@ -64,7 +64,7 @@ public class HomePermissions {
 	}
 
 	public static int integer(Player player, String permission, int defaultPerm) {
-		int value;
+		int value = defaultPerm;
 		String world = player.getWorld().getName();
 		String playername = player.getName();
 		switch (handler) {
@@ -81,11 +81,7 @@ public class HomePermissions {
 		default:
 			value = defaultPerm;
 		}
-		if(value < 0) {
-			return defaultPerm;
-		} else {
-			return value;
-		}
+		return value;
 	}
 	// --------------------------------------------
 	// Admin Permissions
