@@ -64,24 +64,22 @@ public class HomePermissions {
 	}
 
 	public static int integer(Player player, String permission, int defaultPerm) {
-		int value = defaultPerm;
 		String world = player.getWorld().getName();
 		String playername = player.getName();
 		switch (handler) {
 		case PERMISSIONSEX:
-			value = ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(playername).getOptionInteger(permission, world, defaultPerm);
+			return ((PermissionsEx) permissionPlugin).getPermissionManager().getUser(playername).getOptionInteger(permission, world, defaultPerm);
 		case PERMISSIONS3:
-			value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(world, playername, permission);
+			return ((Permissions) permissionPlugin).getHandler().getPermissionInteger(world, playername, permission);
 		case PERMISSIONS:
-			value = ((Permissions) permissionPlugin).getHandler().getPermissionInteger(world, playername, permission);
+			return ((Permissions) permissionPlugin).getHandler().getPermissionInteger(world, playername, permission);
 		case GROUPMANAGER:
-			value = ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).getPermissionInteger(playername, permission);
+			return ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).getPermissionInteger(playername, permission);
 		case NONE:
-			value = defaultPerm;
+			return defaultPerm;
 		default:
-			value = defaultPerm;
+			return defaultPerm;
 		}
-		return value;
 	}
 	// --------------------------------------------
 	// Admin Permissions
