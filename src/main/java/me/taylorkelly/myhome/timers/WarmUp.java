@@ -20,25 +20,16 @@ public class WarmUp {
             return;
         }
         
-        if (HomeSettings.warmUp > 0) {
+        int timer = getTimer(player);
+    	
+        if (timer > 0) {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
             
-            int timer;
-        	if (HomeSettings.timerByPerms) {
-				timer = HomePermissions.integer(player, "myhome.timer.warmup", HomeSettings.warmUp);
-				if(HomeSettings.additionalTime) {
-					timer += HomeSettings.warmUp;
-				}
-			} else {
-				timer = HomeSettings.warmUp;
-			}
-            
-            if (HomeSettings.warmUpNotify && timer > 0) {
+            if (HomeSettings.warmUpNotify) {
                 player.sendMessage(ChatColor.RED + "You will have to warm up for " + timer + " secs");
             }
-
             
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer*20);
             players.put(player.getName(), taskIndex);
@@ -52,15 +43,7 @@ public class WarmUp {
     }
 
     private static void sendPlayer(Player player, Home home, Server server) {
-        int timer;
-    	if (HomeSettings.timerByPerms) {
-			timer = HomePermissions.integer(player, "myhome.timer.warmup", HomeSettings.warmUp);
-			if(HomeSettings.additionalTime) {
-				timer += HomeSettings.warmUp;
-			}
-		} else {
-			timer = HomeSettings.warmUp;
-		}
+        int timer = getTimer(player);
     	if (HomeSettings.warmUpNotify && timer > 0)
             player.sendMessage(ChatColor.RED + "You have warmed up! Sending you /home");
         home.warp(player, server);
@@ -70,10 +53,24 @@ public class WarmUp {
     	if(!HomePermissions.bypassWarmupAbort(player)) {
     		if (players.containsKey(player.getName())) {
     			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
+    			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
     		}
-    		player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
     	}
     }
+    
+    public static int getTimer(Player player) {
+        int timer = 0;
+    	if (HomeSettings.timerByPerms) {
+			timer = HomePermissions.integer(player, "myhome.timer.warmup", HomeSettings.warmUp);
+			if(HomeSettings.additionalTime) {
+				timer += HomeSettings.warmUp;
+			}
+		} else {
+			timer = HomeSettings.warmUp;
+		}
+    	return timer;
+    }
+    
     
     private static class WarmTask implements Runnable {
         private Player player;

@@ -17,20 +17,12 @@ public class SetHomeCoolDown {
         if (HomePermissions.bypassSHCooling(player)) {
             return;
         }
-        if (HomeSettings.coolDownSetHome > 0) {
+
+        int timer = getTimer(player);
+        if (timer > 0) {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
-            
-            int timer;
-        	if (HomeSettings.timerByPerms) {
-				timer = HomePermissions.integer(player, "myhome.timer.sethome", HomeSettings.coolDownSetHome);
-				if(HomeSettings.additionalTime) {
-					timer += HomeSettings.coolDownSetHome;
-				}
-			} else {
-				timer = HomeSettings.coolDownSetHome;
-			}
 
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new CoolSHTask(player), timer * 20);
             players.put(player.getName(), taskIndex);
@@ -50,6 +42,19 @@ public class SetHomeCoolDown {
         }
     }
 
+    public static int getTimer(Player player) {
+        int timer = 0;
+    	if (HomeSettings.timerByPerms) {
+			timer = HomePermissions.integer(player, "myhome.timer.sethome", HomeSettings.coolDownSetHome);
+			if(HomeSettings.additionalTime) {
+				timer += HomeSettings.coolDownSetHome;
+			}
+		} else {
+			timer = HomeSettings.coolDownSetHome;
+		}
+        return timer;
+    }
+    
     private static class CoolSHTask implements Runnable {
 
         private Player player;
