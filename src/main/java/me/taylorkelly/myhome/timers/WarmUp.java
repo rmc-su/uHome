@@ -3,6 +3,7 @@ package me.taylorkelly.myhome.timers;
 import java.util.HashMap;
 
 import me.taylorkelly.myhome.Home;
+import me.taylorkelly.myhome.HomeLogger;
 import me.taylorkelly.myhome.HomePermissions;
 import me.taylorkelly.myhome.HomeSettings;
 
@@ -53,6 +54,7 @@ public class WarmUp {
     	if(!HomePermissions.bypassWarmupAbort(player)) {
     		if (players.containsKey(player.getName())) {
     			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
+    			players.remove(player.getName());
     			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
     		}
     	}
