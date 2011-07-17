@@ -7,6 +7,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Animals;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -18,7 +20,7 @@ public class MHEntityListener extends EntityListener {
 	}
 
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled() || !(event instanceof EntityDamageByEntityEvent) || HomeSettings.abortOnDamage == 0)
+		if (event.isCancelled() || !(event instanceof EntityDamageByEntityEvent) || !(event.getEntity() instanceof LivingEntity) || HomeSettings.abortOnDamage == 0)
 			return;
 		
 		final LivingEntity victim = (LivingEntity) event.getEntity();
@@ -34,11 +36,11 @@ public class MHEntityListener extends EntityListener {
 				WarmUp.cancelWarming(aplayer, plugin);
 			}
 		} else if(HomeSettings.abortOnDamage == 2) {
-			if(victim instanceof Player && ((aggressor instanceof LivingEntity) && !(aggressor instanceof Player))) {
+			if(victim instanceof Player && (((aggressor instanceof Monster) || (aggressor instanceof Animals)) && !(aggressor instanceof Player))) {
 				Player vplayer = (Player) event.getEntity();
 				WarmUp.cancelWarming(vplayer, plugin);
 			}
-			if(aggressor instanceof Player && ((victim instanceof LivingEntity) && !(victim instanceof Player))) {
+			if(aggressor instanceof Player && (((victim instanceof Monster) || (victim instanceof Animals)) && !(victim instanceof Player))) {
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
 				WarmUp.cancelWarming(aplayer, plugin);
 			}			
