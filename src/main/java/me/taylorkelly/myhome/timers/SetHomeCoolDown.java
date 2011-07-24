@@ -1,70 +1,38 @@
 package me.taylorkelly.myhome.timers;
 
-import java.util.HashMap;
 import me.taylorkelly.myhome.HomePermissions;
 
 import me.taylorkelly.myhome.HomeSettings;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public class SetHomeCoolDown {
-
-    private static HashMap<String, Integer> players = new HashMap<String, Integer>();
-
-    public static void addPlayer(Player player, Plugin plugin) {
-        if (HomePermissions.bypassSHCooling(player)) {
-            return;
-        }
-
-        int timer = getTimer(player);
-        if (timer > 0) {
-            if (players.containsKey(player.getName())) {
-                plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
-            }
-
-            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new CoolSHTask(player), timer * 20);
-            players.put(player.getName(), taskIndex);
-        }
+/**
+ * Manages cooldown for the sethome command.
+ */
+public final class SetHomeCoolDown extends CoolDownManager {
+    private static final SetHomeCoolDown singletonInstance = new SetHomeCoolDown();
+    
+    private static final String SET_HOME_PERMISSION_NAME = "myhome.timer.sethome";
+    
+    public static SetHomeCoolDown getInstance() {
+        return singletonInstance;
     }
 
-    public static boolean playerHasCooled(Player player) {
-        return !players.containsKey(player.getName());
-    }
+    private SetHomeCoolDown() {}
 
-    public static int timeLeft(Player player) {
-        if (players.containsKey(player.getName())) {
-            // TODO
-            return 0;
-        } else {
-            return 0;
-        }
-    }
-
-    public static int getTimer(Player player) {
-        int timer = 0;
-    	if (HomeSettings.timerByPerms) {
-			timer = HomePermissions.integer(player, "myhome.timer.sethome", HomeSettings.coolDownSetHome);
-			if(HomeSettings.additionalTime) {
-				timer += HomeSettings.coolDownSetHome;
-			}
-		} else {
-			timer = HomeSettings.coolDownSetHome;
-		}
-        return timer;
+    @Override
+    protected boolean isCoolingBypassed(Player player) {
+        return HomePermissions.bypassSHCooling(player);
     }
     
-    private static class CoolSHTask implements Runnable {
-
-        private Player player;
-
-        public CoolSHTask(Player player) {
-            this.player = player;
-        }
-
-        public void run() {
-        	players.remove(player.getName());
-        }
+    @Override
+    protected int getCoolDownSetting() {
+        return HomeSettings.coolDownSetHome;
     }
+    
+    @Override
+    protected String getCoolDownPermissionName() {
+        return SET_HOME_PERMISSION_NAME;
+    }
+
 }
