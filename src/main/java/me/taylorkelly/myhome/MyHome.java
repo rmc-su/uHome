@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import me.taylorkelly.myhome.griefcraft.Updater;
-import me.taylorkelly.myhome.timers.WarmUp;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
