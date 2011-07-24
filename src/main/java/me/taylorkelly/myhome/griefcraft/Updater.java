@@ -28,6 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import me.taylorkelly.myhome.Home;
+import me.taylorkelly.myhome.HomeSettings;
+
 public class Updater {
 
 	private Logger logger = Logger.getLogger("Minecraft");
@@ -40,8 +43,15 @@ public class Updater {
 	}
 
 	public void check() {
-		String[] paths = new String[] { "lib/sqlite.jar", "lib/" + getOSSpecificFileName(), "lib/mysql-connector-java-bin.jar" };
-
+		ArrayList<String> paths = new ArrayList<String>();
+		if(HomeSettings.sqliteLib) {
+			paths.add("lib/sqlite.jar");
+			paths.add("lib/" + getOSSpecificFileName());
+		}
+		if(HomeSettings.mysqlLib) 
+			paths.add("lib/mysql-connector-java-bin.jar");
+		
+		
 		for (String path : paths) {
 			File file = new File(path);
 

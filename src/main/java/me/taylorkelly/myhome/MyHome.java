@@ -88,11 +88,13 @@ public class MyHome extends JavaPlugin {
 
 
 	private void libCheck(){
-		updater = new Updater();
-		try {
-			updater.check();
-			updater.update();
-		} catch (Exception e) {
+		if(HomeSettings.downloadLibs){ 
+			updater = new Updater();
+			try {
+				updater.check();
+				updater.update();
+			} catch (Exception e) {
+			}
 		}
 	}
 
