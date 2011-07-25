@@ -28,7 +28,7 @@ public class HomeList {
 		int cost = 0;
 		if (!(setHomeCoolDown.playerHasCooled(player))) {
 			player.sendMessage(ChatColor.RED + "You need to wait " +
-					setHomeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+					setHomeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
 					setHomeCoolDown.getTimer(player) + " second cooldown before you can change your home.");
 		} else if (HomeSettings.eConomyEnabled && !HomePermissions.setHomeFree(player) ) {
 			if (HomeSettings.costByPerms) {
@@ -120,7 +120,7 @@ public class HomeList {
 					}
 				} else {
 					player.sendMessage(ChatColor.RED + "You need to wait " +
-							homeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+							homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
 							homeCoolDown.getTimer(player) + " second cooldown.");
 				}
 			} else {
@@ -157,7 +157,7 @@ public class HomeList {
 				}
 			} else {
 				player.sendMessage(ChatColor.RED + "You need to wait " +
-						homeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+						homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
 						homeCoolDown.getTimer(player) + " second cooldown.");
 			}
 		}

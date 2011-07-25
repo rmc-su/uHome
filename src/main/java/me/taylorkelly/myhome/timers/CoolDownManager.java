@@ -46,8 +46,7 @@ public abstract class CoolDownManager{
                     plugin, new CoolTask(player, this), timer * SERVER_TICKS_PER_SEC);
             players.put(
                     player.getName(),
-                    new PlayerTaskDetails(
-                            taskIndex, System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timer)));
+                    new PlayerTaskDetails(taskIndex, System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timer)));
         }
     }
 
@@ -62,25 +61,25 @@ public abstract class CoolDownManager{
         return !players.containsKey(player.getName());
     }
 
-	/**
-	 * Calculates and returns the estimated time left for the specified player's
-	 * cooldown. If the player is not currently cooling down, returns 0.
-	 * 
-	 * @param player
-	 *            Player for whom the remaining cooldown is calculated and
-	 *            returned.
-	 * @return Estimated remaining cooldown, in seconds, or zero if no cooldown
-	 *         remains. Note that small discrepancies in timing between the
-	 *         expected and actual cooldown expiry mean that negative values
-	 *         cannot be ruled out.
-	 */
-    public int calcEstimatedTimeLeft(Player player) {
+    /**
+     * Estimates and returns time left for the specified player's cooldown. If
+     * the player is not currently cooling down, returns 0. Note that small
+     * discrepancies in timing between the expected and actual cooldown expiry,
+     * may exist.
+     * 
+     * @param player
+     *            Player for whom the remaining cooldown is calculated and
+     *            returned.
+     * @return Estimated remaining cooldown, in seconds, zero if no cooldown
+     *         remains or if expected cooldown time has passed.
+     */
+    public int estimateTimeLeft(Player player) {
         PlayerTaskDetails taskDetails = players.get(player.getName());
         if (taskDetails == null) {
             return 0;
         } else {
             int secondsLeft =(int) TimeUnit.MILLISECONDS.toSeconds(
-                    players.get(player.getName()).getFinishTime() - System.currentTimeMillis());
+                    taskDetails.getFinishTime() - System.currentTimeMillis());
             return (secondsLeft > 0) ? secondsLeft : 0;
         }
     }
