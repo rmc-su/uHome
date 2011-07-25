@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.timers;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import me.taylorkelly.myhome.HomePermissions;
 
@@ -14,9 +15,10 @@ import org.bukkit.plugin.Plugin;
  * determine cooldown timings and applicability.
  */
 public abstract class CoolDownManager{
-    private static final int SERVER_TICKS_PER_MSEC = 20;
+    private static final int SERVER_TICKS_PER_SEC = 20;
 
-    private final ConcurrentHashMap<String, Integer> players = new ConcurrentHashMap<String, Integer>();
+    private final ConcurrentHashMap<String, PlayerTaskDetails> players =
+            new ConcurrentHashMap<String, PlayerTaskDetails>();
 
     /**
      * Activates cooldown for the specified player, using the current
@@ -36,12 +38,16 @@ public abstract class CoolDownManager{
         
         if(timer > 0) {
             if (players.containsKey(player.getName())) {
-                plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
+                plugin.getServer().getScheduler().cancelTask(
+                        players.get(player.getName()).getTaskIndex());
             }
 
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(
-                    plugin, new CoolTask(player, this), timer * SERVER_TICKS_PER_MSEC);
-            players.put(player.getName(), taskIndex);
+                    plugin, new CoolTask(player, this), timer * SERVER_TICKS_PER_SEC);
+            players.put(
+                    player.getName(),
+                    new PlayerTaskDetails(
+                            taskIndex, System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timer)));
         }
     }
 
@@ -56,12 +62,26 @@ public abstract class CoolDownManager{
         return !players.containsKey(player.getName());
     }
 
-    public int timeLeft(Player player) {
-        if (players.containsKey(player.getName())) {
-            // TODO
+	/**
+	 * Calculates and returns the estimated time left for the specified player's
+	 * cooldown. If the player is not currently cooling down, returns 0.
+	 * 
+	 * @param player
+	 *            Player for whom the remaining cooldown is calculated and
+	 *            returned.
+	 * @return Estimated remaining cooldown, in seconds, or zero if no cooldown
+	 *         remains. Note that small discrepancies in timing between the
+	 *         expected and actual cooldown expiry mean that negative values
+	 *         cannot be ruled out.
+	 */
+    public int calcEstimatedTimeLeft(Player player) {
+        PlayerTaskDetails taskDetails = players.get(player.getName());
+        if (taskDetails == null) {
             return 0;
         } else {
-            return 0;
+            int secondsLeft =(int) TimeUnit.MILLISECONDS.toSeconds(
+                    players.get(player.getName()).getFinishTime() - System.currentTimeMillis());
+            return (secondsLeft > 0) ? secondsLeft : 0;
         }
     }
 
@@ -71,7 +91,7 @@ public abstract class CoolDownManager{
      * 
      * @param player
      *            Player for whom cooldown is returned.
-     * @return Total cooldown for the specified player.
+     * @return Total cooldown in seconds for the specified player.
      */
     public int getTimer(Player player) {
         int timer = 0;

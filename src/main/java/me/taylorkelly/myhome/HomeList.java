@@ -27,7 +27,9 @@ public class HomeList {
 	public void addHome(Player player, Plugin plugin) {
 		int cost = 0;
 		if (!(setHomeCoolDown.playerHasCooled(player))) {
-			player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + setHomeCoolDown.getTimer(player) + " secs before you can change your home.");
+			player.sendMessage(ChatColor.RED + "You need to wait " +
+					setHomeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+					setHomeCoolDown.getTimer(player) + " second cooldown before you can change your home.");
 		} else if (HomeSettings.eConomyEnabled && !HomePermissions.setHomeFree(player) ) {
 			if (HomeSettings.costByPerms) {
 				cost = HomePermissions.integer(player, "myhome.costs.sethome", HomeSettings.setHomeCost);
@@ -117,7 +119,9 @@ public class HomeList {
 						homeCoolDown.addPlayer(player, plugin);
 					}
 				} else {
-					player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + homeCoolDown.getTimer(player) + " secs");
+					player.sendMessage(ChatColor.RED + "You need to wait " +
+							homeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+							homeCoolDown.getTimer(player) + " second cooldown.");
 				}
 			} else {
 				player.sendMessage(ChatColor.RED + "You do not have permission to warp to " + name + "'s home");
@@ -152,7 +156,9 @@ public class HomeList {
 					homeCoolDown.addPlayer(player, plugin);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + homeCoolDown.getTimer(player) + " secs");
+				player.sendMessage(ChatColor.RED + "You need to wait " +
+						homeCoolDown.calcEstimatedTimeLeft(player) + " more seconds of the " +
+						homeCoolDown.getTimer(player) + " second cooldown.");
 			}
 		}
 	}
