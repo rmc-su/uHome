@@ -1,6 +1,6 @@
 package me.taylorkelly.myhome.timers;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import me.taylorkelly.myhome.HomePermissions;
@@ -17,8 +17,8 @@ import org.bukkit.plugin.Plugin;
 public abstract class CoolDownManager{
     private static final int SERVER_TICKS_PER_SEC = 20;
 
-    private final ConcurrentHashMap<String, PlayerTaskDetails> players =
-            new ConcurrentHashMap<String, PlayerTaskDetails>();
+    private final HashMap<String, PlayerTaskDetails> players =
+            new HashMap<String, PlayerTaskDetails>();
 
     /**
      * Activates cooldown for the specified player, using the current
@@ -148,9 +148,9 @@ public abstract class CoolDownManager{
      */
     private static class CoolTask implements Runnable {
 
-        protected final Player player;
-        
-        protected final CoolDownManager coolDownManager;
+        private final Player player;
+
+        private final CoolDownManager coolDownManager;
 
         public CoolTask(Player player, CoolDownManager coolDownManager) {
             this.player = player;
