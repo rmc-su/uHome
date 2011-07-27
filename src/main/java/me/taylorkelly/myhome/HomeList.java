@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import me.taylorkelly.myhome.timers.CoolDown;
+import me.taylorkelly.myhome.timers.HomeCoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;
 import me.taylorkelly.myhome.timers.SetHomeCoolDown;
 import org.bukkit.*;
@@ -15,6 +15,8 @@ import org.bukkit.plugin.Plugin;
 public class HomeList {
 	private HashMap<String, Home> homeList;
 	private Server server;
+	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
+	private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
 
 	public HomeList(Server server) {
 		WarpDataSource.initialize();
@@ -24,8 +26,10 @@ public class HomeList {
 
 	public void addHome(Player player, Plugin plugin) {
 		int cost = 0;
-		if (!(SetHomeCoolDown.playerHasCooled(player))) {
-			player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + SetHomeCoolDown.getTimer(player) + " secs before you can change your home.");
+		if (!(setHomeCoolDown.playerHasCooled(player))) {
+			player.sendMessage(ChatColor.RED + "You need to wait " +
+					setHomeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
+					setHomeCoolDown.getTimer(player) + " second cooldown before you can change your home.");
 		} else if (HomeSettings.eConomyEnabled && !HomePermissions.setHomeFree(player) ) {
 			if (HomeSettings.costByPerms) {
 				cost = HomePermissions.integer(player, "myhome.costs.sethome", HomeSettings.setHomeCost);
@@ -41,13 +45,13 @@ public class HomeList {
 					warp.setLocation(player.getLocation());
 					WarpDataSource.moveWarp(warp);
 					player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
-					SetHomeCoolDown.addPlayer(player, plugin);
+					setHomeCoolDown.addPlayer(player, plugin);
 				} else {
 					Home warp = new Home(player);
 					homeList.put(player.getName(), warp);
 					WarpDataSource.addWarp(warp);
 					player.sendMessage(ChatColor.AQUA + "Successfully created your home");
-					SetHomeCoolDown.addPlayer(player, plugin);
+					setHomeCoolDown.addPlayer(player, plugin);
 					if (HomePermissions.invite(player)) {
 						player.sendMessage("If you'd like to invite friends to it,");
 						player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
@@ -65,13 +69,13 @@ public class HomeList {
 				warp.setLocation(player.getLocation());
 				WarpDataSource.moveWarp(warp);
 				player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
-				SetHomeCoolDown.addPlayer(player, plugin);
+				setHomeCoolDown.addPlayer(player, plugin);
 			} else {
 				Home warp = new Home(player);
 				homeList.put(player.getName(), warp);
 				WarpDataSource.addWarp(warp);
 				player.sendMessage(ChatColor.AQUA + "Successfully created your home");
-				SetHomeCoolDown.addPlayer(player, plugin);
+				setHomeCoolDown.addPlayer(player, plugin);
 				if (HomePermissions.invite(player)) {
 					player.sendMessage("If you'd like to invite friends to it,");
 					player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
@@ -93,7 +97,7 @@ public class HomeList {
 		if (homeList.containsKey(name)) {
 			Home warp = homeList.get(name);
 			if (warp.playerCanWarp(player) || HomePermissions.adminAnyHome(player)) {
-				if (CoolDown.playerHasCooled(player)) {
+				if (homeCoolDown.playerHasCooled(player)) {
 					if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player)) {
 						if (HomeSettings.costByPerms) {
 							cost = HomePermissions.integer(player, "myhome.costs.home", HomeSettings.homeCost);
@@ -106,16 +110,18 @@ public class HomeList {
 						if (HomeEconomy.chargePlayer(player.getName(), cost)) {
 							player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
 							WarmUp.addPlayer(player, warp, plugin);
-							CoolDown.addPlayer(player, plugin);
+							homeCoolDown.addPlayer(player, plugin);
 						} else {
 							player.sendMessage("Warping home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
 						}
 					} else {
 						WarmUp.addPlayer(player, warp, plugin);
-						CoolDown.addPlayer(player, plugin);
+						homeCoolDown.addPlayer(player, plugin);
 					}
 				} else {
-					player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + CoolDown.getTimer(player) + " secs");
+					player.sendMessage(ChatColor.RED + "You need to wait " +
+							homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
+							homeCoolDown.getTimer(player) + " second cooldown.");
 				}
 			} else {
 				player.sendMessage(ChatColor.RED + "You do not have permission to warp to " + name + "'s home");
@@ -128,7 +134,7 @@ public class HomeList {
 	public void sendPlayerHome(Player player, Plugin plugin) {
 		int cost = 0;
 		if (homeList.containsKey(player.getName())) {
-			if (CoolDown.playerHasCooled(player)) {
+			if (homeCoolDown.playerHasCooled(player)) {
 				if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player) ) {
 					if (HomeSettings.costByPerms) {
 						cost = HomePermissions.integer(player, "myhome.costs.home", HomeSettings.homeCost);
@@ -141,16 +147,18 @@ public class HomeList {
 					if (HomeEconomy.chargePlayer(player.getName(), cost)) {
 						player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
 						WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
-						CoolDown.addPlayer(player, plugin);
+						homeCoolDown.addPlayer(player, plugin);
 					} else {
 						player.sendMessage("Warping home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
 					}
 				} else {
 					WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
-					CoolDown.addPlayer(player, plugin);
+					homeCoolDown.addPlayer(player, plugin);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You need to wait for the cooldown of " + CoolDown.getTimer(player) + " secs");
+				player.sendMessage(ChatColor.RED + "You need to wait " +
+						homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
+						homeCoolDown.getTimer(player) + " second cooldown.");
 			}
 		}
 	}
