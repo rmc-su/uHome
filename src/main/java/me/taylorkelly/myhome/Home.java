@@ -43,7 +43,7 @@ public class Home {
 		this.name = creator.getName();
 		this.world = creator.getWorld().getName();
 		this.x = creator.getLocation().getX();
-		this.y = creator.getLocation().getBlockY();
+		this.y = creator.getLocation().getY();
 		this.z = creator.getLocation().getZ();
 		this.yaw = Math.round(creator.getLocation().getYaw()) % 360;
 		this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
@@ -58,7 +58,7 @@ public class Home {
 		this.name = name;
 		this.world = location.getWorld().getName();
 		this.x = location.getX();
-		this.y = location.getBlockY();
+		this.y = location.getY();
 		this.z = location.getZ();
 		this.yaw = Math.round(location.getYaw()) % 360;
 		this.pitch = Math.round(location.getPitch()) % 360;
@@ -159,7 +159,7 @@ public class Home {
 	public void setLocation(Location location) {
 		this.world = location.getWorld().getName();
 		this.x = location.getX();
-		this.y = location.getBlockY();
+		this.y = location.getY();
 		this.z = location.getZ();
 		this.yaw = Math.round(location.getYaw()) % 360;
 		this.pitch = Math.round(location.getPitch()) % 360;
