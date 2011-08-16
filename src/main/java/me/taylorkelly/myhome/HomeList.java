@@ -259,8 +259,7 @@ public class HomeList {
 				}
 				for (Player match : server.getOnlinePlayers()) {
 					if (match.getName().equalsIgnoreCase(inviteeName)) {
-						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
-						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
+						match.sendMessage(ChatColor.AQUA + "You are no longer invited to " + player.getName() + "'s home");
 					}
 				}	
 			}
