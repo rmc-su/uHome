@@ -60,7 +60,7 @@ public class HomeSettings {
 		additionalTime = file.getBoolean("additionalTime", false, "Should group/user timers be IN ADDITION to the global timers");
 		abortOnDamage = file.getInt("abortOnDamage", 0, "Global: 0: No aborting, 1: Abort for PVP only, 2: Abort for PVE only, 3: Abort for both pvp/pve damage");
 		
-		allowSetHome = file.getBoolean("allowSetHome", false, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
+		allowSetHome = file.getBoolean("allowSetHome", true, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
 		respawnToHome = file.getBoolean("respawnToHome", true, "Whether or not players will respawn to their homes (false means to global spawn)");
 		homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
 		bedsCanSethome = file.getInt("bedsCanSethome", 0, "0 = Disabled, 1 = Using a bed will /sethome automatically, 2 = /sethome is disabled and can only be set by using a bed ");
