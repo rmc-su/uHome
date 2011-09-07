@@ -60,9 +60,13 @@ public class MyHome extends JavaPlugin {
 		HomeHelp.initialize(this);
 
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
+		
+		if(HomeSettings.respawnToHome) { 
+			// Dont need this if we're not handling respawning.
+			pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
+		}
 
 		if(HomeSettings.loadChunks) {
 			// We dont need to register for teleporting if we dont want to load chunks.
