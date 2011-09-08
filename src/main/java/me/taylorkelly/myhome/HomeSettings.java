@@ -7,6 +7,8 @@ public class HomeSettings {
 	public static File dataDir;
 	public static boolean compassPointer;
 	
+	public static String locale;
+	
 	public static boolean downloadLibs;
 	public static boolean sqliteLib;
 	public static boolean mysqlLib;
@@ -51,6 +53,8 @@ public class HomeSettings {
 
 		compassPointer = file.getBoolean("compassPointer", true, "Whether or not users' compasses point to home");
 
+		locale = file.getString("locale", "en_us", "Localization: what language to use for MyHome");
+		
 		coolDown = file.getInt("coolDown", 0, "Global: The number of seconds between when users can go to a home");
 		warmUp = file.getInt("warmUp", 0, "Global: The number of seconds after a user uses a home command before it takes them");
 		coolDownNotify = file.getBoolean("coolDownNotify", false, "Whether or not players will be notified after they've cooled down");
