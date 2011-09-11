@@ -1,3 +1,4 @@
+locale.name=English
 home.default.welcomemessage=Welcome to {{TARGET}}'s home
 home.stillpublic={{RED}}But your home is still public!
 home.create={{AQUA}}Successfully created your home
