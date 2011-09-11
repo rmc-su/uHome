@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import me.taylorkelly.myhome.griefcraft.Updater;
+import me.taylorkelly.myhome.locale.LocaleManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -50,12 +51,13 @@ public class MyHome extends JavaPlugin {
 		libCheck();
 		convertOldDB(getDataFolder());
 		if(!sqlCheck()) { return; }
-
+		
 		homeList = new HomeList(getServer());
 		playerListener = new MHPlayerListener(homeList, this);
 		entityListener = new MHEntityListener(this);
 		pluginListener = new MHPluginListener();
 
+		LocaleManager.init();
 		HomePermissions.initialize(getServer());
 		HomeHelp.initialize(this);
 
