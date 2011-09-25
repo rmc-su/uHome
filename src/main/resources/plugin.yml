@@ -1,7 +1,9 @@
 name: MyHome
-version: 2.0
+version: 2.0.1
 author: spathizilla
 main: me.taylorkelly.myhome.MyHome
+website: http://forums.bukkit.org/threads/13313/
+softdepend: [Register]
 commands:
   home:
     description: All of the MyHome commands

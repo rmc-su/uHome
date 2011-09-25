@@ -55,7 +55,7 @@ public class MyHome extends JavaPlugin {
 		homeList = new HomeList(getServer());
 		playerListener = new MHPlayerListener(homeList, this);
 		entityListener = new MHEntityListener(this);
-		pluginListener = new MHPluginListener();
+		pluginListener = new MHPluginListener(this);
 
 		LocaleManager.init();
 		HomePermissions.initialize(getServer());
