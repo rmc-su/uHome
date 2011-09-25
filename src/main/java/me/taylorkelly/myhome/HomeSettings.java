@@ -14,7 +14,7 @@ public class HomeSettings {
 	public static boolean sqliteLib;
 	public static boolean mysqlLib;
 
-	public static boolean enableBypassing;
+	public static boolean enableBypassPerms;
 	
 	public static boolean timerByPerms;
 	public static boolean additionalTime;
@@ -36,6 +36,7 @@ public class HomeSettings {
 	public static boolean loadChunks; 
 
 	public static boolean eConomyEnabled;
+	public static boolean enableFreePerms;
 	public static int setHomeCost;
 	public static int homeCost;
 	public static boolean costByPerms;
@@ -60,7 +61,7 @@ public class HomeSettings {
 		locale = file.getString("locale", "en_us", "Localization: what language to use for MyHome");
 		useColors = file.getBoolean("useColors", true, "Should messages in MyHome use colors?");
 		
-		enableBypassing = file.getBoolean("enableBypassing", true, "Enable the bypass permissions? If you use a * permission and dont want bypassing, set to false");
+		enableBypassPerms = file.getBoolean("enableBypassPerms", true, "Enable the bypass permissions? If you use a * permission and dont want bypassing, set to false");
 		
 		coolDown = file.getInt("coolDown", 0, "Global: The number of seconds between when users can go to a home");
 		warmUp = file.getInt("warmUp", 0, "Global: The number of seconds after a user uses a home command before it takes them");
@@ -85,6 +86,7 @@ public class HomeSettings {
 		
 		// Economy
 		eConomyEnabled = file.getBoolean("eConomyEnabled", false, "Whether or not to hook into an eConomy plugin");
+		enableFreePerms = file.getBoolean("enableFreePerms", true, "Enable the permissions to allow free usage of /home and /sethome - If you use a * permission and dont want it to be free");
 		setHomeCost = file.getInt("setHomeCost", 0, "Global: How much to charge the player for using /home set");
 		homeCost = file.getInt("homeCost", 0, "Global: How much to charge a player for using /home");
 		costByPerms = file.getBoolean("costByPerms", false, "Should costs be dictated by settings in a permissions plugin - Per user/group costs");

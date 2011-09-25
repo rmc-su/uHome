@@ -128,43 +128,51 @@ public class HomePermissions {
 	public static boolean canPrivate(Player player) {
 		return permission(player, "myhome.home.soc.private", true);
 	}
+	
+	// ------------------------------------
+	// Economy permissions
 	public static boolean setHomeFree(Player player) {
+		if(!HomeSettings.enableFreePerms) return false;
+		
 		return permission(player, "myhome.home.free.sethome", true);
 	}
+	
 	public static boolean homeFree(Player player) {
+		if(!HomeSettings.enableFreePerms) return false;
+		
 		return permission(player, "myhome.home.free.home", true);
 	}
 
 	// -----------------------------------
 	// Bypass Permissions
 	public static boolean bedBypass(Player player) {
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 		
 		return permission(player, "myhome.bypass.bedsethome", true);
 	}
 	public static boolean bypassCooling(Player player) { 
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 
 		return permission(player, "myhome.bypass.cooldown", player.isOp());
 	}
 	public static boolean bypassWarming(Player player) {
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 		
 		return permission(player, "myhome.bypass.warmup", player.isOp());
 	}
 	public static boolean bypassSHCooling(Player player) {
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 		
 		return permission(player, "myhome.bypass.sethomecool", player.isOp());
 	}
 	public static boolean bypassWarmupDmgAbort(Player player) {
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 		
 		return permission(player, "myhome.bypass.dmgaborting", player.isOp());
 	}
 	
 	public static boolean bypassWarmupMoveAbort(Player player) {
-		if(!HomeSettings.enableBypassing) return false;
+		if(!HomeSettings.enableBypassPerms) return false;
 		
 		return permission(player, "myhome.bypass.moveaborting", player.isOp());
 	}
