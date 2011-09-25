@@ -29,27 +29,27 @@ public class MHEntityListener extends EntityListener {
 		if(HomeSettings.abortOnDamage == 3) {
 			if(victim instanceof Player) {
 				Player vplayer = (Player) event.getEntity();
-				WarmUp.cancelWarming(vplayer, plugin);
+				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);
 			}
 			if(aggressor instanceof Player) {
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-				WarmUp.cancelWarming(aplayer, plugin);
+				WarmUp.cancelWarming(aplayer, plugin, WarmUp.Reason.DAMAGE);
 			}
 		} else if(HomeSettings.abortOnDamage == 2) {
 			if(victim instanceof Player && (((aggressor instanceof Monster) || (aggressor instanceof Animals)) && !(aggressor instanceof Player))) {
 				Player vplayer = (Player) event.getEntity();
-				WarmUp.cancelWarming(vplayer, plugin);
+				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);
 			}
 			if(aggressor instanceof Player && (((victim instanceof Monster) || (victim instanceof Animals)) && !(victim instanceof Player))) {
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-				WarmUp.cancelWarming(aplayer, plugin);
+				WarmUp.cancelWarming(aplayer, plugin, WarmUp.Reason.DAMAGE);
 			}			
 		} else if(HomeSettings.abortOnDamage == 1) {
 			if(victim instanceof Player && aggressor instanceof Player) {
 				Player vplayer = (Player) event.getEntity();
-				WarmUp.cancelWarming(vplayer, plugin);
+				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-				WarmUp.cancelWarming(aplayer, plugin);
+				WarmUp.cancelWarming(aplayer, plugin, WarmUp.Reason.DAMAGE);
 			}			
 		}
 	}

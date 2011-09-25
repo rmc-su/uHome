@@ -157,9 +157,15 @@ public class HomePermissions {
 		
 		return permission(player, "myhome.bypass.sethomecool", player.isOp());
 	}
-	public static boolean bypassWarmupAbort(Player player) {
+	public static boolean bypassWarmupDmgAbort(Player player) {
 		if(!HomeSettings.enableBypassing) return false;
 		
 		return permission(player, "myhome.bypass.dmgaborting", player.isOp());
+	}
+	
+	public static boolean bypassWarmupMoveAbort(Player player) {
+		if(!HomeSettings.enableBypassing) return false;
+		
+		return permission(player, "myhome.bypass.moveaborting", player.isOp());
 	}
 }

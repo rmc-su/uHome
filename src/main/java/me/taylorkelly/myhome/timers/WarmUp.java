@@ -13,6 +13,9 @@ import org.bukkit.plugin.Plugin;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
+    public enum Reason {
+    	DAMAGE, MOVEMENT, EVENTCANCEL, NONE
+    }
 
     public static void addPlayer(Player player, Home home, Plugin plugin) {
         if (HomePermissions.bypassWarming(player)) {
@@ -57,14 +60,18 @@ public class WarmUp {
     	}
     }
     
-    public static void cancelWarming(Player player, Plugin plugin) {
-    	if(!HomePermissions.bypassWarmupAbort(player)) {
-    		if (isWarming(player)) {
-    			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
-    			players.remove(player.getName());
-    			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
-    		}
-    	}
+    public static void cancelWarming(Player player, Plugin plugin, Reason reason) {
+   		if(reason == Reason.DAMAGE && HomePermissions.bypassWarmupDmgAbort(player)) 
+   			return;
+   		
+   		if(reason == Reason.MOVEMENT && HomePermissions.bypassWarmupMoveAbort(player)) 
+   			return;
+    	
+    	if (isWarming(player)) {
+   			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
+   			players.remove(player.getName());
+   			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   		}
     }
     
     public static int getTimer(Player player) {
