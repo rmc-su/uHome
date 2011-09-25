@@ -12,14 +12,14 @@ import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.HomeLogger;
 
 public class LocaleManager {
-	private static final String LOCALE_BUNDLE = "me.taylorkely.myhome.locale.";
+	private static final String LOCALE_BUNDLE = "me.taylorkelly.myhome.locale.myhome";
 	private static ResourceBundle locResBundle = null;
 
 	public static void init() {
 		String locale = HomeSettings.locale.toLowerCase();
 		try {
 			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
-			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + "(" + locale + ")");
+			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
 		} catch (MissingResourceException e) {
 			// Failed to load requested locale file so fallback to en_us
 			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en_us"));
