@@ -14,6 +14,8 @@ public class HomeSettings {
 	public static boolean sqliteLib;
 	public static boolean mysqlLib;
 
+	public static boolean enableBypassing;
+	
 	public static boolean timerByPerms;
 	public static boolean additionalTime;
 	public static int coolDown;
@@ -57,6 +59,8 @@ public class HomeSettings {
 		locale = file.getString("locale", "en_us", "Localization: what language to use for MyHome");
 		useColors = file.getBoolean("useColors", true, "Should messages in MyHome use colors?");
 		
+		enableBypassing = file.getBoolean("enableBypassing", true, "Enable the bypass permissions? If you use a * permission and dont want bypassing, set to false");
+		
 		coolDown = file.getInt("coolDown", 0, "Global: The number of seconds between when users can go to a home");
 		warmUp = file.getInt("warmUp", 0, "Global: The number of seconds after a user uses a home command before it takes them");
 		coolDownNotify = file.getBoolean("coolDownNotify", false, "Whether or not players will be notified after they've cooled down");
@@ -65,7 +69,7 @@ public class HomeSettings {
 		timerByPerms = file.getBoolean("timerByPerms", false, "Should cooldown/warmup timers be dictated by settings in a permissions plugin - Per user/group");
 		additionalTime = file.getBoolean("additionalTime", false, "Should group/user timers be IN ADDITION to the global timers");
 		abortOnDamage = file.getInt("abortOnDamage", 0, "Global: 0: No aborting, 1: Abort for PVP only, 2: Abort for PVE only, 3: Abort for both pvp/pve damage");
-		
+
 		allowSetHome = file.getBoolean("allowSetHome", true, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
 		respawnToHome = file.getBoolean("respawnToHome", true, "Whether or not players will respawn to their homes (false means to global spawn)");
 		homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
