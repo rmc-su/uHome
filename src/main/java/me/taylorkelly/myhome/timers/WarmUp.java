@@ -23,7 +23,7 @@ public class WarmUp {
         int timer = getTimer(player);
     	
         if (timer > 0) {
-            if (players.containsKey(player.getName())) {
+            if (isWarming(player)) {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
             
@@ -49,9 +49,17 @@ public class WarmUp {
         home.warp(player, server);
     }
 
+    public static boolean isWarming(Player player) {
+    	if(players.containsKey(player.getName())) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
     public static void cancelWarming(Player player, Plugin plugin) {
     	if(!HomePermissions.bypassWarmupAbort(player)) {
-    		if (players.containsKey(player.getName())) {
+    		if (isWarming(player)) {
     			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
     			players.remove(player.getName());
     			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");

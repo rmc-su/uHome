@@ -1,12 +1,16 @@
 package me.taylorkelly.myhome;
 
+import me.taylorkelly.myhome.timers.WarmUp;
+
 import org.bukkit.Location;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -66,6 +70,17 @@ public class MHPlayerListener extends PlayerListener {
 			if (location != null) {
 				event.setRespawnLocation(location);
 				homeList.orientPlayer(event.getPlayer());
+			}
+		}
+	}
+	
+	public void onPlayerMove(PlayerMoveEvent event) {
+		if(event.isCancelled()) return;
+		
+		if(HomeSettings.abortOnMove) {
+			Player player = event.getPlayer();
+			if(WarmUp.isWarming(player)) {
+				WarmUp.cancelWarming(player, plugin);
 			}
 		}
 	}

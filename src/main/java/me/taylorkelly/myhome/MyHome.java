@@ -33,18 +33,15 @@ public class MyHome extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		name = this.getDescription().getName();
-		version = this.getDescription().getVersion();
-
 		ConnectionManager.closeConnection();
 		HomeLogger.info(name + " " + version + " disabled");
 	}
 
 	@Override
 	public void onEnable() {
-		pm = getServer().getPluginManager();
-		name = this.getDescription().getName();
-		version = this.getDescription().getVersion();
+		this.pm = getServer().getPluginManager();
+		this.name = this.getDescription().getName();
+		this.version = this.getDescription().getVersion();
 
 		HomeSettings.initialize(getDataFolder());
 
@@ -61,25 +58,27 @@ public class MyHome extends JavaPlugin {
 		HomePermissions.initialize(getServer());
 		HomeHelp.initialize(this);
 
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
+		
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		
 		if(HomeSettings.respawnToHome) { 
 			// Dont need this if we're not handling respawning.
 			pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
 		}
-
 		if(HomeSettings.loadChunks) {
 			// We dont need to register for teleporting if we dont want to load chunks.
 			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
 		}
-		
 		if(HomeSettings.abortOnDamage != 0) {
 			// We dont need this if we're not aborting warmups for combat.
 			pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
 		}
-
+		if(HomeSettings.abortOnMove) { 
+			// We dont need this if we're not aborting if they move during warmup.
+			pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
+		}
 		if(HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
 			// We don't need this if the beds cannot be used during the day
 			pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
