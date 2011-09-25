@@ -74,7 +74,7 @@ public class WarmUp {
    			if(reason == Reason.DAMAGE) { 
    				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
    			} else if(reason == Reason.MOVEMENT) { 
-   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to movement");
    			}
    		}
     }
