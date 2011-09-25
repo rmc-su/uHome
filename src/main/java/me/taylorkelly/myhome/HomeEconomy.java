@@ -46,7 +46,6 @@ public class HomeEconomy {
 	
 	public static void disableEconomy() {
 		econEnabled = false;
-		HomeLogger.warning("Could not interface with Register for Economy support. Is it installed?");
 	}
 	
 	public static void enableEconomy() {
@@ -62,13 +61,14 @@ public class HomeEconomy {
 	}
 	
 	public static boolean checkRegister(Plugin plugin) {
-		Plugin register = plugin.getServer().getPluginManager().getPlugin("Register");
-		if(register == null) {
+		try{
+			Class.forName("com.nijikokun.register.Register");
+		} catch (ClassNotFoundException ex) {
+			HomeLogger.warning("Could not interface with Register for Economy support. Is it installed?");
 			disableEconomy();
 			return false;
-		} else {
-			enableEconomy();
-			return true;
 		}
+		enableEconomy();
+		return true;
 	}
 }
