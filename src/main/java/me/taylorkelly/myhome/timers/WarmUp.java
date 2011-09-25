@@ -70,7 +70,12 @@ public class WarmUp {
     	if (isWarming(player)) {
    			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
    			players.remove(player.getName());
-   			player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   			
+   			if(reason == Reason.DAMAGE) { 
+   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   			} else if(reason == Reason.MOVEMENT) { 
+   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   			}
    		}
     }
     
