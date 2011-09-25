@@ -24,6 +24,7 @@ public class HomeSettings {
 	public static int warmUp;
 	public static boolean warmUpNotify;
 	public static int abortOnDamage;
+	public static boolean abortOnMove;
 	
 	public static boolean respawnToHome;
 	public static boolean allowSetHome;
@@ -69,7 +70,8 @@ public class HomeSettings {
 		timerByPerms = file.getBoolean("timerByPerms", false, "Should cooldown/warmup timers be dictated by settings in a permissions plugin - Per user/group");
 		additionalTime = file.getBoolean("additionalTime", false, "Should group/user timers be IN ADDITION to the global timers");
 		abortOnDamage = file.getInt("abortOnDamage", 0, "Global: 0: No aborting, 1: Abort for PVP only, 2: Abort for PVE only, 3: Abort for both pvp/pve damage");
-
+		abortOnMove = file.getBoolean("abortOnMove", false, "Should /home abort the warmup if the player moves during that time")
+		
 		allowSetHome = file.getBoolean("allowSetHome", true, "Whether MyHome should also watch for /sethome - This may cause conflicts with Essentials");
 		respawnToHome = file.getBoolean("respawnToHome", true, "Whether or not players will respawn to their homes (false means to global spawn)");
 		homesArePublic = file.getBoolean("homesArePublic", false, "Should home warps be made public by default");
