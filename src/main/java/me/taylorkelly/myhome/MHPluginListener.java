@@ -1,10 +1,10 @@
 package me.taylorkelly.myhome;
 
-import com.nijikokun.register.payment.Methods;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
+import com.nijikokun.register.payment.Methods;
 
 public class MHPluginListener extends ServerListener {
 	private Methods Methods = null;
@@ -20,13 +20,13 @@ public class MHPluginListener extends ServerListener {
 	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
 		if(HomeSettings.eConomyEnabled) {
-			if(HomeEconomy.checkRegister(this.plugin)) {
-				//Economy support
-				if(!this.Methods.hasMethod()){
-					if(this.Methods.setMethod(plugin.getServer().getPluginManager())){
-						HomeEconomy.economy = this.Methods.getMethod();
-						HomeLogger.info("Connected to " + HomeEconomy.economy.getName() + " v" + HomeEconomy.economy.getVersion() + " for economy support.");
-					}
+			if(!HomeEconomy.hookedEconomy()) {
+				Plugin plugin = event.getPlugin();
+				String plugname = plugin.getDescription().getName();
+				if(plugname.equals("Register") && plugin.getClass().getName().equals("com.nijikokun.register.Register")) {
+					// We found register
+					HomeEconomy.enableEconomy();
+					HomeEconomy.findEconomy();
 				}
 			}
 		}
@@ -35,14 +35,8 @@ public class MHPluginListener extends ServerListener {
 	@Override
 	public void onPluginDisable(PluginDisableEvent event) {
 		if(HomeSettings.eConomyEnabled) {
-			if(HomeEconomy.checkRegister(this.plugin)) {
-				if (this.Methods != null && this.Methods.hasMethod()) {
-					Boolean check = this.Methods.checkDisabled(event.getPlugin());
-					if(check) {
-						this.Methods = null;
-						HomeLogger.info("Payment method was disabled. No longer accepting payments.");
-					}
-				}
+			if(HomeEconomy.hookedEconomy()) {
+				HomeEconomy.hasUnhooked(event.getPlugin());
 			}
 		}
 	}

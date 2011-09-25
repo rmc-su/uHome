@@ -50,14 +50,15 @@ public class MyHome extends JavaPlugin {
 		if(!sqlCheck()) { return; }
 		
 		homeList = new HomeList(getServer());
-		playerListener = new MHPlayerListener(homeList, this);
-		entityListener = new MHEntityListener(this);
-		pluginListener = new MHPluginListener(this);
-
 		LocaleManager.init();
 		HomePermissions.initialize(getServer());
 		HomeHelp.initialize(this);
-
+		HomeEconomy.init(this);
+		
+		playerListener = new MHPlayerListener(homeList, this);
+		entityListener = new MHEntityListener(this);
+		pluginListener = new MHPluginListener(this);
+		
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
 		
