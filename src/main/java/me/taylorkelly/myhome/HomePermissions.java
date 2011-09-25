@@ -138,18 +138,28 @@ public class HomePermissions {
 	// -----------------------------------
 	// Bypass Permissions
 	public static boolean bedBypass(Player player) {
+		if(!HomeSettings.enableBypassing) return false;
+		
 		return permission(player, "myhome.bypass.bedsethome", true);
 	}
-	public static boolean bypassCooling(Player player) {
+	public static boolean bypassCooling(Player player) { 
+		if(!HomeSettings.enableBypassing) return false;
+
 		return permission(player, "myhome.bypass.cooldown", player.isOp());
 	}
 	public static boolean bypassWarming(Player player) {
+		if(!HomeSettings.enableBypassing) return false;
+		
 		return permission(player, "myhome.bypass.warmup", player.isOp());
 	}
 	public static boolean bypassSHCooling(Player player) {
+		if(!HomeSettings.enableBypassing) return false;
+		
 		return permission(player, "myhome.bypass.sethomecool", player.isOp());
 	}
 	public static boolean bypassWarmupAbort(Player player) {
+		if(!HomeSettings.enableBypassing) return false;
+		
 		return permission(player, "myhome.bypass.dmgaborting", player.isOp());
 	}
 }
