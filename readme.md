@@ -3,7 +3,7 @@ MyHome - A home warp plugin for Bukkit and Minecraft
 
 
 Uses Permissions 2, Permissions 3, PermissionsEx or GroupManager plugins to manage permissions
-Supports iConony 4, iConomy 5, BOSEconomy, EssentialsEco for charging for using MyHome
+Supports iConony 4, 5 & 6+, BOSEconomy 6 & 7, EssentialsEco or MultiCurrency for charging users to use MyHome
 
 For simple set-up, give your users 'myhome.home.*' and your admins 'myhome.*'
 
