@@ -22,7 +22,7 @@ public class LocaleManager {
 			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
 		} catch (MissingResourceException e) {
 			// Failed to load requested locale file so fallback to en_us
-			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en_us"));
+			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
 			HomeLogger.warning("Failed to find locale " + locale + ". Falling back to using English (en_us).");
 		}
 	}

@@ -58,7 +58,7 @@ public class HomeSettings {
 
 		compassPointer = file.getBoolean("compassPointer", true, "Whether or not users' compasses point to home");
 
-		locale = file.getString("locale", "en_us", "Localization: what language to use for MyHome");
+		locale = file.getString("locale", "en", "Localization: what language to use for MyHome");
 		useColors = file.getBoolean("useColors", true, "Should messages in MyHome use colors?");
 		
 		enableBypassPerms = file.getBoolean("enableBypassPerms", true, "Enable the bypass permissions? If you use a * permission and dont want bypassing, set to false");
