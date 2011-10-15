@@ -33,9 +33,9 @@ Commands & Permissions:
 Permissions:
 
     Economy Permissions:
-    (myhome.home.free.*) - Allow /sethome and /home usage for free
-    (myhome.home.free.sethome) - Allow /sethome usage for free
-    (myhome.home.free.home) - Allow /home usage for free
+    (myhome.econ.free.*) - Allow /sethome and /home usage for free
+    (myhome.econ.free.sethome) - Allow /sethome usage for free
+    (myhome.econ.free.home) - Allow /home usage for free
 
     Bypassing Timers/Limits Permisions:
     (myhome.bypass.*) - Bypass all limits (cooldowns, warmups and bed usage etc)
