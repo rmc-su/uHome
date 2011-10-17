@@ -58,7 +58,7 @@ public class HomeList {
 					}
 				}
 				player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
-				MyHome.setCompass(player, player.getLocation());
+				pointCompass(player, player.getLocation());
 			} else {
 				player.sendMessage("Setting a home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
 				return;
@@ -81,7 +81,7 @@ public class HomeList {
 					player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
 				}
 			}
-			MyHome.setCompass(player, player.getLocation());
+			pointCompass(player, player.getLocation());
 		}
 
 	}
@@ -330,10 +330,16 @@ public class HomeList {
 			Home home = homeList.get(player.getName());
 			World world = player.getWorld();
 			Location location = new Location(world, home.x, home.y, home.z);
-			MyHome.setCompass(player, location);
+			pointCompass(player, location);
 		}
 	}
 
+	public void pointCompass(Player player, Location location) {
+		if (HomeSettings.compassPointer) {
+			player.setCompassTarget(location);
+		}
+	}
+	
 	public MatchList getMatches(String name, Player player) {
 		ArrayList<Home> exactMatches = new ArrayList<Home>();
 		ArrayList<Home> matches = new ArrayList<Home>();

@@ -287,10 +287,4 @@ public class MyHome extends JavaPlugin {
 	public void disablePlugin() {
 		pm.disablePlugin(this);
 	}
-	
-	public static void setCompass(Player player, Location location) {
-		if (HomeSettings.compassPointer) {
-			player.setCompassTarget(location);
-		}
-	}
 }
