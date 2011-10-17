@@ -1,5 +1,7 @@
 package me.taylorkelly.myhome;
 
+import me.taylorkelly.myhome.utils.HomeLogger;
+
 import org.bukkit.plugin.Plugin;
 import com.nijikokun.register.Register;
 import com.nijikokun.register.payment.Method;

@@ -165,7 +165,7 @@ public class Home {
 		this.pitch = Math.round(location.getPitch()) % 360;
 	}
 
-	Location getLocation(Server server) {
+	public Location getLocation(Server server) {
 		World currWorld = server.getWorld(world);
 		if(currWorld == null) {
 			return null;

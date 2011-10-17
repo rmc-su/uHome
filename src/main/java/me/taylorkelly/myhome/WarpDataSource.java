@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
 
+import me.taylorkelly.myhome.utils.HomeLogger;
+
 public class WarpDataSource {
     public final static String sqlitedb = "/homes.db";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 

@@ -1,8 +1,9 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.utils;
 
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+
 
 public class PropertiesFile {
 	private HashMap<String, PropertiesEntry> map;

@@ -6,7 +6,9 @@ import java.util.Map;
 import ru.tehkode.permissions.bukkit.*;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import org.anjocaido.groupmanager.GroupManager;
-import me.taylorkelly.myhome.HomeLogger;
+
+import me.taylorkelly.myhome.utils.HomeLogger;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;

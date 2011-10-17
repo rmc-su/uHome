@@ -2,6 +2,8 @@ package me.taylorkelly.myhome;
 
 import java.io.File;
 
+import me.taylorkelly.myhome.utils.PropertiesFile;
+
 public class HomeSettings {
 	private static final String settingsFile = "MyHome.settings";
 	public static File dataDir;

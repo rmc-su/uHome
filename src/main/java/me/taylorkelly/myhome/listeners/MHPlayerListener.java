@@ -1,5 +1,7 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.listeners;
 
+import me.taylorkelly.myhome.HomeList;
+import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.timers.WarmUp;
 
 import org.bukkit.Location;

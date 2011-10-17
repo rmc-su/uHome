@@ -9,7 +9,7 @@ import java.util.Iterator;
 import org.bukkit.ChatColor;
 
 import me.taylorkelly.myhome.HomeSettings;
-import me.taylorkelly.myhome.HomeLogger;
+import me.taylorkelly.myhome.utils.HomeLogger;
 
 public class LocaleManager {
 	private static final String LOCALE_BUNDLE = "me.taylorkelly.myhome.locale.myhome";

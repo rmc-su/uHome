@@ -1,14 +1,14 @@
 package me.taylorkelly.myhome;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 
-import me.taylorkelly.myhome.griefcraft.Updater;
+import me.taylorkelly.myhome.listeners.MHEntityListener;
+import me.taylorkelly.myhome.listeners.MHPlayerListener;
+import me.taylorkelly.myhome.listeners.MHPluginListener;
 import me.taylorkelly.myhome.locale.LocaleManager;
+import me.taylorkelly.myhome.utils.Converter;
+import me.taylorkelly.myhome.utils.HomeLogger;
+import me.taylorkelly.myhome.utils.MHUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,8 +28,8 @@ public class MyHome extends JavaPlugin {
 	private boolean warning = false;
 	public String name;
 	public String version;
-	private Updater updater;
 	public PluginManager pm;
+	private MHUtils utils;
 
 	@Override
 	public void onDisable() {
@@ -42,26 +42,30 @@ public class MyHome extends JavaPlugin {
 		this.pm = getServer().getPluginManager();
 		this.name = this.getDescription().getName();
 		this.version = this.getDescription().getVersion();
-
+		this.utils = new MHUtils(this);
+		
 		HomeSettings.initialize(getDataFolder());
 
-		libCheck();
-		convertOldDB(getDataFolder());
-		if(!sqlCheck()) { return; }
-		
+		utils.startupChecks();
+	
 		homeList = new HomeList(getServer());
 		LocaleManager.init();
 		HomePermissions.initialize(getServer());
 		HomeHelp.initialize(this);
 		HomeEconomy.init(this);
 		
-		playerListener = new MHPlayerListener(homeList, this);
-		entityListener = new MHEntityListener(this);
-		pluginListener = new MHPluginListener(this);
+		this.playerListener = new MHPlayerListener(homeList, this);
+		this.entityListener = new MHEntityListener(this);
+		this.pluginListener = new MHPluginListener(this);
 		
+		registerEvents();
+
+		HomeLogger.info(name + " " + version + " enabled");
+	}
+	
+	private void registerEvents() {
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
-		
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		
 		if(HomeSettings.respawnToHome) { 
@@ -86,91 +90,6 @@ public class MyHome extends JavaPlugin {
 		} else if(!HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
 			// We don't need this if the beds dont sethome
 			pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
-		}
-
-		HomeLogger.info(name + " " + version + " enabled");
-	}
-
-
-	private void libCheck(){
-		if(HomeSettings.downloadLibs){ 
-			updater = new Updater();
-			try {
-				updater.check();
-				updater.update();
-			} catch (Exception e) {
-			}
-		}
-	}
-
-	private void convertOldDB(File df) {
-		File newDatabase = new File(df, "homes.db");
-		File oldDatabase = new File("homes-warps.db");
-		if (!newDatabase.exists() && oldDatabase.exists()) {
-			updateFiles(oldDatabase, newDatabase);
-			oldDatabase.renameTo(new File("homes-warps.db.old"));
-		} else if (newDatabase.exists() && oldDatabase.exists()) {
-			// We no longer need this file since homes.db exists
-			oldDatabase.renameTo(new File("homes-warps.db.old"));
-		}
-	}
-
-	private boolean sqlCheck() {
-		Connection conn = ConnectionManager.initialize();
-		if (conn == null) {
-			HomeLogger.severe("Could not establish SQL connection. Disabling MyHome");
-			pm.disablePlugin(this);
-			return false;
-		} 
-		return true;
-	}
-
-	private void updateFiles(File oldDatabase, File newDatabase) {
-		if (!getDataFolder().exists()) {
-			getDataFolder().mkdirs();
-		}
-		if (newDatabase.exists()) {
-			newDatabase.delete();
-		}
-		try {
-			newDatabase.createNewFile();
-		} catch (IOException ex) {
-			HomeLogger.severe("Could not create new database file", ex);
-		}
-		copyFile(oldDatabase, newDatabase);
-	}
-
-	/**
-	 * File copier from xZise
-	 * @param fromFile
-	 * @param toFile
-	 */
-	private static void copyFile(File fromFile, File toFile) {
-		FileInputStream from = null;
-		FileOutputStream to = null;
-		try {
-			from = new FileInputStream(fromFile);
-			to = new FileOutputStream(toFile);
-			byte[] buffer = new byte[4096];
-			int bytesRead;
-
-			while ((bytesRead = from.read(buffer)) != -1) {
-				to.write(buffer, 0, bytesRead);
-			}
-		} catch (IOException ex) {
-		} finally {
-			if (from != null) {
-				try {
-					from.close();
-				} catch (IOException e) {
-				}
-			}
-			if (to != null) {
-				try {
-					to.close();
-				} catch (IOException e) {
-				}
-			}
 		}
 	}
 
@@ -365,6 +284,10 @@ public class MyHome extends JavaPlugin {
 		return false;
 	}
 
+	public void disablePlugin() {
+		pm.disablePlugin(this);
+	}
+	
 	public static void setCompass(Player player, Location location) {
 		if (HomeSettings.compassPointer) {
 			player.setCompassTarget(location);

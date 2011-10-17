@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import me.taylorkelly.myhome.utils.HomeLogger;
+
 public class ConnectionManager {
 	private static Connection conn;
 

@@ -1,4 +1,4 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import me.taylorkelly.myhome.ConnectionManager;
+import me.taylorkelly.myhome.Home;
+import me.taylorkelly.myhome.HomeList;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
