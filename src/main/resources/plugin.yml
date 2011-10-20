@@ -1,19 +1,108 @@
-name: MyHome
-version: 2.0.1
-author: spathizilla
-main: me.taylorkelly.myhome.MyHome
-website: http://forums.bukkit.org/threads/13313/
+name: uHome
+version: 1.0
+author: ks07
+authors: [spathizilla, tkelly]
+main: uk.co.ks07.uhome.MyHome
+website: http://ks07.co.uk/
 softdepend:
-  - Register
-  - Permissions
-  - GroupManager
-  - PermissionsEx
   - Help
 commands:
   home:
-    description: All of the MyHome commands
+    description: Access to the home commands.
     usage: /<command> help - Displays the MyHome commands
-    aliases: [mh,myhome]
+    permission: uhome.own
   sethome:
     description: Alias for /home set
-    usage: /<command> - Sets the home position if enabled in the configuration
+    usage: /<command> - Sets the home position.
+    permission: uhome.own.set
+
+permissions:
+  uhome.*:
+    description: Givess access to all uHome commands.
+    children:
+      uhome.admin: true
+      uhome.own: true
+      uhome.bypass: true
+  uhome.own:
+    description: Gives access to all uHome commands
+    default: true
+    children:
+      uhome.own.set: true
+      uhome.own.warp: true
+      uhome.own.delete: true
+      uhome.own.list: true
+  uhome.own.set:
+    description: Allows you to set homes.
+  uhome.own.warp:
+    description: Allows you to warp to your homes.
+  uhome.own.delete:
+    description: Allows you to delete your warps.
+  uhome.own.list:
+    description: Allows you to list your warps.
+  uhome.admin:
+    description: Gives access to all uHome admin commands
+    default: op
+    children:
+      uhome.admin.warp: true
+      uhome.admin.set: true
+      uhome.admin.delete: true
+      uhome.admin.list: true
+      uhome.admin.reload: true
+      uhome.admin.info: true
+  uhome.admin.set:
+    description: Allows you to set other people's homes.
+  uhome.admin.warp:
+    description: Allows you to warp to other's homes.
+  uhome.admin.delete:
+    description: Allows you to delete other's warps.
+  uhome.admin.list:
+    description: Allows you to list other's warps.
+  uhome.admin.reload:
+    description: Allows you to reload uHome.
+  uhome.admin.info:
+    description: Allows you to lookup a home's location.
+  uhome.bypass:
+    description: Allows you to bypass all restrictions.
+    default: op
+    children:
+      uhome.bypass.bed: true
+      uhome.bypass.cooldown: true
+      uhome.bypass.warmup: true
+      uhome.bypass.limit: true
+  uhome.bypass.bed:
+    description: Allows you to bypass the bed restriction in the config.
+  uhome.bypass.cooldown:
+    description: Allows you to bypass the warp cooldown.
+  uhome.bypass.warmup:
+    description: Allows you to bypass the warp warm-up.
+    children:
+      uhome.bypass.warmup.damage: true
+      uhome.bypass.warmup.movement: true
+  uhome.bypass.warmup.damage:
+    description: Prevents damage from cancelling your warm-up.
+  uhome.bypass.warmup.movement:
+    description: Prevents movement from cancelling your warm-up.
+  uhome.bypass.limit:
+    description: Allows you to bypass all warp limits.
+  uhome.limit.a:
+    description: Gives the player the warp limit a set in the config.
+  uhome.limit.b:
+    description: Gives the player the warp limit b set in the config.
+  uhome.limit.c:
+    description: Gives the player the warp limit c set in the config.
+  uhome.limit.d:
+    description: Gives the player the warp limit d set in the config.
+  uhome.limit.e:
+    description: Gives the player the warp limit e set in the config.
+  uhome.warmup.a:
+    description: Gives the player the warmup time a set in the config.
+  uhome.warmup.b:
+    description: Gives the player the warmup time b set in the config.
+  uhome.warmup.c:
+    description: Gives the player the warmup time c set in the config.
+  uhome.cooldown.a:
+    description: Gives the player the cooldown time a set in the config.
+  uhome.cooldown.b:
+    description: Gives the player the cooldown time a set in the config.
+  uhome.cooldown.c:
+    description: Gives the player the cooldown time a set in the config.
