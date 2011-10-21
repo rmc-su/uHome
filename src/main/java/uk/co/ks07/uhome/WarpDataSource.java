@@ -122,6 +122,12 @@ public class WarpDataSource {
     			st.executeUpdate(sql);
     			conn.commit();
 
+    			// Create a unique key on SQL.
+    			sql = "CREATE UNIQUE INDEX 'ownerName' ON `homeTable` (`owner`, `name`) ";
+    			st = conn.createStatement();
+    			st.executeUpdate(sql);
+    			conn.commit();
+
     			// Check for old homes.db and import to mysql
     			File sqlitefile = new File(HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
     			if (!sqlitefile.exists()) {
