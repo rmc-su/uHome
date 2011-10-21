@@ -113,8 +113,12 @@ public class HomeEconomy {
 		if(!economyReady()) { return false; }
 		
 		if(hasAccount(name)) {
-			economy.getAccount(name).subtract(amount);
-			return true;
+			if(hasEnough(name, amount)) { 
+				economy.getAccount(name).subtract(amount);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			HomeLogger.warning("Could not fetch economy details for " + name);
 			return false;
