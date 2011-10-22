@@ -21,7 +21,8 @@ public class WarpDataSource {
             + "`y` DOUBLE NOT NULL DEFAULT '0',"
             + "`z` DOUBLE NOT NULL DEFAULT '0'," 
             + "`yaw` smallint NOT NULL DEFAULT '0'," 
-            + "`pitch` smallint NOT NULL DEFAULT '0'"
+            + "`pitch` smallint NOT NULL DEFAULT '0',"
+            + "UNIQUE (`owner`,`world`)"
             + ");";
 
     public static void initialize() {
@@ -118,12 +119,6 @@ public class WarpDataSource {
     			// We need to set auto increment on SQL.
     			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
     			HomeLogger.info("Modifying database for MySQL support");
-    			st = conn.createStatement();
-    			st.executeUpdate(sql);
-    			conn.commit();
-
-    			// Create a unique key on SQL.
-    			sql = "CREATE UNIQUE INDEX 'ownerName' ON `homeTable` (`owner`, `name`) ";
     			st = conn.createStatement();
     			st.executeUpdate(sql);
     			conn.commit();
