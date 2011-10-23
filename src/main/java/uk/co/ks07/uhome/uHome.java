@@ -20,9 +20,9 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 
-public class MyHome extends JavaPlugin {
-	private MHPlayerListener playerListener;
-	private MHEntityListener entityListener;
+public class uHome extends JavaPlugin {
+	private UHPlayerListener playerListener;
+	private UHEntityListener entityListener;
 	private HomeList homeList;
 	public String name;
 	public String version;
@@ -51,8 +51,8 @@ public class MyHome extends JavaPlugin {
 		LocaleManager.init();
 		HomeHelp.initialize(this);
 		
-		playerListener = new MHPlayerListener(homeList, this);
-		entityListener = new MHEntityListener(this);
+		playerListener = new UHPlayerListener(homeList, this);
+		entityListener = new UHEntityListener(this);
 		
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		
@@ -110,7 +110,7 @@ public class MyHome extends JavaPlugin {
 	private boolean sqlCheck() {
 		Connection conn = ConnectionManager.initialize();
 		if (conn == null) {
-			HomeLogger.severe("Could not establish SQL connection. Disabling MyHome");
+			HomeLogger.severe("Could not establish SQL connection. Disabling uHome");
 			pm.disablePlugin(this);
 			return false;
 		} 
@@ -211,7 +211,7 @@ public class MyHome extends JavaPlugin {
 					 */
 				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && player.hasPermission("uhome.admin.reload")) {
 					HomeSettings.initialize(getDataFolder());
-					player.sendMessage("[MyHome] Reloading config");
+					player.sendMessage("[uHome] Reloading config");
 					/**
 					 * /home set
 					 */

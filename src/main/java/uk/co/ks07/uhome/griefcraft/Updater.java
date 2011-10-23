@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import uk.co.ks07.uhome.Home;
 import uk.co.ks07.uhome.HomeSettings;
 
 public class Updater {

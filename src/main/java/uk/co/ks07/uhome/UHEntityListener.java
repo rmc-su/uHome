@@ -13,9 +13,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
-public class MHEntityListener extends EntityListener {
+public class UHEntityListener extends EntityListener {
 	private Plugin plugin;
-	public MHEntityListener(Plugin plugin) {
+	public UHEntityListener(Plugin plugin) {
 		this.plugin = plugin;
 	}
 

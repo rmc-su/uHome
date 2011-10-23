@@ -16,12 +16,12 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.Material;
 
-public class MHPlayerListener extends PlayerListener {
+public class UHPlayerListener extends PlayerListener {
 
 	private HomeList homeList;
 	private Plugin plugin;
 
-	public MHPlayerListener(HomeList homeList, Plugin plugin) {
+	public UHPlayerListener(HomeList homeList, Plugin plugin) {
 		this.homeList = homeList;
 		this.plugin = plugin;
 	}

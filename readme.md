@@ -59,9 +59,9 @@ Configuration Options:
 
     compassPointer - default: true - Should the compass point to a player's /home
 
-    downloadLibs - default: true - Should MyHome attempt to download any libraries
-    sqliteLib - default: true - Should MyHome attempt to download the SQLite library (downloadLibs must be true)
-    mysqlLib - default: true - Should MyHome attempt to download the MySQL library (downloadLibs must be true)
+    downloadLibs - default: true - Should uHome attempt to download any libraries
+    sqliteLib - default: true - Should uHome attempt to download the SQLite library (downloadLibs must be true)
+    mysqlLib - default: true - Should uHome attempt to download the MySQL library (downloadLibs must be true)
 
     allowSetHome - default: false - Should /sethome usage be enabled (/home set is not disabled)
     respawnToHome - default: false - Whether or not players will respawn to their homes (false means to global spawn)
