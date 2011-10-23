@@ -33,7 +33,7 @@ public abstract class CoolDownManager{
             return;
         }
         int timer = getTimer(player);
-        
+
         if(timer > 0) {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(
@@ -49,14 +49,27 @@ public abstract class CoolDownManager{
     }
 
     /**
-     * Whether or not the specified player has cooled down.
+     * Whether or not the specified player has cooled down. This includes when
+     * the estimated cooldown time has been reached, so that players may be
+     * cooled down before the timed task has been executed.
      * 
      * @param player
      *            Player to check.
      * @return True if the player has cooled down, otherwise false.
      */
     public boolean playerHasCooled(Player player) {
-        return !players.containsKey(player.getName());
+        return !isCoolingTimerPresent(player) || estimateTimeLeft(player) == 0;
+    }
+
+    /**
+     * Whether or not a cooling timer for the specified player is present.
+     * 
+     * @param player
+     *            Player to check
+     * @return True if the cooling timer is not present, otherwise false.
+     */
+    public boolean isCoolingTimerPresent(Player player) {
+        return players.containsKey(player.getName());
     }
 
     /**
@@ -75,11 +88,10 @@ public abstract class CoolDownManager{
         PlayerTaskDetails taskDetails = players.get(player.getName());
         if (taskDetails == null) {
             return 0;
-        } else {
-            int secondsLeft =(int) TimeUnit.MILLISECONDS.toSeconds(
-                    taskDetails.getFinishTime() - System.currentTimeMillis());
-            return (secondsLeft > 0) ? secondsLeft : 0;
         }
+        int secondsLeft =(int) TimeUnit.MILLISECONDS.toSeconds(
+                taskDetails.getFinishTime() - System.currentTimeMillis());
+        return (secondsLeft > 0) ? secondsLeft : 0;
     }
 
     /**
@@ -126,7 +138,7 @@ public abstract class CoolDownManager{
     protected void removePlayer(String playerName) {
         players.remove(playerName);
     }
-    
+
     /**
      * Returns true if cooldown is bypassed for the specified player, otherwise
      * false.
