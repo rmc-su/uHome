@@ -1,4 +1,4 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.sql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
 
+import me.taylorkelly.myhome.Home;
+import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.utils.HomeLogger;
 
 public class WarpDataSource {

@@ -6,10 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 
-import me.taylorkelly.myhome.ConnectionManager;
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.MyHome;
 import me.taylorkelly.myhome.griefcraft.Updater;
+import me.taylorkelly.myhome.sql.ConnectionManager;
 
 public class MHUtils {
 	private MyHome plugin;

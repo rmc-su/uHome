@@ -1,9 +1,10 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.utils.HomeLogger;
 
 public class ConnectionManager {

@@ -6,6 +6,7 @@ import me.taylorkelly.myhome.listeners.MHEntityListener;
 import me.taylorkelly.myhome.listeners.MHPlayerListener;
 import me.taylorkelly.myhome.listeners.MHPluginListener;
 import me.taylorkelly.myhome.locale.LocaleManager;
+import me.taylorkelly.myhome.sql.ConnectionManager;
 import me.taylorkelly.myhome.utils.Converter;
 import me.taylorkelly.myhome.utils.HomeHelp;
 import me.taylorkelly.myhome.utils.HomeLogger;
