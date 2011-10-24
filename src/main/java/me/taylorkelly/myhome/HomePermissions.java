@@ -18,7 +18,7 @@ import org.bukkit.plugin.PluginManager;
 
 public class HomePermissions {
 	private enum PermissionsHandler {
-		PERMISSIONSEX, PERMISSIONS3, PERMISSIONS, GROUPMANAGER, PERMBUKKIT, NONE
+		PERMISSIONSEX, PERMISSIONS3, PERMISSIONS, GROUPMANAGER, BPERMISSIONS, PERMBUKKIT, NONE
 	}
 	private static PermissionsHandler handler;
 	private static Plugin permissionPlugin;
@@ -28,6 +28,7 @@ public class HomePermissions {
 		Plugin permissionsEx = server.getPluginManager().getPlugin("PermissionsEx");
 		Plugin groupManager = server.getPluginManager().getPlugin("GroupManager");
 		Plugin permissions = server.getPluginManager().getPlugin("Permissions");
+		Plugin bpermissions = server.getPluginManager().getPlugin("bPermissions");
 
 		if (permissionsEx != null) {
 			permissionPlugin = permissionsEx;
@@ -39,6 +40,12 @@ public class HomePermissions {
 			handler = PermissionsHandler.GROUPMANAGER;
 			String version = groupManager.getDescription().getVersion();
 			HomeLogger.info("Permissions enabled using: GroupManager v" + version);
+		} else if (bpermissions != null) {
+			handler = PermissionsHandler.BPERMISSIONS;
+			String version = bpermissions.getDescription().getVersion();
+			HomeLogger.info("Permissions enabled using: bPermissions" + version);
+			HomePermissions.pm = server.getPluginManager();
+			registerPermissions();
 		} else if (permissions != null) {
 			permissionPlugin = permissions;
 			String version = permissions.getDescription().getVersion();
@@ -49,6 +56,7 @@ public class HomePermissions {
 				handler = PermissionsHandler.PERMISSIONS;
 			}
 			HomeLogger.info("Permissions enabled using: Permissions v" + version);
+			
 		} else {
 			handler = PermissionsHandler.PERMBUKKIT;
 			HomeLogger.info("Permissions enabled using: PermissionsBukkit");
@@ -68,6 +76,7 @@ public class HomePermissions {
 		case GROUPMANAGER:
 			return ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, permission);
 		case PERMBUKKIT:
+		case BPERMISSIONS:
 			return player.hasPermission(permission);
 		case NONE:
 			return defaultPerm;
@@ -97,6 +106,7 @@ public class HomePermissions {
 		case GROUPMANAGER:
 			return ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).getPermissionInteger(playername, permission);
 		case PERMBUKKIT:
+		case BPERMISSIONS:
 			return defaultPerm;
 		case NONE:
 			return defaultPerm;
