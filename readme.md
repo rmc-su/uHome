@@ -1,9 +1,8 @@
 MyHome - A home warp plugin for Bukkit and Minecraft 
 ===========
 
-
-Uses Permissions 2, Permissions 3, PermissionsEx or GroupManager plugins to manage permissions
-Supports iConony 4, 5 & 6+, BOSEconomy 6 & 7, EssentialsEco or MultiCurrency for charging users to use MyHome
+Uses Permissions 2, Permissions 3, PermissionsEx, GroupManager or PermissionsBukkit to manage permissions.
+Supports iConony 4, 5 & 6+, BOSEconomy 6 & 7, EssentialsEco or MultiCurrency for charging users to use MyHome.
 
 For simple set-up, give your users 'myhome.home.*' and your admins 'myhome.*'
 
@@ -95,3 +94,13 @@ Configuration Options:
     mySQLuname - default: root - MySQL Username (only if using MySQL)
     mySQLpass - default: password - MySQL Password (only if using MySQL)
 
+    
+Credits:
+
+* Andy "Spathizilla" F - Caretaker and Developer since MyHome 1.9.3
+* Taylor "tkelly" Kelly - Initial development until MyHome 1.9.3
+* Arthur "flames" Mayer for PermissionsEx support
+* Nick "Sleaker" Minkler for iConomy5 support - Now replaced by wider support
+* Taufiq "Taufiqkh" Hoven for overhauling the Timer system and adding needed improvements
+* Thomas "tcarlsen" Carlsen for Danish translations of MyHome
+Thomas "tcarlsen" Carlsen for the Danish translation
