@@ -1,7 +1,6 @@
-package me.taylorkelly.myhome;
+package me.taylorkelly.myhome.utils;
 
 import me.taylorkelly.help.Help;
-import me.taylorkelly.myhome.utils.HomeLogger;
 
 import org.bukkit.plugin.Plugin;
 
@@ -9,7 +8,7 @@ import org.bukkit.plugin.Plugin;
  *
  * @author taylor
  */
-class HomeHelp {
+public class HomeHelp {
 	public static void initialize(Plugin plugin) {
 		Plugin test = plugin.getServer().getPluginManager().getPlugin("Help");
 		if (test != null) {
