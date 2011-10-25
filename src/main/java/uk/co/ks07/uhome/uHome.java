@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -28,6 +29,7 @@ public class uHome extends JavaPlugin {
 	public String version;
 	private Updater updater;
 	public PluginManager pm;
+        public FileConfiguration config;
 
 	@Override
 	public void onDisable() {
@@ -175,8 +177,8 @@ public class uHome extends JavaPlugin {
 			/**
 			 * /sethome support
 			 */
-			if (commandName.equals("sethome") /*&& HomePermissions.set(player)*/) {
-				if(HomeSettings.bedsCanSethome == 2 /*&& !HomePermissions.bedBypass(player)*/ ) {
+			if (commandName.equals("sethome") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
+				if(HomeSettings.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
 					player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
 					return true;
 				}
@@ -195,13 +197,13 @@ public class uHome extends JavaPlugin {
 				/**
 				 * /home
 				 */
-				if (split.length == 0 && player.hasPermission("uhome.own.warp")) {
+				if (split.length == 0 && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
 					if (homeList.playerHasHome(player)) {
 						homeList.sendPlayerHome(player, this);
 					} else {
 						player.sendMessage(ChatColor.RED + "You have no home :(");
 						if(HomeSettings.bedsCanSethome == 2) { 
-							player.sendMessage("You need to sleep in a bed to set a home");
+							player.sendMessage("You need to sleep in a bed to set your default home");
 						} else {
 							player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
 						}
@@ -209,14 +211,14 @@ public class uHome extends JavaPlugin {
 					/**
 					 *  /home reload
 					 */
-				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && player.hasPermission("uhome.admin.reload")) {
+				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
 					HomeSettings.initialize(getDataFolder());
 					player.sendMessage("[uHome] Reloading config");
 					/**
 					 * /home set
 					 */
-				} else if (split.length == 1 && split[0].equalsIgnoreCase("set") && player.hasPermission("uhome.own.set")) {
-					if(HomeSettings.bedsCanSethome == 2 && !player.hasPermission("uhome.bedbypass")) {
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("set") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
+					if(HomeSettings.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
 						player.sendMessage("You can only set your default home by sleeping in a bed");
 						return true;
 					} else {
@@ -225,43 +227,43 @@ public class uHome extends JavaPlugin {
 					/**
 					 * /home set [name]
 					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("set") && player.hasPermission("uhome.own.set")) {
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("set") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
 					homeList.addHome(player, this, split[1]);
 					/**
 					 * /home set [player] [name]
 					 */
-				} else if (split.length == 3 && split[0].equalsIgnoreCase("set") && player.hasPermission("uhome.admin.set")) {
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("set") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
 					homeList.adminAddHome(player, split[1], split[2]);
 					/**
 					 * /home delete
 					 */
-				} else if (split.length == 1 && split[0].equalsIgnoreCase("delete") && player.hasPermission("uhome.own.delete")) {
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("delete") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
 					homeList.deleteHome(player);
 					/**
 					 * /home list
 					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("list") && player.hasPermission("uhome.admin.list")) {
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
 					homeList.listOther(player, split[1]);
 					/**
 					 * /home list [player]
 					 */
-				} else if (split.length == 1 && split[0].equalsIgnoreCase("list") && player.hasPermission("uhome.own.list")) {
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
 					homeList.list(player);
                                         /**
                                          * /home info [owner] [name]
                                          */
-				} else if (split.length == 3 && split[0].equalsIgnoreCase("info")) {
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("info") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminInfo)) {
 					Location homeLoc = homeList.getHomeLocation(split[1], split[2]);
                                         player.sendMessage("Warp details: "+split[1]+" : "+split[2]+" "+homeLoc.toString());
 					/**
 					 *  /home delete [name]
 					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("delete") && player.hasPermission("uhome.own.delete")) {
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("delete") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
 					homeList.deleteHome(player, split[1]);
 					/**
 					 * /home delete [owner] [name]
 					 */
-				} else if (split.length == 3 && split[0].equalsIgnoreCase("delete") && player.hasPermission("uhome.admin.delete")) {
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("delete") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminDelete)) {
 					homeList.deleteHome(split[1], split[2], player);
 					/**
 					 * /home help
@@ -269,23 +271,23 @@ public class uHome extends JavaPlugin {
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("help")) {
 					ArrayList<String> messages = new ArrayList<String>();
 					messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
-					if (player.hasPermission("uhome.own.warp")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
 						messages.add(ChatColor.RED + "/home" + ChatColor.WHITE + "  -  Go home young chap!");
 					}
-					if (player.hasPermission("uhome.own.set")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
 						messages.add(ChatColor.RED + "/home set" + ChatColor.WHITE + "  -  Sets your home to your current position");
 					}
-					if (player.hasPermission("uhome.own.delete")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
 						messages.add(ChatColor.RED + "/home delete" + ChatColor.WHITE + "  -  Deletes your current home");
 					}
-					if (player.hasPermission("uhome.admin.warp")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
 						messages.add(ChatColor.RED + "/home [player]" + ChatColor.WHITE + "  -  Go to " + ChatColor.GRAY + "[player]" + ChatColor.WHITE
 								+ "'s house (if allowed)");
 					}
-					if (player.hasPermission("uhome.own.list")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
 						messages.add(ChatColor.RED + "/home list" + ChatColor.WHITE + "  -  List the homes that you are invited to");
 					}
-					if(player.hasPermission("uhome.admin.delete")) {
+					if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
 						messages.add(ChatColor.RED + "/home delete [playername]" + ChatColor.WHITE + "  -  Clear playername's home");
 					}
 
@@ -296,7 +298,7 @@ public class uHome extends JavaPlugin {
                                         /**
 					 * /home warp [name]
 					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("warp") && player.hasPermission("uhome.own.warp")) {
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("warp") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
 					String target = split[1];
 
                                         if (homeList.homeExists(player.getName(), target)) {
@@ -307,7 +309,7 @@ public class uHome extends JavaPlugin {
                                         /**
 					 * /home [name] OR /home [player]
 					 */
-				} else if (split.length == 1 && player.hasPermission("uhome.own.warp")) {
+				} else if (split.length == 1 && (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp))) {
 					String target = split[0];
 
                                         if (homeList.homeExists(player.getName(), target)) {
@@ -320,12 +322,11 @@ public class uHome extends JavaPlugin {
                                         /**
 					 * /home [player] [name]
 					 */
-				} else if (split.length == 2 && player.hasPermission("uhome.admin.warp")) {
+				} else if (split.length == 2 && SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
 					String targetOwner = split[0];
                                         String target = split[1];
 
                                         if (homeList.homeExists(targetOwner, target)) {
-                                            player.sendMessage("Home exists, teleporting...");
                                                 homeList.warpTo(targetOwner, target, player, this);
                                         } else {
                                                 player.sendMessage("The home " + target + " doesn't exist!");

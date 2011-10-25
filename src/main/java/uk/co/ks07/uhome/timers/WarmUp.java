@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import uk.co.ks07.uhome.SuperPermsManager;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
@@ -17,7 +18,7 @@ public class WarmUp {
     }
 
     public static void addPlayer(Player player, Home home, Plugin plugin) {
-        if (player.hasPermission("uhome.bypass.warmup")) {
+        if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassWarmup)) {
             home.warp(player, plugin.getServer());
             return;
         }
@@ -60,10 +61,10 @@ public class WarmUp {
     }
     
     public static void cancelWarming(Player player, Plugin plugin, Reason reason) {
-   		if(reason == Reason.DAMAGE && player.hasPermission("uhome.bypass.warmup.damage"))
+   		if(reason == Reason.DAMAGE && SuperPermsManager.hasPermission(player, SuperPermsManager.bypassWarmupDamage))
    			return;
    		
-   		if(reason == Reason.MOVEMENT && player.hasPermission("uhome.bypass.warmup.movement"))
+   		if(reason == Reason.MOVEMENT && SuperPermsManager.hasPermission(player, SuperPermsManager.bypassWarmupMovement))
    			return;
     	
     	if (isWarming(player)) {
@@ -94,11 +95,11 @@ public class WarmUp {
     private static int playerGetWarmup(Player player) {
                 int ret;
 
-                if (player.hasPermission("uhome.warmup.a")) {
+                if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
                     ret = HomeSettings.warmUps.get("a");
-                } else if (player.hasPermission("uhome.warmup.b")) {
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
                     ret = HomeSettings.warmUps.get("b");
-                } else if (player.hasPermission("uhome.warmup.c")) {
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
                     ret = HomeSettings.warmUps.get("c");
                 } else {
                     ret = HomeSettings.defaultWarmUp;

@@ -1,9 +1,10 @@
 package uk.co.ks07.uhome.timers;
 
-import uk.co.ks07.uhome.HomeSettings;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import uk.co.ks07.uhome.SuperPermsManager;
+import uk.co.ks07.uhome.HomeSettings;
 
 /**
  * Manages cooldown for the home command.
@@ -23,7 +24,7 @@ public final class HomeCoolDown extends CoolDownManager {
     
     @Override
     protected boolean isCoolingBypassed(Player player) {
-        return player.hasPermission("uhome.bypass.cooldown");
+        return SuperPermsManager.hasPermission(player, SuperPermsManager.bypassCooldown);
     }
     
     @Override
@@ -35,11 +36,12 @@ public final class HomeCoolDown extends CoolDownManager {
     protected int playerGetPermissionsCooldown(Player player) {
                 int ret;
 
-                if (player.hasPermission("uhome.cooldown.a")) {
+                // TODO: Seperate cooldown limits for home and sethome.
+                if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
                     ret = HomeSettings.coolDowns.get("a");
-                } else if (player.hasPermission("uhome.cooldown.b")) {
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
                     ret = HomeSettings.coolDowns.get("b");
-                } else if (player.hasPermission("uhome.cooldown.c")) {
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
                     ret = HomeSettings.coolDowns.get("c");
                 } else {
                     ret = HomeSettings.defaultCoolDown;

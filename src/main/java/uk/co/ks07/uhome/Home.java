@@ -67,11 +67,7 @@ public class Home {
 	}
 
 	public boolean playerCanWarp(Player player) {
-		if (owner.equals(player.getName()) || player.hasPermission("uhome.admin.warp")) {
-                        return true;
-                } else {
-                        return false;
-                }
+		return (this.playerIsCreator(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
 	}
 
 	public void warp(Player player, Server server) {
@@ -90,10 +86,7 @@ public class Home {
 	}
 
 	public boolean playerIsCreator(String player) {
-		if (owner.equals(player)) {
-			return true;
-		}
-		return false;
+		return owner.equals(player);
 	}
 
 	@Override
