@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.listeners;
 
 import me.taylorkelly.myhome.HomeList;
+import me.taylorkelly.myhome.HomePermissions;
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.timers.WarmUp;
 
@@ -46,6 +47,7 @@ public class MHPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if(event.isCancelled()) return;
+		if(!HomePermissions.set(event.getPlayer())) return;
 		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		if(HomeSettings.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
 			if(HomeSettings.bedsCanSethome != 0) {
