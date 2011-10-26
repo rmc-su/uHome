@@ -102,5 +102,5 @@ Credits:
 * Arthur "flames" Mayer for PermissionsEx support
 * Nick "Sleaker" Minkler for iConomy5 support - Now replaced by wider support
 * Taufiq "Taufiqkh" Hoven for overhauling the Timer system and adding needed improvements
-* Thomas "tcarlsen" Carlsen for Danish translations of MyHome
-Thomas "tcarlsen" Carlsen for the Danish translation
+* Thomas "tcarlsen" Carlsen for Danish translations of MyHome messages
+* BlancoLanda for the Spanish translations of MyHome messages
