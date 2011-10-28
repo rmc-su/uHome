@@ -5,18 +5,15 @@ settings:
   loadChunks: false
   locale: 'en'
   useColors: true
-
   downloadLibs:
     enable: true
     mysqlLib: true
     sqliteLib: true
-
   mysql:
     enable: false
     connection: 'jdbc:mysql://localhost:3306/minecraft'
     username: 'minecraft'
     password: 'password'
-
 homeLimits:
   limitA: 0
   limitB: 20
@@ -24,7 +21,6 @@ homeLimits:
   limitD: 10
   limitE: 5
   default: 3
-
 timers:
   timerByPerms: false
   additionalTime: false
@@ -32,7 +28,6 @@ timers:
   warmupNotify: true
   abortOnDamage: 0
   abortOnMovement: false
-
   cooldowns:
     cooldownA: 0
     cooldownB: 5

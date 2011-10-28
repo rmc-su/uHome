@@ -43,8 +43,14 @@ public class uHome extends JavaPlugin {
 		this.name = this.getDescription().getName();
 		this.version = this.getDescription().getVersion();
                 this.config = this.getConfig();
-
-		HomeConfig.initialize(config, getDataFolder());
+                
+                try {
+                    this.config.options().copyDefaults(true);
+                    this.saveConfig();
+                    HomeConfig.initialize(config, getDataFolder());
+                } catch (Exception ex) {
+                    HomeLogger.severe("Could not load config!", ex);
+                }
 
 		libCheck();
 		convertOldDB(getDataFolder());
