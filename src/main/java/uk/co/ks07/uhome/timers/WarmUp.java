@@ -3,7 +3,7 @@ package uk.co.ks07.uhome.timers;
 import java.util.HashMap;
 
 import uk.co.ks07.uhome.Home;
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -30,7 +30,7 @@ public class WarmUp {
                 plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
             }
             
-            if (HomeSettings.warmUpNotify) {
+            if (HomeConfig.warmUpNotify) {
                 player.sendMessage(ChatColor.RED + "You will have to warm up for " + timer + " secs");
             }
             
@@ -47,7 +47,7 @@ public class WarmUp {
 
     private static void sendPlayer(Player player, Home home, Server server) {
         int timer = getTimer(player);
-    	if (HomeSettings.warmUpNotify && timer > 0)
+    	if (HomeConfig.warmUpNotify && timer > 0)
             player.sendMessage(ChatColor.RED + "You have warmed up! Sending you /home");
         home.warp(player, server);
     }
@@ -81,13 +81,13 @@ public class WarmUp {
     
     public static int getTimer(Player player) {
         int timer = 0;
-    	if (HomeSettings.timerByPerms) {
+    	if (HomeConfig.timerByPerms) {
 			timer = playerGetWarmup(player);
-                        if(HomeSettings.additionalTime) {
-				timer += HomeSettings.defaultWarmUp;
+                        if(HomeConfig.additionalTime) {
+				timer += HomeConfig.defaultWarmUp;
 			}
 		} else {
-			timer = HomeSettings.defaultWarmUp;
+			timer = HomeConfig.defaultWarmUp;
 		}
     	return timer;
     }
@@ -96,13 +96,13 @@ public class WarmUp {
                 int ret;
 
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
-                    ret = HomeSettings.warmUps.get("a");
+                    ret = HomeConfig.warmUps.get("a");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
-                    ret = HomeSettings.warmUps.get("b");
+                    ret = HomeConfig.warmUps.get("b");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
-                    ret = HomeSettings.warmUps.get("c");
+                    ret = HomeConfig.warmUps.get("c");
                 } else {
-                    ret = HomeSettings.defaultWarmUp;
+                    ret = HomeConfig.defaultWarmUp;
                 }
 
                 return ret;

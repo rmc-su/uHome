@@ -3,7 +3,7 @@ package uk.co.ks07.uhome.timers;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -104,9 +104,9 @@ public abstract class CoolDownManager{
      */
     public int getTimer(Player player) {
         int timer = 0;
-        if (HomeSettings.timerByPerms) {
+        if (HomeConfig.timerByPerms) {
             timer = playerGetPermissionsCooldown(player);
-            if (HomeSettings.additionalTime) {
+            if (HomeConfig.additionalTime) {
                 timer += getDefaultCoolDownSetting();
             }
         } else {

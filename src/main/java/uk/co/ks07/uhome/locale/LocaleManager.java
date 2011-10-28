@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.bukkit.ChatColor;
 
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 import uk.co.ks07.uhome.HomeLogger;
 
 public class LocaleManager {
@@ -15,7 +15,7 @@ public class LocaleManager {
 	private static ResourceBundle locResBundle = null;
 
 	public static void init() {
-		String locale = HomeSettings.locale.toLowerCase();
+		String locale = HomeConfig.locale.toLowerCase();
 		try {
 			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
 			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
@@ -42,7 +42,7 @@ public class LocaleManager {
 				}
 			}
 			
-			if(HomeSettings.useColors) {
+			if(HomeConfig.useColors) {
 				output = addColors(output);
 			} else {
 				output = stripColors(output);

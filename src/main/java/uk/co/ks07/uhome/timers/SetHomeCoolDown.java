@@ -2,7 +2,7 @@ package uk.co.ks07.uhome.timers;
 
 import org.bukkit.entity.Player;
 
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 import uk.co.ks07.uhome.SuperPermsManager;
 
 /**
@@ -28,13 +28,13 @@ public final class SetHomeCoolDown extends CoolDownManager {
 
                 // TODO: Seperate cooldown limits for home and sethome.
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
-                    ret = HomeSettings.coolDowns.get("a");
+                    ret = HomeConfig.coolDowns.get("a");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
-                    ret = HomeSettings.coolDowns.get("b");
+                    ret = HomeConfig.coolDowns.get("b");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
-                    ret = HomeSettings.coolDowns.get("c");
+                    ret = HomeConfig.coolDowns.get("c");
                 } else {
-                    ret = HomeSettings.defaultCoolDown;
+                    ret = HomeConfig.defaultCoolDown;
                 }
 
                 return ret;
@@ -42,7 +42,7 @@ public final class SetHomeCoolDown extends CoolDownManager {
     
     @Override
     protected int getDefaultCoolDownSetting() {
-        return HomeSettings.coolDownSetHome;
+        return HomeConfig.defaultCoolDown;
     }
 
 }

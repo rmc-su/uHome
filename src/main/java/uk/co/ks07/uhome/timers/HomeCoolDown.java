@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import uk.co.ks07.uhome.SuperPermsManager;
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 
 /**
  * Manages cooldown for the home command.
@@ -29,7 +29,7 @@ public final class HomeCoolDown extends CoolDownManager {
     
     @Override
     protected int getDefaultCoolDownSetting() {
-        return HomeSettings.defaultCoolDown;
+        return HomeConfig.defaultCoolDown;
     }
 
     @Override
@@ -38,13 +38,13 @@ public final class HomeCoolDown extends CoolDownManager {
 
                 // TODO: Seperate cooldown limits for home and sethome.
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
-                    ret = HomeSettings.coolDowns.get("a");
+                    ret = HomeConfig.coolDowns.get("a");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
-                    ret = HomeSettings.coolDowns.get("b");
+                    ret = HomeConfig.coolDowns.get("b");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
-                    ret = HomeSettings.coolDowns.get("c");
+                    ret = HomeConfig.coolDowns.get("c");
                 } else {
-                    ret = HomeSettings.defaultCoolDown;
+                    ret = HomeConfig.defaultCoolDown;
                 }
 
                 return ret;
@@ -53,7 +53,7 @@ public final class HomeCoolDown extends CoolDownManager {
     @Override
     protected void onCoolDownExpiry(Player player) {
         super.onCoolDownExpiry(player);
-        if (HomeSettings.coolDownNotify) {
+        if (HomeConfig.coolDownNotify) {
             player.sendMessage(ChatColor.AQUA + "You have cooled down, feel free to /home");
         }
     }

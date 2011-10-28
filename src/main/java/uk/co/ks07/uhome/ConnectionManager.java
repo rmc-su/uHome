@@ -9,14 +9,14 @@ public class ConnectionManager {
 
 	public static Connection initialize() {
 		try {
-			if(HomeSettings.usemySQL) {
+			if(HomeConfig.usemySQL) {
 				Class.forName("com.mysql.jdbc.Driver");
-				conn = DriverManager.getConnection(HomeSettings.mySQLconn, HomeSettings.mySQLuname, HomeSettings.mySQLpass);
+				conn = DriverManager.getConnection(HomeConfig.mySQLconn, HomeConfig.mySQLuname, HomeConfig.mySQLpass);
 				conn.setAutoCommit(false);
 				return conn;
 			} else {
 				Class.forName("org.sqlite.JDBC");
-				conn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + "/homes.db");
+				conn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + "/homes.db");
 				conn.setAutoCommit(false);
 				return conn;
 			}
@@ -30,7 +30,7 @@ public class ConnectionManager {
 
 	public static Connection getConnection() {
 		if(conn == null) conn = initialize();
-		if(HomeSettings.usemySQL) {
+		if(HomeConfig.usemySQL) {
 			// We probably dont need to do this for SQLite. 
 			try {
 				if(!conn.isValid(10)) conn = initialize();
@@ -44,7 +44,7 @@ public class ConnectionManager {
 	public static void closeConnection() {
 		if(conn != null) {
 			try {
-				if(HomeSettings.usemySQL){
+				if(HomeConfig.usemySQL){
 					if(conn.isValid(10)) {
 						conn.close();
 					}

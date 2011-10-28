@@ -28,7 +28,7 @@ public class UHPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
-		if(HomeSettings.bedsCanSethome != 0) {
+		if(HomeConfig.bedsCanSethome != 0) {
 			homeList.addHome(event.getPlayer(), plugin);
 		}
 	}
@@ -37,8 +37,8 @@ public class UHPlayerListener extends PlayerListener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if(event.isCancelled()) return;
 		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		if(HomeSettings.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
-			if(HomeSettings.bedsCanSethome != 0) {
+		if(HomeConfig.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
+			if(HomeConfig.bedsCanSethome != 0) {
 				homeList.addHome(event.getPlayer(), plugin);
 			}
 		}
@@ -46,7 +46,7 @@ public class UHPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(HomeSettings.loadChunks) {
+		if(HomeConfig.loadChunks) {
 			World world = event.getPlayer().getWorld();
 			Chunk chunk = world.getChunkAt(event.getTo());
 			int x = chunk.getX();
@@ -57,7 +57,7 @@ public class UHPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (HomeSettings.respawnToHome && homeList.homeExists(event.getPlayer().getName(), "home")) {
+		if (HomeConfig.respawnToHome && homeList.homeExists(event.getPlayer().getName(), "home")) {
 			Location location = homeList.getHomeFor(event.getPlayer()).getLocation(plugin.getServer());
 			if (location != null) {
 				event.setRespawnLocation(location);
@@ -69,7 +69,7 @@ public class UHPlayerListener extends PlayerListener {
 	public void onPlayerMove(PlayerMoveEvent event) {
 		if(event.isCancelled()) return;
 		
-		if(HomeSettings.abortOnMove) {
+		if(HomeConfig.abortOnMove) {
 			Player player = event.getPlayer();
 			if(WarmUp.isWarming(player)) {
 				WarmUp.cancelWarming(player, plugin, WarmUp.Reason.MOVEMENT);

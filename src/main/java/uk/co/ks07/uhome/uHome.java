@@ -42,8 +42,9 @@ public class uHome extends JavaPlugin {
 		this.pm = getServer().getPluginManager();
 		this.name = this.getDescription().getName();
 		this.version = this.getDescription().getVersion();
+                this.config = this.getConfig();
 
-		HomeSettings.initialize(getDataFolder());
+		HomeConfig.initialize(config, getDataFolder());
 
 		libCheck();
 		convertOldDB(getDataFolder());
@@ -58,26 +59,26 @@ public class uHome extends JavaPlugin {
 		
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		
-		if(HomeSettings.respawnToHome) { 
+		if(HomeConfig.respawnToHome) { 
 			// Dont need this if we're not handling respawning.
 			pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
 		}
-		if(HomeSettings.loadChunks) {
+		if(HomeConfig.loadChunks) {
 			// We dont need to register for teleporting if we dont want to load chunks.
 			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
 		}
-		if(HomeSettings.abortOnDamage != 0) {
+		if(HomeConfig.abortOnDamage != 0) {
 			// We dont need this if we're not aborting warmups for combat.
 			pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
 		}
-		if(HomeSettings.abortOnMove) { 
+		if(HomeConfig.abortOnMove) { 
 			// We dont need this if we're not aborting if they move during warmup.
 			pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
 		}
-		if(HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
+		if(HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
 			// We don't need this if the beds cannot be used during the day
 			pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
-		} else if(!HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
+		} else if(!HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
 			// We don't need this if the beds dont sethome
 			pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
 		}
@@ -87,7 +88,7 @@ public class uHome extends JavaPlugin {
 
 
 	private void libCheck(){
-		if(HomeSettings.downloadLibs){ 
+		if(HomeConfig.downloadLibs){ 
 			updater = new Updater();
 			try {
 				updater.check();
@@ -178,7 +179,7 @@ public class uHome extends JavaPlugin {
 			 * /sethome support
 			 */
 			if (commandName.equals("sethome") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
-				if(HomeSettings.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
+				if(HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
 					player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
 					return true;
 				}
@@ -202,7 +203,7 @@ public class uHome extends JavaPlugin {
 						homeList.sendPlayerHome(player, this);
 					} else {
 						player.sendMessage(ChatColor.RED + "You have no home :(");
-						if(HomeSettings.bedsCanSethome == 2) { 
+						if(HomeConfig.bedsCanSethome == 2) { 
 							player.sendMessage("You need to sleep in a bed to set your default home");
 						} else {
 							player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
@@ -212,13 +213,13 @@ public class uHome extends JavaPlugin {
 					 *  /home reload
 					 */
 				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
-					HomeSettings.initialize(getDataFolder());
+					HomeConfig.initialize(this.config, getDataFolder());
 					player.sendMessage("[uHome] Reloading config");
 					/**
 					 * /home set
 					 */
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("set") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
-					if(HomeSettings.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
+					if(HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
 						player.sendMessage("You can only set your default home by sleeping in a bed");
 						return true;
 					} else {
@@ -354,7 +355,7 @@ public class uHome extends JavaPlugin {
                                  * /home reload
                                  */
                                 } else if (split.length == 1 && split[0].equalsIgnoreCase("reload")) {
-                                        HomeSettings.initialize(getDataFolder());
+                                        HomeConfig.initialize(this.config, getDataFolder());
 					sender.sendMessage("[uHome] Reloading config");
                                 /**
                                  * /home info [owner] [name]

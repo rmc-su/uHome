@@ -1,0 +1,45 @@
+settings:
+  respawnToHome: true
+  bedsCanSetHome: 0
+  bedsDuringDay: false
+  loadChunks: false
+  locale: 'en'
+  useColors: true
+
+  downloadLibs:
+    enable: true
+    mysqlLib: true
+    sqliteLib: true
+
+  mysql:
+    enable: false
+    connection: 'jdbc:mysql://localhost:3306/minecraft'
+    username: 'minecraft'
+    password: 'password'
+
+homeLimits:
+  limitA: 0
+  limitB: 20
+  limitC: 15
+  limitD: 10
+  limitE: 5
+  default: 3
+
+timers:
+  timerByPerms: false
+  additionalTime: false
+  cooldownNotify: false
+  warmupNotify: true
+  abortOnDamage: 0
+  abortOnMovement: false
+
+  cooldowns:
+    cooldownA: 0
+    cooldownB: 5
+    cooldownC: 10
+    default: 0
+  warmups:
+    warmupA: 0
+    warmupB: 5
+    warmupC: 10
+    default: 0

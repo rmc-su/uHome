@@ -20,13 +20,13 @@ public class UHEntityListener extends EntityListener {
 	}
 
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled() || !(event instanceof EntityDamageByEntityEvent) || !(event.getEntity() instanceof LivingEntity) || HomeSettings.abortOnDamage == 0)
+		if (event.isCancelled() || !(event instanceof EntityDamageByEntityEvent) || !(event.getEntity() instanceof LivingEntity) || HomeConfig.abortOnDamage == 0)
 			return;
 		
 		final LivingEntity victim = (LivingEntity) event.getEntity();
 		final Entity aggressor =((EntityDamageByEntityEvent)event).getDamager();	
 
-		if(HomeSettings.abortOnDamage == 3) {
+		if(HomeConfig.abortOnDamage == 3) {
 			if(victim instanceof Player) {
 				Player vplayer = (Player) event.getEntity();
 				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);
@@ -35,7 +35,7 @@ public class UHEntityListener extends EntityListener {
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
 				WarmUp.cancelWarming(aplayer, plugin, WarmUp.Reason.DAMAGE);
 			}
-		} else if(HomeSettings.abortOnDamage == 2) {
+		} else if(HomeConfig.abortOnDamage == 2) {
 			if(victim instanceof Player && (((aggressor instanceof Monster) || (aggressor instanceof Animals)) && !(aggressor instanceof Player))) {
 				Player vplayer = (Player) event.getEntity();
 				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);
@@ -44,7 +44,7 @@ public class UHEntityListener extends EntityListener {
 				Player aplayer = (Player) ((EntityDamageByEntityEvent)event).getDamager();
 				WarmUp.cancelWarming(aplayer, plugin, WarmUp.Reason.DAMAGE);
 			}			
-		} else if(HomeSettings.abortOnDamage == 1) {
+		} else if(HomeConfig.abortOnDamage == 1) {
 			if(victim instanceof Player && aggressor instanceof Player) {
 				Player vplayer = (Player) event.getEntity();
 				WarmUp.cancelWarming(vplayer, plugin, WarmUp.Reason.DAMAGE);

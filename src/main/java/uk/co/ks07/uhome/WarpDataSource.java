@@ -115,7 +115,7 @@ public class WarpDataSource {
     		st.executeUpdate(HOME_TABLE);
     		conn.commit();
 
-    		if(HomeSettings.usemySQL){ 
+    		if(HomeConfig.usemySQL){ 
     			// We need to set auto increment on SQL.
     			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
     			HomeLogger.info("Modifying database for MySQL support");
@@ -124,14 +124,14 @@ public class WarpDataSource {
     			conn.commit();
 
     			// Check for old homes.db and import to mysql
-    			File sqlitefile = new File(HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
+    			File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     			if (!sqlitefile.exists()) {
     				HomeLogger.info("Could not find old " + sqlitedb);
     				return;
     			} else {
     				HomeLogger.info("Trying to import homes from homes.db");
     				Class.forName("org.sqlite.JDBC");
-    				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
+    				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
     				Statement slstatement = sqliteconn.createStatement();
     				ResultSet slset = slstatement.executeQuery("SELECT * FROM homeTable");
@@ -153,7 +153,7 @@ public class WarpDataSource {
     				}
     				HomeLogger.info("Imported " + size + " homes from " + sqlitedb);
     				HomeLogger.info("Renaming " + sqlitedb + " to " +sqlitedb + ".old");
-    				if (!sqlitefile.renameTo(new File(HomeSettings.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
+    				if (!sqlitefile.renameTo(new File(HomeConfig.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
     					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
     				}
 
@@ -294,7 +294,7 @@ public class WarpDataSource {
     		// Failed the test so we need to execute the updates
     		try {
     			String[] query;
-    			if (HomeSettings.usemySQL) {
+    			if (HomeConfig.usemySQL) {
     				query = mysql.split(";");
     			} else { 
     				query = sqlite.split(";");
@@ -317,7 +317,7 @@ public class WarpDataSource {
     public static void updateFieldType(String field, String type) {
     	try {
     		// SQLite uses dynamic field typing so we dont need to process these.  
-    		if (!HomeSettings.usemySQL) return;
+    		if (!HomeConfig.usemySQL) return;
 
     		HomeLogger.info("Updating database");
 

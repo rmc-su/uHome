@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import uk.co.ks07.uhome.HomeSettings;
+import uk.co.ks07.uhome.HomeConfig;
 
 public class Updater {
 
@@ -43,11 +43,11 @@ public class Updater {
 
 	public void check() {
 		ArrayList<String> paths = new ArrayList<String>();
-		if(HomeSettings.sqliteLib) {
+		if(HomeConfig.sqliteLib) {
 			paths.add("lib/sqlite.jar");
 			paths.add("lib/" + getOSSpecificFileName());
 		}
-		if(HomeSettings.mysqlLib) 
+		if(HomeConfig.mysqlLib) 
 			paths.add("lib/mysql-connector-java-bin.jar");
 		
 		

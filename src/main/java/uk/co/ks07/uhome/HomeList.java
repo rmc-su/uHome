@@ -163,17 +163,17 @@ public class HomeList {
                 int playerMaxWarps;
 
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitA)) {
-                    playerMaxWarps = HomeSettings.limits.get("a");
+                    playerMaxWarps = HomeConfig.limits.get("a");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitB)) {
-                    playerMaxWarps = HomeSettings.limits.get("b");
+                    playerMaxWarps = HomeConfig.limits.get("b");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitC)) {
-                    playerMaxWarps = HomeSettings.limits.get("c");
+                    playerMaxWarps = HomeConfig.limits.get("c");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitD)) {
-                    playerMaxWarps = HomeSettings.limits.get("d");
+                    playerMaxWarps = HomeConfig.limits.get("d");
                 } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitE)) {
-                    playerMaxWarps = HomeSettings.limits.get("e");
+                    playerMaxWarps = HomeConfig.limits.get("e");
                 } else {
-                    playerMaxWarps = HomeSettings.defaultLimit;
+                    playerMaxWarps = HomeConfig.defaultLimit;
                 }
                 
                 return (playerWarps < playerMaxWarps);
