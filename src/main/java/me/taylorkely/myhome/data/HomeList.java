@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import me.taylorkelly.myhome.HomeEconomy;
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 import me.taylorkelly.myhome.sql.WarpDataSource;

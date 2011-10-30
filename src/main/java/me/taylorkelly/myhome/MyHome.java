@@ -12,6 +12,7 @@ import me.taylorkelly.myhome.utils.Converter;
 import me.taylorkelly.myhome.utils.HomeHelp;
 import me.taylorkelly.myhome.utils.HomeLogger;
 import me.taylorkelly.myhome.utils.MHUtils;
+import me.taylorkely.myhome.data.HomeEconomy;
 import me.taylorkely.myhome.data.HomeList;
 
 import org.bukkit.ChatColor;

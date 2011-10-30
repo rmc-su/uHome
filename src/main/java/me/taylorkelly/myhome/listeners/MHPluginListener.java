@@ -1,7 +1,7 @@
 package me.taylorkelly.myhome.listeners;
 
-import me.taylorkelly.myhome.HomeEconomy;
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkely.myhome.data.HomeEconomy;
 
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.PluginDisableEvent;

@@ -1,5 +1,6 @@
-package me.taylorkelly.myhome;
+package me.taylorkely.myhome.data;
 
+import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.utils.HomeLogger;
 
 import org.bukkit.plugin.Plugin;
