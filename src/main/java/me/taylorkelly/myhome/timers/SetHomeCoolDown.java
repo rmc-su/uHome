@@ -1,8 +1,8 @@
 package me.taylorkelly.myhome.timers;
 
-import me.taylorkelly.myhome.HomePermissions;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.permissions.HomePermissions;
 
 import org.bukkit.entity.Player;
 

@@ -7,9 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import me.taylorkelly.myhome.Home;
-import me.taylorkelly.myhome.HomeList;
 import me.taylorkelly.myhome.sql.ConnectionManager;
+import me.taylorkely.myhome.data.Home;
+import me.taylorkely.myhome.data.HomeList;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;

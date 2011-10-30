@@ -28,8 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import me.taylorkelly.myhome.Home;
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkely.myhome.data.Home;
 
 public class Updater {
 

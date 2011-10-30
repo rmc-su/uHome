@@ -3,9 +3,9 @@ package me.taylorkelly.myhome.timers;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import me.taylorkelly.myhome.HomePermissions;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.permissions.HomePermissions;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
