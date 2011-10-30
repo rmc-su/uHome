@@ -1,5 +1,5 @@
 name: MyHome
-version: 2.0.2
+version: 2.1
 author: spathizilla
 main: me.taylorkelly.myhome.MyHome
 website: http://forums.bukkit.org/threads/13313/
@@ -8,6 +8,7 @@ softdepend:
   - Permissions
   - GroupManager
   - PermissionsEx
+  - bPermissions
   - Help
 commands:
   home:
