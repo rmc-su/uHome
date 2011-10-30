@@ -5,7 +5,6 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import org.bukkit.plugin.Plugin;
 
-
 public class Permissions3Handler implements IPermissionsHandler {
 	private final transient PermissionHandler handler;
 

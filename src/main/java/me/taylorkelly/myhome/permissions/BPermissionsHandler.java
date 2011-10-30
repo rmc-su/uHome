@@ -1,9 +1,6 @@
 package me.taylorkelly.myhome.permissions;
 
 import org.bukkit.entity.Player;
-import de.bananaco.permissions.Permissions;
-import de.bananaco.permissions.interfaces.PermissionSet;
-import de.bananaco.permissions.worlds.WorldPermissionsManager;
 import de.bananaco.permissions.info.InfoReader;
 
 public class BPermissionsHandler implements IPermissionsHandler {
