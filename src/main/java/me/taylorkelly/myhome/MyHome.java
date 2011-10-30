@@ -6,11 +6,13 @@ import me.taylorkelly.myhome.listeners.MHEntityListener;
 import me.taylorkelly.myhome.listeners.MHPlayerListener;
 import me.taylorkelly.myhome.listeners.MHPluginListener;
 import me.taylorkelly.myhome.locale.LocaleManager;
+import me.taylorkelly.myhome.permissions.HomePermissions;
 import me.taylorkelly.myhome.sql.ConnectionManager;
 import me.taylorkelly.myhome.utils.Converter;
 import me.taylorkelly.myhome.utils.HomeHelp;
 import me.taylorkelly.myhome.utils.HomeLogger;
 import me.taylorkelly.myhome.utils.MHUtils;
+import me.taylorkely.myhome.data.HomeList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,7 +54,7 @@ public class MyHome extends JavaPlugin {
 	
 		homeList = new HomeList(getServer());
 		LocaleManager.init();
-		HomePermissions.initialize(getServer());
+		HomePermissions.initialize(this);
 		HomeHelp.initialize(this);
 		HomeEconomy.init(this);
 		
