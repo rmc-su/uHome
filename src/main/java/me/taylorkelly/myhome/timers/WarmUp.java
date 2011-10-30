@@ -3,8 +3,8 @@ package me.taylorkelly.myhome.timers;
 import java.util.HashMap;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.data.Home;
 import me.taylorkelly.myhome.permissions.HomePermissions;
-import me.taylorkely.myhome.data.Home;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;

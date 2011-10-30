@@ -1,4 +1,4 @@
-package me.taylorkely.myhome.data;
+package me.taylorkelly.myhome.data;
 
 import java.util.ArrayList;
 

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import me.taylorkelly.myhome.HomeSettings;
-import me.taylorkely.myhome.data.Home;
+import me.taylorkelly.myhome.data.Home;
 
 public class Updater {
 

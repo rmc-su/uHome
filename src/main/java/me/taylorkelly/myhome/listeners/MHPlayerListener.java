@@ -1,9 +1,9 @@
 package me.taylorkelly.myhome.listeners;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.data.HomeList;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 import me.taylorkelly.myhome.timers.WarmUp;
-import me.taylorkely.myhome.data.HomeList;
 
 import org.bukkit.Location;
 import org.bukkit.Chunk;

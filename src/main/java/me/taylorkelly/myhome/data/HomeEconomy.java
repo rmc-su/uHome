@@ -1,4 +1,4 @@
-package me.taylorkely.myhome.data;
+package me.taylorkelly.myhome.data;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.utils.HomeLogger;
