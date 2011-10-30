@@ -8,7 +8,7 @@ import org.bukkit.plugin.PluginManager;
 
 public class PermissionsHandler implements IPermissionsHandler {
 	private enum PermHandler {
-		PERMISSIONSEX, PERMISSIONS3, PERMISSIONS2, GROUPMANAGER, BPERMISSIONS, PERMBUKKIT, SUPERPERMS, NONE
+		PERMISSIONSEX, PERMISSIONS3, PERMISSIONS2, GROUPMANAGER, BPERMISSIONS, SUPERPERMS, NONE
 	}
 	private static PermHandler permplugin = PermHandler.NONE;
 	private transient IPermissionsHandler handler = new NullHandler();
