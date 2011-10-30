@@ -1,4 +1,4 @@
-package me.taylorkelly.myhome;
+package me.taylorkely.myhome.data;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import me.taylorkelly.myhome.HomeEconomy;
+import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.permissions.HomePermissions;
 import me.taylorkelly.myhome.sql.WarpDataSource;
 import me.taylorkelly.myhome.timers.HomeCoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;

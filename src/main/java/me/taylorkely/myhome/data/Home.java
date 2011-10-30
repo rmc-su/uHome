@@ -1,6 +1,9 @@
-package me.taylorkelly.myhome;
+package me.taylorkely.myhome.data;
 
 import java.util.ArrayList;
+
+import me.taylorkelly.myhome.HomeSettings;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
