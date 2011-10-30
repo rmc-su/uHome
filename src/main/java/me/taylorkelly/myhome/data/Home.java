@@ -3,6 +3,7 @@ package me.taylorkelly.myhome.data;
 import java.util.ArrayList;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.locale.LocaleManager;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class Home {
 			currWorld = server.getWorld(world);
 		}
 		if (currWorld == null) {
-			player.sendMessage(ChatColor.RED + "Uh oh. The world with that home doesn't exist!");
+			player.sendMessage(LocaleManager.getString("error.nosuchworld"));
 		} else {
 			Location location = new Location(currWorld, x, y, z, yaw, pitch);
 			player.teleport(location);

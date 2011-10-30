@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.data.Home;
+import me.taylorkelly.myhome.locale.LocaleManager;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 
 import org.bukkit.ChatColor;
@@ -48,7 +49,7 @@ public class WarmUp {
     private static void sendPlayer(Player player, Home home, Server server) {
         int timer = getTimer(player);
     	if (HomeSettings.warmUpNotify && timer > 0)
-            player.sendMessage(ChatColor.RED + "You have warmed up! Sending you /home");
+            player.sendMessage(LocaleManager.getString("timer.home.warmed"));
         home.warp(player, server);
     }
 
@@ -72,9 +73,9 @@ public class WarmUp {
    			players.remove(player.getName());
    			
    			if(reason == Reason.DAMAGE) { 
-   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+   				player.sendMessage(LocaleManager.getString("timer.home.combatabort"));
    			} else if(reason == Reason.MOVEMENT) { 
-   				player.sendMessage(ChatColor.RED + "Your /home has been aborted due to movement");
+   				player.sendMessage(LocaleManager.getString("timer.home.moveabort"));
    			}
    		}
     }

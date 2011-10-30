@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.timers;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.locale.LocaleManager;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 
 import org.bukkit.ChatColor;
@@ -42,7 +43,7 @@ public final class HomeCoolDown extends CoolDownManager {
     protected void onCoolDownExpiry(Player player) {
         super.onCoolDownExpiry(player);
         if (HomeSettings.coolDownNotify) {
-            player.sendMessage(ChatColor.AQUA + "You have cooled down, feel free to /home");
+            player.sendMessage(LocaleManager.getString("timer.home.cooled"));
         }
     }
 }

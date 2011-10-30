@@ -109,14 +109,14 @@ public class MyHome extends JavaPlugin {
 			 */
 			if (commandName.equals("sethome") && HomePermissions.set(player)) {
 				if(HomeSettings.bedsCanSethome == 2 && !HomePermissions.bedBypass(player) ) { 
-					player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
+					player.sendMessage(LocaleManager.getString("error.sleepinbed"));
 					return true;
 				}
 				// Check for /sethome if enabled in the configuration
 				if (HomeSettings.allowSetHome) { 
 					homeList.addHome(player, this);
 				} else {
-					player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+					player.sendMessage(LocaleManager.getString("usage.sethome"));
 				}
 				return true;
 				/**
@@ -130,11 +130,11 @@ public class MyHome extends JavaPlugin {
 					if (homeList.playerHasHome(player)) {
 						homeList.sendPlayerHome(player, this);
 					} else {
-						player.sendMessage(ChatColor.RED + "You have no home :(");
+						player.sendMessage(LocaleManager.getString("error.youhavenohome"));
 						if(HomeSettings.bedsCanSethome == 2) { 
-							player.sendMessage("You need to sleep in a bed to set a home");
+							player.sendMessage(LocaleManager.getString("error.sleepinbed"));
 						} else {       
-							player.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+							player.sendMessage(LocaleManager.getString("usage.sethome"));
 						}
 					}
 					/**
@@ -142,15 +142,15 @@ public class MyHome extends JavaPlugin {
 					 */
 				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && HomePermissions.adminReloadConfig(player)) {
 					HomeSettings.initialize(getDataFolder());
-					player.sendMessage("[MyHome] Reloading config");
+					player.sendMessage(LocaleManager.getString("admin.reload"));
 					/**
 					 * /home convert
 					 */
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("convert") && HomePermissions.adminConvert(player)) {
 					if (!warning) {
-						player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.WHITE + "Only use a copy of homes.txt.");
-						player.sendMessage("This will delete the homes.txt it uses");
-						player.sendMessage("Use " + ChatColor.RED + "'/home convert'" + ChatColor.WHITE + " again to confirm.");
+						player.sendMessage(LocaleManager.getString("admin.convert"));
+						player.sendMessage(LocaleManager.getString("admin.convert2"));
+						player.sendMessage(LocaleManager.getString("usage.convert"));
 						warning = true;
 					} else {
 						Converter.convert(player, getServer(), homeList);
@@ -161,7 +161,7 @@ public class MyHome extends JavaPlugin {
 					 */
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("set") && HomePermissions.set(player)) {
 					if(HomeSettings.bedsCanSethome == 2 && !HomePermissions.bedBypass(player)) { 
-						player.sendMessage("You can only set a home by sleeping in a bed");
+						player.sendMessage(LocaleManager.getString("error.sleepinbed"));
 						return true;
 					} else {
 						homeList.addHome(player, this);
@@ -229,55 +229,50 @@ public class MyHome extends JavaPlugin {
 					ArrayList<String> messages = new ArrayList<String>();
 					messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
 					if (HomePermissions.home(player)) {
-						messages.add(ChatColor.RED + "/home" + ChatColor.WHITE + "  -  Go home young chap!");
+						messages.add(ChatColor.RED + "/home" + ChatColor.WHITE + "  -  " + LocaleManager.getString("help.home"));
 					}
 					if (HomePermissions.set(player)) {
-						messages.add(ChatColor.RED + "/home set" + ChatColor.WHITE + "  -  Sets your home to your current position");
+						messages.add(ChatColor.RED + "/home set" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeset"));
 					}
 					if (HomePermissions.delete(player)) {
-						messages.add(ChatColor.RED + "/home delete" + ChatColor.WHITE + "  -  Deletes your current home");
+						messages.add(ChatColor.RED + "/home delete" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homedelete"));
 					}
 					if (HomePermissions.homeOthers(player)) {
-						messages.add(ChatColor.RED + "/home [player]" + ChatColor.WHITE + "  -  Go to " + ChatColor.GRAY + "[player]" + ChatColor.WHITE
-								+ "'s house (if allowed)");
+						messages.add(ChatColor.RED + "/home [player]" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeplayer"));
 					}
 					if (HomePermissions.list(player)) {
-						messages.add(ChatColor.RED + "/home list" + ChatColor.WHITE + "  -  List the homes that you are invited to");
-						messages.add(ChatColor.RED + "/home ilist" + ChatColor.WHITE + "  -  List the people invited to your home");
+						messages.add(ChatColor.RED + "/home list" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homelist"));
+						messages.add(ChatColor.RED + "/home ilist" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeilist"));
 					}
 					if (HomePermissions.invite(player)) {
-						messages.add(ChatColor.RED + "/home invite [player]" + ChatColor.WHITE + "  -  Invite " + ChatColor.GRAY + "[player]" + ChatColor.WHITE
-								+ " to your house");
+						messages.add(ChatColor.RED + "/home invite [player]" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeinvite"));
 					}
 					if (HomePermissions.uninvite(player)) {
-						messages.add(ChatColor.RED + "/home uninvite [player]" + ChatColor.WHITE + "  -  Uninvite " + ChatColor.GRAY + "[player]"
-								+ ChatColor.WHITE + " to your house");
+						messages.add(ChatColor.RED + "/home uninvite [player]" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeuninvite"));
 					}
 					if (HomePermissions.canPublic(player)) {
-						messages.add(ChatColor.RED + "/home public" + ChatColor.WHITE + "  -  Makes your house public");
+						messages.add(ChatColor.RED + "/home public" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homepublic"));
 					}
 					if (HomePermissions.canPrivate(player)) {
-						messages.add(ChatColor.RED + "/home private" + ChatColor.WHITE + "  -  Makes your house private");
+						messages.add(ChatColor.RED + "/home private" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.homeprivate"));
 					}
 					if (HomeSettings.compassPointer) {
-						messages.add(ChatColor.RED + "/home point" + ChatColor.WHITE + "  -  Points your compass home");
+						messages.add(ChatColor.RED + "/home point" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.point"));
 					}
 					if(HomePermissions.adminConvert(player)) {
-						messages.add(ChatColor.RED + "/home convert" + ChatColor.WHITE + "  -  Convert a homes.txt file.");
+						messages.add(ChatColor.RED + "/home convert" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.convert"));
 					}
 					if(HomePermissions.adminDeleteHome(player)) {
-						messages.add(ChatColor.RED + "/home clear [playername]" + ChatColor.WHITE + "  -  Clear playername's home");
+						messages.add(ChatColor.RED + "/home clear [playername]" + ChatColor.WHITE + "  -  "  + LocaleManager.getString("help.admin.clear"));
 					}
 					if(HomePermissions.adminListHome(player)) {
-						messages.add(ChatColor.RED + "/home listall" + ChatColor.WHITE + "  -  List all Homes");
+						messages.add(ChatColor.RED + "/home listall" + ChatColor.WHITE + "  - "  + LocaleManager.getString("help.admin.listall"));
 					}
 
 					for (String message : messages) {
 						player.sendMessage(message);
 					}
 				} else if (split.length == 1 && HomePermissions.homeOthers(player)) {
-					// TODO ChunkLoading
-
 					String playerName = split[0];
 					homeList.warpTo(playerName, player, this);
 				} else {

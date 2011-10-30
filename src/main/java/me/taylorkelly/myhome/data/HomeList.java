@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.taylorkelly.myhome.HomeSettings;
+import me.taylorkelly.myhome.locale.LocaleManager;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 import me.taylorkelly.myhome.sql.WarpDataSource;
 import me.taylorkelly.myhome.timers.HomeCoolDown;
@@ -48,17 +49,17 @@ public class HomeList {
 					Home warp = homeList.get(player.getName());
 					warp.setLocation(player.getLocation());
 					WarpDataSource.moveWarp(warp);
-					player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+					player.sendMessage(LocaleManager.getString("home.move"));
 					setHomeCoolDown.addPlayer(player, plugin);
 				} else {
 					Home warp = new Home(player);
 					homeList.put(player.getName(), warp);
 					WarpDataSource.addWarp(warp);
-					player.sendMessage(ChatColor.AQUA + "Successfully created your home");
+					player.sendMessage(LocaleManager.getString("home.create"));
 					setHomeCoolDown.addPlayer(player, plugin);
 					if (HomePermissions.invite(player)) {
-						player.sendMessage("If you'd like to invite friends to it,");
-						player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
+						player.sendMessage(LocaleManager.getString("home.invite.others"));
+						player.sendMessage(LocaleManager.getString("usage.invite"));
 					}
 				}
 				player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
@@ -72,17 +73,17 @@ public class HomeList {
 				Home warp = homeList.get(player.getName());
 				warp.setLocation(player.getLocation());
 				WarpDataSource.moveWarp(warp);
-				player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+				player.sendMessage(LocaleManager.getString("home.move"));
 				setHomeCoolDown.addPlayer(player, plugin);
 			} else {
 				Home warp = new Home(player);
 				homeList.put(player.getName(), warp);
 				WarpDataSource.addWarp(warp);
-				player.sendMessage(ChatColor.AQUA + "Successfully created your home");
+				player.sendMessage(LocaleManager.getString("home.create"));
 				setHomeCoolDown.addPlayer(player, plugin);
 				if (HomePermissions.invite(player)) {
-					player.sendMessage("If you'd like to invite friends to it,");
-					player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
+					player.sendMessage(LocaleManager.getString("home.invite.others"));
+					player.sendMessage(LocaleManager.getString("usage.invite"));
 				}
 			}
 			pointCompass(player, player.getLocation());
@@ -176,9 +177,9 @@ public class HomeList {
 			Home warp = homeList.get(player.getName());
 			homeList.remove(player.getName());
 			WarpDataSource.deleteWarp(warp);
-			player.sendMessage(ChatColor.AQUA + "You have deleted your home");
+			player.sendMessage(LocaleManager.getString("home.delete.done"));
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home to delete :(");
+			player.sendMessage(LocaleManager.getString("home.delete.fail"));
 		}
 	}
 
@@ -198,13 +199,14 @@ public class HomeList {
 			Home warp = homeList.get(player.getName());
 			warp.publicAll = 0;
 			WarpDataSource.publicizeWarp(warp, 0);
-			player.sendMessage(ChatColor.AQUA + "You have privatized your home");
+			//player.sendMessage(ChatColor.AQUA + "You have privatized your home");
+			player.sendMessage(LocaleManager.getString("home.privatize"));
 			if (HomePermissions.invite(player)) {
-				player.sendMessage("If you'd like to invite others to it,");
-				player.sendMessage("Use: " + ChatColor.RED + "/home invite <player>");
+				player.sendMessage(LocaleManager.getString("home.invite.others"));
+				player.sendMessage(LocaleManager.getString("usage.invite"));
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home to privatize :(");
+			player.sendMessage(LocaleManager.getString("home.privatize.fail"));
 		}
 	}
 
@@ -213,9 +215,9 @@ public class HomeList {
 			Home warp = homeList.get(player.getName());
 			warp.publicAll = 1;
 			WarpDataSource.publicizeWarp(warp, 1);
-			player.sendMessage(ChatColor.AQUA + "You have publicized your home.");
+			player.sendMessage(LocaleManager.getString("home.publicize"));
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home to publicize :(");
+			player.sendMessage(LocaleManager.getString("home.publicize.fail"));
 		}
 	}
 
@@ -226,13 +228,13 @@ public class HomeList {
 			if (warp.playerIsInvited(inviteeName)) {
 				player.sendMessage(ChatColor.RED + inviteeName + " is already invited to your home.");
 			} else if (warp.playerIsCreator(inviteeName)) {
-				player.sendMessage(ChatColor.RED + "This is your home!");
+				player.sendMessage(LocaleManager.getString("home.invite.yours"));
 			} else {
 				warp.invite(inviteeName);
 				WarpDataSource.updatePermissions(warp);
 				player.sendMessage(ChatColor.AQUA + "You have invited " + inviteeName + " to your home");
 				if (warp.publicAll == 1) {
-					player.sendMessage(ChatColor.RED + "But your home is still public!");
+					player.sendMessage(LocaleManager.getString("home.stillpublic"));
 				}
 				for (Player match : server.getOnlinePlayers()) {
 					if (match.getName().equalsIgnoreCase(inviteeName)) {
@@ -242,7 +244,7 @@ public class HomeList {
 				}	
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home to invite people to :(");
+			player.sendMessage(LocaleManager.getString("home.invite.fail"));
 		}
 	}
 
@@ -253,13 +255,13 @@ public class HomeList {
 			if (!warp.playerIsInvited(inviteeName)) {
 				player.sendMessage(ChatColor.RED + inviteeName + " is not invited to your home.");
 			} else if (warp.playerIsCreator(inviteeName)) {
-				player.sendMessage(ChatColor.RED + "Why would you want to uninivite yourself?");
+				player.sendMessage(LocaleManager.getString("home.uninvite.yours"));
 			} else {
 				warp.uninvite(inviteeName);
 				WarpDataSource.updatePermissions(warp);
 				player.sendMessage(ChatColor.AQUA + "You have uninvited " + inviteeName + " from your home");
 				if (warp.publicAll == 1) {
-					player.sendMessage(ChatColor.RED + "But your home is still public.");
+					player.sendMessage(LocaleManager.getString("home.stillpublic"));
 				}
 				for (Player match : server.getOnlinePlayers()) {
 					if (match.getName().equalsIgnoreCase(inviteeName)) {
@@ -268,7 +270,7 @@ public class HomeList {
 				}	
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home to uninvite people from :(");
+			player.sendMessage(LocaleManager.getString("home.uninvite.fail"));
 		}
 	}
 
@@ -280,9 +282,9 @@ public class HomeList {
 		ArrayList<Home> results = homesInvitedTo(player);
 
 		if (results.size() == 0) {
-			player.sendMessage(ChatColor.RED + "You are invited to no one's home.");
+			player.sendMessage(LocaleManager.getString("home.list.none"));
 		} else {
-			player.sendMessage(ChatColor.AQUA + "You are invited to the homes of:");
+			player.sendMessage(LocaleManager.getString("home.list"));
 			player.sendMessage(results.toString().replace("[", "").replace("]", ""));
 		}
 	}
@@ -291,9 +293,9 @@ public class HomeList {
 		ArrayList<Home> results = allHomes();
 
 		if (results.size() == 0) {
-			player.sendMessage(ChatColor.RED + "There are no homes.");
+			player.sendMessage(LocaleManager.getString("home.listall.none"));
 		} else {
-			player.sendMessage(ChatColor.AQUA + "There are the following Homes:");
+			player.sendMessage(LocaleManager.getString("home.listall"));
 			player.sendMessage(results.toString().replace("[", "").replace("]", ""));
 		}
 	}
@@ -302,12 +304,13 @@ public class HomeList {
 		if (homeList.containsKey(player.getName())) {
 			Home warp = homeList.get(player.getName());
 			if (warp.permissions.size() == 0) {
-				player.sendMessage(ChatColor.AQUA + "No one is invited to your house");
+				player.sendMessage(LocaleManager.getString("home.ilist.none"));
 			} else {
-				player.sendMessage(ChatColor.AQUA + warp.invitees() + " invited to your house");
+				player.sendMessage(LocaleManager.getString("home.ilist"));
+				player.sendMessage(ChatColor.AQUA + warp.invitees());
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + "You have no home :(");
+			player.sendMessage(LocaleManager.getString("error.youhavenohome"));
 		}
 	}
 
