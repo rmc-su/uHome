@@ -278,7 +278,7 @@ public class WarpDataSource {
         // SQLite does not support field renaming or deletion, so we can't alter the table this way.
         if (HomeConfig.usemySQL) {
             String test = "SELECT `owner` FROM `homeTable`";
-            String sql = "ALTER TABLE homeTable CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', ADD UNIQUE INDEX `uniq` (`owner` ASC, `name` ASC)";
+            String sql = "ALTER TABLE `homeTable` CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', ADD UNIQUE INDEX `uniq` (`owner` ASC, `name` ASC)";
             updateDB(test, sql);
         } else if (needImport) {
             importMyHome();
