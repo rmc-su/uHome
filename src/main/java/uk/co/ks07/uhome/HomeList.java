@@ -18,8 +18,8 @@ public class HomeList {
 	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
 	private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
 
-	public HomeList(Server server) {
-		WarpDataSource.initialize();
+	public HomeList(Server server, boolean needImport) {
+		WarpDataSource.initialize(needImport);
 		homeList = WarpDataSource.getMap();
 		this.server = server;
 	}

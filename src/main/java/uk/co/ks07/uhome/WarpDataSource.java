@@ -11,7 +11,8 @@ import java.io.File;
 import java.util.HashMap;
 
 public class WarpDataSource {
-    public final static String sqlitedb = "/homes.db";
+    public final static String sqlitedb = "/uhomes.db";
+    public final static String mhsqlitedb = "/homes.db.old";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
     	    + "`id` INTEGER PRIMARY KEY,"
             + "`owner` varchar(32) NOT NULL DEFAULT 'Player',"
@@ -25,11 +26,11 @@ public class WarpDataSource {
             + "UNIQUE (`owner`,`world`)"
             + ");";
 
-    public static void initialize() {
+    public static void initialize(boolean needImport) {
     	if (!tableExists()) {
     		createTable();
     	}
-    	dbTblCheck();
+    	dbTblCheck(needImport);
     }
 
     public static HashMap<String, HashMap<String, Home>> getMap() {
@@ -123,13 +124,13 @@ public class WarpDataSource {
     			st.executeUpdate(sql);
     			conn.commit();
 
-    			// Check for old homes.db and import to mysql
+    			// Check for old uhomes.db and import to mysql
     			File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     			if (!sqlitefile.exists()) {
     				HomeLogger.info("Could not find old " + sqlitedb);
     				return;
     			} else {
-    				HomeLogger.info("Trying to import homes from homes.db");
+    				HomeLogger.info("Trying to import homes from uhomes.db");
     				Class.forName("org.sqlite.JDBC");
     				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
@@ -272,9 +273,67 @@ public class WarpDataSource {
     	}
     }
 
-    public static void dbTblCheck() {
-    	// Add future modifications to the table structure here
+    public static void dbTblCheck(boolean needImport) {
+        // Add future modifications to the table structure here
+        // SQLite does not support field renaming or deletion, so we can't alter the table this way.
+        if (HomeConfig.usemySQL) {
+            String test = "SELECT `owner` FROM `homeTable`";
+            String sql = "ALTER TABLE homeTable CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', ADD UNIQUE INDEX `uniq` (`owner` ASC, `name` ASC)";
+            updateDB(test, sql);
+        } else if (needImport) {
+            importMyHome();
+        }
+    }
 
+    private static void importMyHome() {
+    	try {
+    		if(!HomeConfig.usemySQL){
+    			// Check for old homes.db and import to new db. Assume home name as 'home'
+    			File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + mhsqlitedb);
+    			if (!sqlitefile.exists()) {
+    				HomeLogger.info("Could not find " + mhsqlitedb);
+    				return;
+    			} else {
+    				HomeLogger.info("Trying to import homes from homes.db.old");
+    				Class.forName("org.sqlite.JDBC");
+    				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + mhsqlitedb);
+    				sqliteconn.setAutoCommit(false);
+    				Statement slstatement = sqliteconn.createStatement();
+    				ResultSet slset = slstatement.executeQuery("SELECT * FROM homeTable");
+
+    				int size = 0;
+    				while (slset.next()) {
+    					size++;
+    					int index = slset.getInt("id");
+                                        String owner = slset.getString("name");
+    					String world = slset.getString("world");
+    					double x = slset.getDouble("x");
+    					double y = slset.getInt("y");
+    					double z = slset.getDouble("z");
+    					int yaw = slset.getInt("yaw");
+    					int pitch = slset.getInt("pitch");
+    					Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch);
+    					addWarp(warp);
+    				}
+    				HomeLogger.info("Imported " + size + " homes from " + mhsqlitedb);
+
+    				if (slstatement != null) {
+    					slstatement.close();
+    				}
+    				if (slset != null) {
+    					slset.close();
+    				}
+
+    				if (sqliteconn != null) {
+    					sqliteconn.close();
+    				}
+    			}
+    		}
+    	} catch (SQLException e) {
+    		HomeLogger.severe("MyHome Import Exception", e);
+    	} catch (ClassNotFoundException e) {
+    		HomeLogger.severe("You need the SQLite library.", e);
+    	}
     }
 
     public static void updateDB(String test, String sql) {

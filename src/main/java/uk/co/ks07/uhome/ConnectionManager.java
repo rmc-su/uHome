@@ -16,7 +16,7 @@ public class ConnectionManager {
 				return conn;
 			} else {
 				Class.forName("org.sqlite.JDBC");
-				conn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + "/homes.db");
+				conn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + "/uhomes.db");
 				conn.setAutoCommit(false);
 				return conn;
 			}

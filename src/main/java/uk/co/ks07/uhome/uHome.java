@@ -1,8 +1,8 @@
 package uk.co.ks07.uhome;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+//import java.io.FileInputStream;
+//import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -53,10 +53,10 @@ public class uHome extends JavaPlugin {
                 }
 
 		libCheck();
-		convertOldDB(getDataFolder());
+		boolean needImport = convertOldDB(getDataFolder());
 		if(!sqlCheck()) { return; }
 		
-		homeList = new HomeList(getServer());
+		homeList = new HomeList(getServer(), needImport);
 		LocaleManager.init();
 		HomeHelp.initialize(this);
 		
@@ -104,16 +104,23 @@ public class uHome extends JavaPlugin {
 		}
 	}
 
-	private void convertOldDB(File df) {
-		File newDatabase = new File(df, "homes.db");
-		File oldDatabase = new File("homes-warps.db");
+	private boolean convertOldDB(File df) {
+		File oldDatabase = new File(df, "homes.db");
+		File newDatabase = new File(df, "uhomes.db");
 		if (!newDatabase.exists() && oldDatabase.exists()) {
-			updateFiles(oldDatabase, newDatabase);
-			oldDatabase.renameTo(new File("homes-warps.db.old"));
+                        // Create new database file.
+			updateFiles(newDatabase);
+			oldDatabase.renameTo(new File(df, "homes.db.old"));
+
+                        // Return true if importing is required (sqlite only).
+                        if (!HomeConfig.usemySQL) {
+                            return true;
+                        }
 		} else if (newDatabase.exists() && oldDatabase.exists()) {
-			// We no longer need this file since homes.db exists
-			oldDatabase.renameTo(new File("homes-warps.db.old"));
+			// We no longer need this file since uhomes.db exists
+			oldDatabase.renameTo(new File(df, "homes.db.old"));
 		}
+                return false;
 	}
 
 	private boolean sqlCheck() {
@@ -126,7 +133,7 @@ public class uHome extends JavaPlugin {
 		return true;
 	}
 
-	private void updateFiles(File oldDatabase, File newDatabase) {
+	private void updateFiles(File newDatabase) {
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdirs();
 		}
@@ -138,7 +145,6 @@ public class uHome extends JavaPlugin {
 		} catch (IOException ex) {
 			HomeLogger.severe("Could not create new database file", ex);
 		}
-		copyFile(oldDatabase, newDatabase);
 	}
 
 	/**
@@ -146,34 +152,34 @@ public class uHome extends JavaPlugin {
 	 * @param fromFile
 	 * @param toFile
 	 */
-	private static void copyFile(File fromFile, File toFile) {
-		FileInputStream from = null;
-		FileOutputStream to = null;
-		try {
-			from = new FileInputStream(fromFile);
-			to = new FileOutputStream(toFile);
-			byte[] buffer = new byte[4096];
-			int bytesRead;
-
-			while ((bytesRead = from.read(buffer)) != -1) {
-				to.write(buffer, 0, bytesRead);
-			}
-		} catch (IOException ex) {
-		} finally {
-			if (from != null) {
-				try {
-					from.close();
-				} catch (IOException e) {
-				}
-			}
-			if (to != null) {
-				try {
-					to.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-	}
+//	private static void copyFile(File fromFile, File toFile) {
+//		FileInputStream from = null;
+//		FileOutputStream to = null;
+//		try {
+//			from = new FileInputStream(fromFile);
+//			to = new FileOutputStream(toFile);
+//			byte[] buffer = new byte[4096];
+//			int bytesRead;
+//
+//			while ((bytesRead = from.read(buffer)) != -1) {
+//				to.write(buffer, 0, bytesRead);
+//			}
+//		} catch (IOException ex) {
+//		} finally {
+//			if (from != null) {
+//				try {
+//					from.close();
+//				} catch (IOException e) {
+//				}
+//			}
+//			if (to != null) {
+//				try {
+//					to.close();
+//				} catch (IOException e) {
+//				}
+//			}
+//		}
+//	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
