@@ -147,6 +147,16 @@ public class Home {
             }
         }
 
+        public void removeInvitee(String player) {
+            if (this.invitees != null || this.invitees.contains(player)) {
+                this.invitees.remove(player);
+            }
+        }
+
+        public void clearInvitees() {
+            this.invitees = null;
+        }
+
         public boolean playerIsInvited(String player) {
             return (this.invitees != null) && (this.invitees.contains(player));
         }

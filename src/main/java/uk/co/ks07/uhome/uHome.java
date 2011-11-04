@@ -290,6 +290,18 @@ public class uHome extends JavaPlugin {
                                         } else {
                                                 player.sendMessage("The home " + targetHome + " doesn't exist!");
                                         }
+					/**
+					 * /home uninvite [player] [name]
+					 */
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("uninvite") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
+                                        String targetPlayer = split[1];
+                                        String targetHome = split[2];
+
+                                        if (homeList.homeExists(player.getName(), targetHome)) {
+                                                homeList.uninvitePlayer(player, targetPlayer, targetHome);
+                                        } else {
+                                                player.sendMessage("The home " + targetHome + " doesn't exist!");
+                                        }
 					
 					/**
 					 * /home help

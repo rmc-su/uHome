@@ -153,6 +153,10 @@ public class HomeList {
         public void invitePlayer(Player owner, String player, String name) {
                 homeList.get(owner.getName()).get(name).addInvitees(player);
         }
+
+        public void uninvitePlayer(Player owner, String player, String name) {
+                homeList.get(owner.getName()).get(name).removeInvitee(player);
+        }
         
         public int getPlayerWarpNo(String owner) {
                 return homeList.get(owner).size();
