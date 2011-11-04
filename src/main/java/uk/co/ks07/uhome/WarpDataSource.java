@@ -348,9 +348,18 @@ public class WarpDataSource {
     		statement.executeQuery(test);
     		statement.close();
     	} catch(SQLException ex) {
-    		HomeLogger.info("Updating database");
+    		HomeLogger.info("Backing up database for update.");
     		// Failed the test so we need to execute the updates
     		try {
+                        Connection conn = ConnectionManager.getConnection();
+                        Statement bkpStatement = conn.createStatement();
+                        bkpStatement.executeQuery("DROP TABLE IF EXISTS homeTableBackup");
+                        bkpStatement.close();
+                        HomeLogger.info("Updating database.");
+                        bkpStatement = conn.createStatement();
+                        bkpStatement.executeQuery("CREATE TABLE homeTableBackup SELECT * FROM homeTable");
+                        bkpStatement.close();
+
     			String[] query;
     			if (HomeConfig.usemySQL) {
     				query = mysql.split(";");
@@ -358,7 +367,7 @@ public class WarpDataSource {
     				query = sqlite.split(";");
     			}
 
-    			Connection conn = ConnectionManager.getConnection();
+    			
     			Statement sqlst = conn.createStatement();
     			for (String qry : query) {
     				sqlst.executeUpdate(qry);
