@@ -281,7 +281,7 @@ public class uHome extends JavaPlugin {
 					/**
 					 * /home invite [player] [name]
 					 */
-				} else if (split.length == 3 && split[0].equalsIgnoreCase("invite") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("invite") && HomeConfig.enableInvite && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
                                         String targetPlayer = split[1];
                                         String targetHome = split[2];
 
@@ -293,7 +293,7 @@ public class uHome extends JavaPlugin {
 					/**
 					 * /home uninvite [player] [name]
 					 */
-				} else if (split.length == 3 && split[0].equalsIgnoreCase("uninvite") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("uninvite") && HomeConfig.enableInvite && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                                         String targetPlayer = split[1];
                                         String targetHome = split[2];
 

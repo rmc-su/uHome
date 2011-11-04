@@ -5,6 +5,7 @@ settings:
   loadChunks: false
   locale: 'en'
   useColors: true
+  enableInvite: true
   downloadLibs:
     enable: true
     mysqlLib: true
