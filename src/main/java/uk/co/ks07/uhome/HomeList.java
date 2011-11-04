@@ -149,6 +149,10 @@ public class HomeList {
         public boolean playerCanWarp(Player player, String owner, String name) {
                 return homeList.get(owner).get(name).playerCanWarp(player);
         }
+
+        public void invitePlayer(Player owner, String player, String name) {
+                homeList.get(owner.getName()).get(name).addInvitees(player);
+        }
         
         public int getPlayerWarpNo(String owner) {
                 return homeList.get(owner).size();

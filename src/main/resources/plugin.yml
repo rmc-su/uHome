@@ -39,6 +39,8 @@ permissions:
     description: Allows you to delete your warps.
   uhome.own.list:
     description: Allows you to list your warps.
+  uhome.own.invite:
+    description: Allows you to invite others to your homes.
   uhome.admin:
     description: Gives access to all uHome admin commands
     default: op
