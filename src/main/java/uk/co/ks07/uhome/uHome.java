@@ -277,6 +277,31 @@ public class uHome extends JavaPlugin {
 				} else if (split.length == 3 && split[0].equalsIgnoreCase("delete") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminDelete)) {
 					homeList.deleteHome(split[1], split[2], player);
 					/**
+					 * /home invite [player] [name]
+					 */
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("invite") && HomeConfig.enableInvite && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                                        String targetPlayer = split[1];
+                                        String targetHome = split[2];
+
+                                        if (homeList.homeExists(player.getName(), targetHome)) {
+                                                homeList.invitePlayer(player, targetPlayer, targetHome);
+                                        } else {
+                                                player.sendMessage("The home " + targetHome + " doesn't exist!");
+                                        }
+					/**
+					 * /home uninvite [player] [name]
+					 */
+				} else if (split.length == 3 && split[0].equalsIgnoreCase("uninvite") && HomeConfig.enableInvite && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
+                                        String targetPlayer = split[1];
+                                        String targetHome = split[2];
+
+                                        if (homeList.homeExists(player.getName(), targetHome)) {
+                                                homeList.uninvitePlayer(player, targetPlayer, targetHome);
+                                        } else {
+                                                player.sendMessage("The home " + targetHome + " doesn't exist!");
+                                        }
+					
+					/**
 					 * /home help
 					 */
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("help")) {
