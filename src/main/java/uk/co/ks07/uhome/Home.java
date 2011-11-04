@@ -32,10 +32,6 @@ public class Home {
 		nextIndex++;
 	}
 
-	public Home(Player creator) {
-		this(creator, "home");
-	}
-
         public Home(Player creator, String name) {
                 this.index = nextIndex;
 		nextIndex++;
@@ -48,10 +44,6 @@ public class Home {
 		this.yaw = Math.round(creator.getLocation().getYaw()) % 360;
 		this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
         }
-
-	public Home(String owner, Location location) {
-		this(owner, location, "home");
-	}
 
 	public Home(String owner, Location location, String name) {
 		this.index = nextIndex;

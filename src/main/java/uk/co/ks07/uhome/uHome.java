@@ -1,8 +1,6 @@
 package uk.co.ks07.uhome;
 
 import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
