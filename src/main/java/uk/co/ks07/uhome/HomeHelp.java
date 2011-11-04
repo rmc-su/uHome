@@ -23,7 +23,7 @@ class HomeHelp {
 //			helpPlugin.registerCommand("home private", "Makes your home private", plugin, "myhome.home.soc.private");
 //			HomeLogger.info("Help plugin support enabled.");
 //		} else {
-			HomeLogger.warning("Help plugin not detected. Only providing help via /home help.");
+//			HomeLogger.warning("Help plugin not detected. Only providing help via /home help.");
 //		}
 	}
 }
