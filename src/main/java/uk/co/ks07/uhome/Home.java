@@ -1,5 +1,7 @@
 package uk.co.ks07.uhome;
 
+import java.util.Collection;
+import java.util.TreeSet;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -13,6 +15,7 @@ public class Home {
 	public double z;
 	public int yaw;
 	public int pitch;
+        public Collection<String> invitees;
 	public static int nextIndex = 1;
 	Location getLocation;
 
@@ -26,6 +29,23 @@ public class Home {
 		this.z = z;
 		this.pitch = pitch;
 		this.yaw = yaw;
+		if (index > nextIndex) {
+			nextIndex = index;
+		}
+		nextIndex++;
+	}
+
+	public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch, Collection<String> invitees) {
+		this.index = index;
+                this.name = name;
+		this.owner = owner;
+		this.world = world;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.pitch = pitch;
+		this.yaw = yaw;
+                this.invitees.addAll(invitees);
 		if (index > nextIndex) {
 			nextIndex = index;
 		}
@@ -67,7 +87,7 @@ public class Home {
 	}
 
 	public boolean playerCanWarp(Player player) {
-		return (this.playerIsCreator(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
+		return (this.playerIsCreator(player.getName()) || this.playerIsInvited(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
 	}
 
 	public void warp(Player player, Server server) {
@@ -111,4 +131,23 @@ public class Home {
 			return new Location(currWorld, x, y, z, yaw, pitch);
 		}
 	}
+
+        public void addInvitees(String player) {
+            if (this.invitees == null) {
+                this.invitees = new TreeSet<String>();
+            }
+            this.invitees.add(player);
+        }
+
+        public void addInvitees(Collection<String> players) {
+            if (this.invitees == null) {
+                this.invitees = new TreeSet<String>(players);
+            } else {
+                this.invitees.addAll(players);
+            }
+        }
+
+        public boolean playerIsInvited(String player) {
+            return (this.invitees != null) && (this.invitees.contains(player));
+        }
 }
