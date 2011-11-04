@@ -239,43 +239,39 @@ public class HomeList {
 	}
 
 	public boolean hasHomes(String player) {
-                return homeList.containsKey(player);
+                return (homeList.containsKey(player) && homeList.get(player).size() > 0);
 	}
 
 	public void list(Player player) {
-            if (hasHomes(player.getName())) {
-		ArrayList<Home> results = new ArrayList(homeList.get(player.getName()).values());
+            String results = this.getPlayerList(player.getName());
 
-		if (results.isEmpty()) {
-			player.sendMessage(ChatColor.RED + "You have no homes!");
-		} else {
-			player.sendMessage(ChatColor.AQUA + "You have the following homes:");
-			player.sendMessage(results.toString().replace("[", "").replace("]", ""));
-		}
-            } else {
+            if (results == null) {
                     player.sendMessage(ChatColor.RED + "You have no homes!");
+            } else {
+                    player.sendMessage(ChatColor.AQUA + "You have the following homes:");
+                    player.sendMessage(results);
             }
 	}
 
 	public void listOther(Player player, String owner) {
-		ArrayList<Home> results = new ArrayList(homeList.get(owner).values());
+                String results = this.getPlayerList(owner);
 
-		if (results.isEmpty()) {
+		if (results == null) {
 			player.sendMessage(ChatColor.RED + "That player has no homes.");
 		} else {
 			player.sendMessage(ChatColor.AQUA + "That player has the following homes:");
-			player.sendMessage(results.toString().replace("[", "").replace("]", ""));
+			player.sendMessage(results);
 		}
 	}
 
 	public String getPlayerList(String owner) {
-		ArrayList<Home> results = new ArrayList(homeList.get(owner).values());
+                if (this.hasHomes(owner)) {
+                    ArrayList<Home> results = new ArrayList(homeList.get(owner).values());
                 
-                if (results.isEmpty()) {
-                    return null;
-                } else {
                     String ret = results.toString().replace("[", "").replace("]", "");
                     return ret;
+                } else {
+                    return null;
                 }
 	}
         
