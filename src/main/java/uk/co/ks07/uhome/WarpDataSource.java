@@ -353,11 +353,11 @@ public class WarpDataSource {
     		try {
                         Connection conn = ConnectionManager.getConnection();
                         Statement bkpStatement = conn.createStatement();
-                        bkpStatement.executeQuery("DROP TABLE IF EXISTS homeTableBackup");
+                        bkpStatement.executeUpdate("DROP TABLE IF EXISTS homeTableBackup");
                         bkpStatement.close();
                         HomeLogger.info("Updating database.");
                         bkpStatement = conn.createStatement();
-                        bkpStatement.executeQuery("CREATE TABLE homeTableBackup SELECT * FROM homeTable");
+                        bkpStatement.executeUpdate("CREATE TABLE homeTableBackup SELECT * FROM homeTable");
                         bkpStatement.close();
 
     			String[] query;
