@@ -367,7 +367,6 @@ public class WarpDataSource {
     				query = sqlite.split(";");
     			}
 
-    			
     			Statement sqlst = conn.createStatement();
     			for (String qry : query) {
     				sqlst.executeUpdate(qry);
