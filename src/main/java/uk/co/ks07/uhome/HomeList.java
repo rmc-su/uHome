@@ -100,7 +100,7 @@ public class HomeList {
 	}
 
 	public void warpTo(String targetOwner, String target, Player player, Plugin plugin) {
-		MatchList matches = this.getMatches(target, player);
+		MatchList matches = this.getMatches(target, player, targetOwner);
 		target = matches.getMatch(target);
 		if (homeList.get(targetOwner).containsKey(target)) {
 			Home warp = homeList.get(targetOwner).get(target);
@@ -283,18 +283,22 @@ public class HomeList {
                 return ret;
         }
 
-	private MatchList getMatches(String name, Player player) {
+	private MatchList getMatches(String name, Player player, String owner) {
 		ArrayList<Home> exactMatches = new ArrayList<Home>();
 		ArrayList<Home> matches = new ArrayList<Home>();
 
-		List<String> names = new ArrayList<String>(homeList.get(player.getName()).keySet());
+                if (!this.hasHomes(owner)) {
+                    return new MatchList(exactMatches, matches);
+                }
+
+		List<String> names = new ArrayList<String>(homeList.get(owner).keySet());
 		Collator collator = Collator.getInstance();
 		collator.setStrength(Collator.SECONDARY);
 		Collections.sort(names, collator);
 
 		for (int i = 0; i < names.size(); i++) {
 			String currName = names.get(i);
-			Home warp = homeList.get(player.getName()).get(currName);
+			Home warp = homeList.get(owner).get(currName);
 			if (warp.playerCanWarp(player)) {
 				if (warp.name.equalsIgnoreCase(name)) {
 					exactMatches.add(warp);
