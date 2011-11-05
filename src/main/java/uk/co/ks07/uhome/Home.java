@@ -154,6 +154,6 @@ public class Home {
         }
 
         public boolean playerIsInvited(String player) {
-            return (this.invitees != null) && (this.invitees.contains(player));
+            return (this.invitees != null) && (HomeConfig.enableInvite) && (this.invitees.contains(player));
         }
 }
