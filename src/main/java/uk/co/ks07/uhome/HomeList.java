@@ -231,7 +231,7 @@ public class HomeList {
         }
 
 	public boolean homeExists(String owner, String name) {
-                if (homeList.containsKey(owner)) {
+                if (this.hasHomes(owner)) {
                         return homeList.get(owner).containsKey(name);
                 } else {
                         return false;

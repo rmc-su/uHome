@@ -251,14 +251,14 @@ public class uHome extends JavaPlugin {
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("delete") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
 					homeList.deleteHome(player);
 					/**
-					 * /home list
-					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
-					homeList.listOther(player, split[1]);
-					/**
 					 * /home list [player]
 					 */
-				} else if (split.length == 1 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
+					homeList.listOther(player, split[1]);
+					/**
+					 * /home list
+					 */
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
 					homeList.list(player);
                                         /**
                                          * /home info [owner] [name]
@@ -358,12 +358,16 @@ public class uHome extends JavaPlugin {
                                         /**
 					 * /home [player] [name]
 					 */
-				} else if (split.length == 2 && SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
+				} else if (split.length == 2) {
 					String targetOwner = split[0];
                                         String target = split[1];
 
                                         if (homeList.homeExists(targetOwner, target)) {
-                                                homeList.warpTo(targetOwner, target, player, this);
+                                                if (homeList.playerCanWarp(player, targetOwner, target)) {
+                                                    homeList.warpTo(targetOwner, target, player, this);
+                                                } else {
+                                                    player.sendMessage("You aren't invited to "+targetOwner+"'s home '"+target+"'!");
+                                                }
                                         } else {
                                                 player.sendMessage("The home " + target + " doesn't exist!");
                                         }
