@@ -32,6 +32,10 @@ public class LocaleManager {
 	}
 
 	public static String getString(String key, Map<String, String> params) {
+		return getString(key, params, false);
+	}
+	
+	public static String getString(String key, Map<String, String> params, Boolean console) {
 		try {
 			String output = locResBundle.getString(key);
 
@@ -46,6 +50,10 @@ public class LocaleManager {
 			if(HomeSettings.useColors) {
 				output = addColors(output);
 			} else {
+				output = stripColors(output);
+			}
+			
+			if(console) {
 				output = stripColors(output);
 			}
 			

@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
-	private static Map<String, String> localedata;
+    private static Map<String, String> localedata = new HashMap<String, String>();
     public enum Reason {
     	DAMAGE, MOVEMENT, EVENTCANCEL, NONE
     }

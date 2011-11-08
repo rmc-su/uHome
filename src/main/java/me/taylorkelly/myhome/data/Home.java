@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import me.taylorkelly.myhome.HomeSettings;
@@ -23,7 +24,7 @@ public class Home {
 	public ArrayList<String> permissions;
 	public static int nextIndex = 1;
 	Location getLocation;
-	private Map<String, String> localedata;
+	private Map<String, String> localedata = new HashMap<String, String>();
 
 	public Home(int index, String name, String world, double x, double y, double z, int yaw, int pitch, int publicAll, String permissions, String welcomeMessage) {
 		this.index = index;

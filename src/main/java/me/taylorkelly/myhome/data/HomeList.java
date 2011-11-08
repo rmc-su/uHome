@@ -22,7 +22,7 @@ import org.bukkit.plugin.Plugin;
 
 public class HomeList {
 	private HashMap<String, Home> homeList;
-	private Map<String, String> localedata;
+	private Map<String, String> localedata = new HashMap<String, String>();
 	private Server server;
 	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
 	private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
@@ -231,11 +231,11 @@ public class HomeList {
 			homeList.remove(srchplayer);
 			WarpDataSource.deleteWarp(warp);
 			localedata.put("TARGET", srchplayer);
-			HomeLogger.info(LocaleManager.getString("admin.delete.done", localedata));
+			HomeLogger.info(LocaleManager.getString("admin.delete.done", localedata, true));
 			localedata.clear();
 		} else {
 			localedata.put("TARGET", srchplayer);
-			HomeLogger.info(LocaleManager.getString("admin.delete.fail", localedata));
+			HomeLogger.info(LocaleManager.getString("admin.delete.fail", localedata, true));
 			localedata.clear();
 		}
 	}
