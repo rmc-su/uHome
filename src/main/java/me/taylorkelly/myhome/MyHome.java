@@ -280,6 +280,8 @@ public class MyHome extends JavaPlugin {
 				}
 				return true;
 			}
+		} else if (commandName.equals("home") || commandName.equals("myhome") || commandName.equals("mh") && (split.length == 2 && split[0].equalsIgnoreCase("clear"))) {
+			homeList.consoleClearHome(split[1]);
 		}
 		return false;
 	}

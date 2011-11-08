@@ -13,6 +13,8 @@ import me.taylorkelly.myhome.sql.WarpDataSource;
 import me.taylorkelly.myhome.timers.HomeCoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;
 import me.taylorkelly.myhome.timers.SetHomeCoolDown;
+import me.taylorkelly.myhome.utils.HomeLogger;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -191,6 +193,17 @@ public class HomeList {
 			player.sendMessage(ChatColor.AQUA + "You have deleted "+srchplayer+"'s home");
 		} else {
 			player.sendMessage(ChatColor.RED + "There is no home for " + srchplayer);
+		}
+	}
+	
+	public void consoleClearHome(String srchplayer) {
+		if (homeList.containsKey(srchplayer)) {
+			Home warp = homeList.get(srchplayer);
+			homeList.remove(srchplayer);
+			WarpDataSource.deleteWarp(warp);
+			HomeLogger.info("Deleted "+srchplayer+"'s home");
+		} else {
+			HomeLogger.info("There is no home for: " + srchplayer);
 		}
 	}
 
