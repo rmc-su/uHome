@@ -47,14 +47,14 @@ public class LocaleManager {
 				}
 			}
 			
-			if(HomeSettings.useColors) {
-				output = addColors(output);
-			} else {
-				output = stripColors(output);
-			}
-			
 			if(console) {
 				output = stripColors(output);
+			} else {
+				if(HomeSettings.useColors) {
+					output = addColors(output);
+				} else {
+					output = stripColors(output);
+				}
 			}
 			
 			return output;
