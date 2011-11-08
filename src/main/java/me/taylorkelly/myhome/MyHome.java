@@ -280,8 +280,31 @@ public class MyHome extends JavaPlugin {
 				}
 				return true;
 			}
-		} else if (commandName.equals("home") || commandName.equals("myhome") || commandName.equals("mh") && (split.length == 2 && split[0].equalsIgnoreCase("clear"))) {
-			homeList.consoleClearHome(split[1]);
+		} else if ((commandName.equals("home") || commandName.equals("myhome") || commandName.equals("mh"))) {
+			if (split.length == 2 && split[0].equalsIgnoreCase("clear")) {
+					homeList.consoleClearHome(split[1]);
+			} else if(split.length == 1 && split[0].equalsIgnoreCase("reload")) {
+				HomeSettings.initialize(getDataFolder());
+				HomeLogger.info(LocaleManager.getString("admin.reload"));
+			} else if (split.length == 1 && split[0].equalsIgnoreCase("convert")) {
+				if (!warning) {
+					HomeLogger.warning(LocaleManager.getString("admin.convert"));
+					HomeLogger.warning(LocaleManager.getString("admin.convert2"));
+					HomeLogger.warning(LocaleManager.getString("usage.convert"));
+					warning = true;
+				} else {
+					Converter.convert(getServer(), homeList);
+					warning = false;
+				}
+			} else {
+				HomeLogger.info("--------------------------");
+				HomeLogger.info("MyHome Console Commands:");
+				HomeLogger.info("--------------------------");
+				HomeLogger.info("myhome clear <playername> -- Clear <playername>'s home.");	
+				HomeLogger.info("myhome reload -- Reload the MyHome config");
+				HomeLogger.info("myhome convert -- Convert an old homes.txt");
+				HomeLogger.info("--------------------------");
+			}
 			return true;
 		}
 		return false;
