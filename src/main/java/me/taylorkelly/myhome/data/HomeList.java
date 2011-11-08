@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.locale.LocaleManager;
@@ -21,6 +22,7 @@ import org.bukkit.plugin.Plugin;
 
 public class HomeList {
 	private HashMap<String, Home> homeList;
+	private Map<String, String> localedata;
 	private Server server;
 	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
 	private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
@@ -34,9 +36,10 @@ public class HomeList {
 	public void addHome(Player player, Plugin plugin) {
 		int cost = 0;
 		if (!(setHomeCoolDown.playerHasCooled(player))) {
-			player.sendMessage(ChatColor.RED + "You need to wait " +
-					setHomeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
-					setHomeCoolDown.getTimer(player) + " second cooldown before you can change your home.");
+			localedata.put("TIMER.SHCDREM", Integer.toString(setHomeCoolDown.estimateTimeLeft(player)));
+			localedata.put("TIMER.SHCDT", Integer.toString(setHomeCoolDown.estimateTimeLeft(player)));
+			player.sendMessage(LocaleManager.getString("timer.sethome.cooldown", localedata));
+			localedata.clear();
 		} else if (HomeSettings.eConomyEnabled && !HomePermissions.setHomeFree(player) ) {
 			if (HomeSettings.costByPerms) {
 				cost = HomePermissions.integer(player, "myhome.costs.sethome", HomeSettings.setHomeCost);
@@ -64,10 +67,15 @@ public class HomeList {
 						player.sendMessage(LocaleManager.getString("usage.invite"));
 					}
 				}
-				player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
+				localedata.put("ECO.SHCOST", HomeEconomy.formattedBalance(cost));
+				player.sendMessage(LocaleManager.getString("eco.deduct", localedata));
+				localedata.clear();	
 				pointCompass(player, player.getLocation());
 			} else {
-				player.sendMessage("Setting a home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
+				localedata.put("ECO.SHCOST", HomeEconomy.formattedBalance(cost));
+				localedata.put("ECO.PLAYERBAL", Double.toString(HomeEconomy.balance(player.getName())));
+				player.sendMessage(LocaleManager.getString("eco.shnotenough", localedata));
+				localedata.clear();
 				return;
 			}   
 		} else {
@@ -115,26 +123,36 @@ public class HomeList {
 							cost = HomeSettings.homeCost;
 						}
 						if (HomeEconomy.chargePlayer(player.getName(), cost)) {
-							player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
+							localedata.put("ECO.SHCOST", HomeEconomy.formattedBalance(cost));
+							player.sendMessage(LocaleManager.getString("eco.deduct", localedata));
+							localedata.clear();	
 							WarmUp.addPlayer(player, warp, plugin);
 							homeCoolDown.addPlayer(player, plugin);
 						} else {
-							player.sendMessage("Warping home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
+							localedata.put("ECO.HOMECOST", HomeEconomy.formattedBalance(cost));
+							localedata.put("ECO.PLAYERBAL", Double.toString(HomeEconomy.balance(player.getName())));
+							player.sendMessage(LocaleManager.getString("eco.homenotenough", localedata));
+							localedata.clear();
 						}
 					} else {
 						WarmUp.addPlayer(player, warp, plugin);
 						homeCoolDown.addPlayer(player, plugin);
 					}
 				} else {
-					player.sendMessage(ChatColor.RED + "You need to wait " +
-							homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
-							homeCoolDown.getTimer(player) + " second cooldown.");
+					localedata.put("TIMER.HOMECDREM", Integer.toString(homeCoolDown.estimateTimeLeft(player)));
+					localedata.put("TIMER.HOMECDT", Integer.toString(homeCoolDown.estimateTimeLeft(player)));
+					player.sendMessage(LocaleManager.getString("timer.home.cooldown", localedata));
+					localedata.clear();
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You do not have permission to warp to " + name + "'s home");
+				localedata.put("TARGET", name);
+				player.sendMessage(LocaleManager.getString("error.nopermission", localedata));
+				localedata.clear();
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + name + " doesn't have a home :(");
+			localedata.put("TARGET", name);
+			player.sendMessage(LocaleManager.getString("error.nosuchhome", localedata));
+			localedata.clear();
 		}
 	}
 
@@ -152,20 +170,26 @@ public class HomeList {
 						cost = HomeSettings.homeCost;
 					}
 					if (HomeEconomy.chargePlayer(player.getName(), cost)) {
-						player.sendMessage(HomeEconomy.formattedBalance(cost) + " has been deducted from your account.");
+						localedata.put("ECO.SHCOST", HomeEconomy.formattedBalance(cost));
+						player.sendMessage(LocaleManager.getString("eco.deduct", localedata));
+						localedata.clear();	
 						WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
 						homeCoolDown.addPlayer(player, plugin);
 					} else {
-						player.sendMessage("Warping home requires: " + HomeEconomy.formattedBalance(cost) + ". You have " + HomeEconomy.balance(player.getName()));
+						localedata.put("ECO.HOMECOST", HomeEconomy.formattedBalance(cost));
+						localedata.put("ECO.PLAYERBAL", Double.toString(HomeEconomy.balance(player.getName())));
+						player.sendMessage(LocaleManager.getString("eco.homenotenough", localedata));
+						localedata.clear();
 					}
 				} else {
 					WarmUp.addPlayer(player, homeList.get(player.getName()), plugin);
 					homeCoolDown.addPlayer(player, plugin);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You need to wait " +
-						homeCoolDown.estimateTimeLeft(player) + " more seconds of the " +
-						homeCoolDown.getTimer(player) + " second cooldown.");
+				localedata.put("TIMER.HOMECDREM", Integer.toString(homeCoolDown.estimateTimeLeft(player)));
+				localedata.put("TIMER.HOMECDT", Integer.toString(homeCoolDown.estimateTimeLeft(player)));
+				player.sendMessage(LocaleManager.getString("timer.home.cooldown", localedata));
+				localedata.clear();
 			}
 		}
 	}
@@ -190,9 +214,14 @@ public class HomeList {
 			Home warp = homeList.get(srchplayer);
 			homeList.remove(srchplayer);
 			WarpDataSource.deleteWarp(warp);
-			player.sendMessage(ChatColor.AQUA + "You have deleted "+srchplayer+"'s home");
+			
+			localedata.put("TARGET", srchplayer);
+			player.sendMessage(LocaleManager.getString("admin.delete.done", localedata));
+			localedata.clear();
 		} else {
-			player.sendMessage(ChatColor.RED + "There is no home for " + srchplayer);
+			localedata.put("TARGET", srchplayer);
+			player.sendMessage(LocaleManager.getString("admin.delete.fail", localedata));
+			localedata.clear();
 		}
 	}
 	
@@ -201,9 +230,13 @@ public class HomeList {
 			Home warp = homeList.get(srchplayer);
 			homeList.remove(srchplayer);
 			WarpDataSource.deleteWarp(warp);
-			HomeLogger.info("Deleted "+srchplayer+"'s home");
+			localedata.put("TARGET", srchplayer);
+			HomeLogger.info(LocaleManager.getString("admin.delete.done", localedata));
+			localedata.clear();
 		} else {
-			HomeLogger.info("There is no home for: " + srchplayer);
+			localedata.put("TARGET", srchplayer);
+			HomeLogger.info(LocaleManager.getString("admin.delete.fail", localedata));
+			localedata.clear();
 		}
 	}
 
@@ -239,20 +272,26 @@ public class HomeList {
 			// TODO match player stuff
 			Home warp = homeList.get(player.getName());
 			if (warp.playerIsInvited(inviteeName)) {
-				player.sendMessage(ChatColor.RED + inviteeName + " is already invited to your home.");
+				localedata.put("TARGET", inviteeName);
+				player.sendMessage(LocaleManager.getString("home.invite.already", localedata));
+				localedata.clear();
 			} else if (warp.playerIsCreator(inviteeName)) {
 				player.sendMessage(LocaleManager.getString("home.invite.yours"));
 			} else {
 				warp.invite(inviteeName);
 				WarpDataSource.updatePermissions(warp);
-				player.sendMessage(ChatColor.AQUA + "You have invited " + inviteeName + " to your home");
+				localedata.put("TARGET", inviteeName);
+				player.sendMessage(LocaleManager.getString("home.invite.success", localedata));
+				localedata.clear();
 				if (warp.publicAll == 1) {
 					player.sendMessage(LocaleManager.getString("home.stillpublic"));
 				}
 				for (Player match : server.getOnlinePlayers()) {
 					if (match.getName().equalsIgnoreCase(inviteeName)) {
-						match.sendMessage(ChatColor.AQUA + "You've been invited to " + player.getName() + "'s home");
-						match.sendMessage("Use: " + ChatColor.RED + "/home " + player.getName() + ChatColor.WHITE + " to warp to it.");
+						localedata.put("SOURCE", player.getName());
+						match.sendMessage(LocaleManager.getString("home.invited", localedata));
+						match.sendMessage(LocaleManager.getString("usage.invited", localedata));
+						localedata.clear();		
 					}
 				}	
 			}
@@ -266,19 +305,25 @@ public class HomeList {
 			// TODO player match stuff
 			Home warp = homeList.get(player.getName());
 			if (!warp.playerIsInvited(inviteeName)) {
-				player.sendMessage(ChatColor.RED + inviteeName + " is not invited to your home.");
+				localedata.put("TARGET", inviteeName);
+				player.sendMessage(LocaleManager.getString("home.uninvite.notinvited", localedata));
+				localedata.clear();
 			} else if (warp.playerIsCreator(inviteeName)) {
 				player.sendMessage(LocaleManager.getString("home.uninvite.yours"));
 			} else {
 				warp.uninvite(inviteeName);
 				WarpDataSource.updatePermissions(warp);
-				player.sendMessage(ChatColor.AQUA + "You have uninvited " + inviteeName + " from your home");
+				localedata.put("TARGET", inviteeName);
+				player.sendMessage(LocaleManager.getString("home.uninvite.success", localedata));
+				localedata.clear();	
 				if (warp.publicAll == 1) {
 					player.sendMessage(LocaleManager.getString("home.stillpublic"));
 				}
 				for (Player match : server.getOnlinePlayers()) {
 					if (match.getName().equalsIgnoreCase(inviteeName)) {
-						match.sendMessage(ChatColor.AQUA + "You are no longer invited to " + player.getName() + "'s home");
+						localedata.put("SOURCE", player.getName());
+						match.sendMessage(LocaleManager.getString("home.uninvited", localedata));
+						localedata.clear();	
 					}
 				}	
 			}

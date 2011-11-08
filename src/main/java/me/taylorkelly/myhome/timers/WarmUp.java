@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.timers;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.data.Home;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
+	private static Map<String, String> localedata;
     public enum Reason {
     	DAMAGE, MOVEMENT, EVENTCANCEL, NONE
     }
@@ -32,7 +34,9 @@ public class WarmUp {
             }
             
             if (HomeSettings.warmUpNotify) {
-                player.sendMessage(ChatColor.RED + "You will have to warm up for " + timer + " secs");
+				localedata.put("TIMER.HOMEWT", Integer.toString(timer));
+				player.sendMessage(LocaleManager.getString("timer.home.warmup", localedata));
+				localedata.clear();	
             }
             
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer*20);

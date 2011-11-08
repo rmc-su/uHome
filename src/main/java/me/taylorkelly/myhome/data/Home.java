@@ -1,6 +1,7 @@
 package me.taylorkelly.myhome.data;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.locale.LocaleManager;
@@ -22,6 +23,7 @@ public class Home {
 	public ArrayList<String> permissions;
 	public static int nextIndex = 1;
 	Location getLocation;
+	private Map<String, String> localedata;
 
 	public Home(int index, String name, String world, double x, double y, double z, int yaw, int pitch, int publicAll, String permissions, String welcomeMessage) {
 		this.index = index;
@@ -53,7 +55,9 @@ public class Home {
 		this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
 		this.publicAll = HomeSettings.homesArePublic ? 1 : 0;
 		this.permissions = new ArrayList<String>();
-		this.welcomeMessage = "Welcome to " + name + "'s home";
+		localedata.put("TARGET", name);
+		this.welcomeMessage = LocaleManager.getString("home.default.welcomemessage", localedata);
+		localedata.clear();	
 	}
 
 	public Home(String name, Location location) {
@@ -68,7 +72,9 @@ public class Home {
 		this.pitch = Math.round(location.getPitch()) % 360;
 		this.publicAll = HomeSettings.homesArePublic ? 1 : 0;
 		this.permissions = new ArrayList<String>();
-		this.welcomeMessage = "Welcome to " + name + "'s home";
+		localedata.put("TARGET", name);
+		this.welcomeMessage = LocaleManager.getString("home.default.welcomemessage", localedata);
+		localedata.clear();	
 	}
 
 	private ArrayList<String> processList(String permissions) {
