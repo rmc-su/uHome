@@ -210,6 +210,8 @@ public class HomeList {
 	}
 
 	public void clearHome(String srchplayer, Player player) {
+		MatchList matches = this.getMatches(srchplayer);
+		srchplayer = matches.getMatch(srchplayer);
 		if (homeList.containsKey(srchplayer)) {
 			Home warp = homeList.get(srchplayer);
 			homeList.remove(srchplayer);
@@ -226,6 +228,8 @@ public class HomeList {
 	}
 	
 	public void consoleClearHome(String srchplayer) {
+		MatchList matches = this.getMatches(srchplayer);
+		srchplayer = matches.getMatch(srchplayer);
 		if (homeList.containsKey(srchplayer)) {
 			Home warp = homeList.get(srchplayer);
 			homeList.remove(srchplayer);
@@ -436,6 +440,35 @@ public class HomeList {
 		return new MatchList(exactMatches, matches);
 	}
 
+	public MatchList getMatches(String name) {
+		ArrayList<Home> exactMatches = new ArrayList<Home>();
+		ArrayList<Home> matches = new ArrayList<Home>();
+
+		List<String> names = new ArrayList<String>(homeList.keySet());
+		Collator collator = Collator.getInstance();
+		collator.setStrength(Collator.SECONDARY);
+		Collections.sort(names, collator);
+
+		for (int i = 0; i < names.size(); i++) {
+			String currName = names.get(i);
+			Home warp = homeList.get(currName);
+			if (warp.name.equalsIgnoreCase(name)) {
+					exactMatches.add(warp);
+				} else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
+					matches.add(warp);
+				}
+		}
+		if (exactMatches.size() > 1) {
+			for (Home warp : exactMatches) {
+				if (!warp.name.equals(name)) {
+					exactMatches.remove(warp);
+					matches.add(0, warp);
+				}
+			}
+		}
+		return new MatchList(exactMatches, matches);
+	}
+	
 	public Home getHomeFor(Player player) {
 		return homeList.get(player.getName());
 	}
