@@ -37,7 +37,7 @@ public class LocaleManager {
 
 			if (params != null) {
 				for(Map.Entry<String, String> e : params.entrySet()) {
-					String ekey = e.getKey();
+					String ekey = e.getKey().toUpperCase();
 					String evalue = e.getValue();
 					output = output.replaceAll("(?i)\\Q{{" + ekey + "}}\\E", evalue);
 				}
