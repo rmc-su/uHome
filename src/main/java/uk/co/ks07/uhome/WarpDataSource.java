@@ -23,7 +23,7 @@ public class WarpDataSource {
             + "`z` DOUBLE NOT NULL DEFAULT '0'," 
             + "`yaw` smallint NOT NULL DEFAULT '0'," 
             + "`pitch` smallint NOT NULL DEFAULT '0',"
-            + "UNIQUE (`owner`,`world`)"
+            + "UNIQUE (`owner`,`name`)"
             + ");";
 
     public static void initialize(boolean needImport) {
