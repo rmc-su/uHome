@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class WarpDataSource {
     public final static String sqlitedb = "/uhomes.db";
     public final static String mhsqlitedb = "/homes.db.old";
+    private final static String TABLE_NAME = "uhomeTable";
     private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `uhomeTable` ("
     	    + "`id` INTEGER PRIMARY KEY,"
             + "`owner` varchar(32) NOT NULL DEFAULT 'Player',"
@@ -55,7 +56,7 @@ public class WarpDataSource {
     private static void patchMySQLTable() {
         if (HomeConfig.usemySQL) {
             String sqlOne = "ALTER TABLE `homeTable` DROP INDEX `owner`";
-            String sqlTwo = "ALTER TABLE `homeTable` RENAME TO `uhomeTable`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
+            String sqlTwo = "ALTER TABLE `homeTable` RENAME TO `"+TABLE_NAME+"`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
 
             Statement ps = null;
             try {
@@ -89,7 +90,7 @@ public class WarpDataSource {
             try {
                     Connection conn = ConnectionManager.getConnection();
                     ps = conn.createStatement();
-                    ps.executeUpdate("INSERT INTO uhomeTable SELECT * FROM homeTable");
+                    ps.executeUpdate("INSERT INTO "+TABLE_NAME+" SELECT * FROM homeTable");
                     conn.commit();
 
                     ps = conn.createStatement();
@@ -117,7 +118,7 @@ public class WarpDataSource {
     		Connection conn = ConnectionManager.getConnection();
 
     		statement = conn.createStatement();
-    		set = statement.executeQuery("SELECT * FROM uhomeTable");
+    		set = statement.executeQuery("SELECT * FROM "+TABLE_NAME);
     		int size = 0;
     		while (set.next()) {
     			size++;
@@ -162,7 +163,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
     		DatabaseMetaData dbm = conn.getMetaData();
-    		rs = dbm.getTables(null, null, "uhomeTable", null);
+    		rs = dbm.getTables(null, null, TABLE_NAME, null);
     		if (!rs.next()) {
                         rs = dbm.getTables(null, null, "homeTable", null);
                         if (!rs.next()) {
@@ -217,7 +218,7 @@ public class WarpDataSource {
     				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
     				Statement slstatement = sqliteconn.createStatement();
-    				ResultSet slset = slstatement.executeQuery("SELECT * FROM homeTable");
+    				ResultSet slset = slstatement.executeQuery("SELECT * FROM "+TABLE_NAME);
 
     				int size = 0;
     				while (slset.next()) {
@@ -272,7 +273,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
 
-    		ps = conn.prepareStatement("INSERT INTO homeTable (id, name, owner, world, x, y, z, yaw, pitch) VALUES (?,?,?,?,?,?,?,?,?)");
+    		ps = conn.prepareStatement("INSERT INTO "+TABLE_NAME+" (id, name, owner, world, x, y, z, yaw, pitch) VALUES (?,?,?,?,?,?,?,?,?)");
     		ps.setInt(1, warp.index);
                 ps.setString(2, warp.name);
     		ps.setString(3, warp.owner);
@@ -303,7 +304,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
 
-    		ps = conn.prepareStatement("DELETE FROM homeTable WHERE id = ?");
+    		ps = conn.prepareStatement("DELETE FROM "+TABLE_NAME+" WHERE id = ?");
     		ps.setInt(1, warp.index);
     		ps.executeUpdate();
     		conn.commit();
@@ -329,7 +330,7 @@ public class WarpDataSource {
 
     	try {
     		Connection conn = ConnectionManager.getConnection();
-    		ps = conn.prepareStatement("UPDATE homeTable SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
+    		ps = conn.prepareStatement("UPDATE "+TABLE_NAME+" SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
     		ps.setDouble(1, warp.x);
     		ps.setDouble(2, warp.y);
     		ps.setDouble(3, warp.z);
@@ -359,7 +360,7 @@ public class WarpDataSource {
         // SQLite does not support field renaming or deletion, so we can't alter the table this way.
         if (HomeConfig.usemySQL) {
             String test = "SELECT `owner` FROM `homeTable`";
-            String sql = "ALTER TABLE `homeTable` RENAME TO `uhomeTable`, CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', DROP COLUMN `publicAll`, DROP COLUMN `permissions`, DROP COLUMN `welcomeMessage`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
+            String sql = "ALTER TABLE `homeTable` RENAME TO `"+TABLE_NAME+"`, CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', DROP COLUMN `publicAll`, DROP COLUMN `permissions`, DROP COLUMN `welcomeMessage`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
             return updateDB(test, sql);
         }
         // No changes.
@@ -438,11 +439,11 @@ public class WarpDataSource {
     		try {
                         Connection conn = ConnectionManager.getConnection();
                         Statement bkpStatement = conn.createStatement();
-                        bkpStatement.executeUpdate("DROP TABLE IF EXISTS homeTableBackup");
+                        bkpStatement.executeUpdate("DROP TABLE IF EXISTS "+TABLE_NAME+"Backup");
                         bkpStatement.close();
                         HomeLogger.info("Updating database.");
                         bkpStatement = conn.createStatement();
-                        bkpStatement.executeUpdate("CREATE TABLE homeTableBackup SELECT * FROM homeTable");
+                        bkpStatement.executeUpdate("CREATE TABLE "+TABLE_NAME+"Backup SELECT * FROM "+TABLE_NAME);
                         bkpStatement.close();
 
     			String[] query;
@@ -480,7 +481,7 @@ public class WarpDataSource {
     		DatabaseMetaData meta = conn.getMetaData();
 
     		ResultSet colRS = null;
-    		colRS = meta.getColumns(null, null, "homeTable", null);
+    		colRS = meta.getColumns(null, null, TABLE_NAME, null);
     		while (colRS.next()) {
     			String colName = colRS.getString("COLUMN_NAME");
     			String colType = colRS.getString("TYPE_NAME");
@@ -488,7 +489,7 @@ public class WarpDataSource {
     			if (colName.equals(field) && !colType.equals(type))
     			{
     				Statement stm = conn.createStatement();
-    				stm.executeUpdate("ALTER TABLE homeTable MODIFY " + field + " " + type + "; ");
+    				stm.executeUpdate("ALTER TABLE "+TABLE_NAME+" MODIFY " + field + " " + type + "; ");
     				conn.commit();
     				stm.close();
     				break;
