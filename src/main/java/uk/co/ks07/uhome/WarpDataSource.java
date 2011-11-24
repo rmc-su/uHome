@@ -9,8 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
+import org.bukkit.ChatColor;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 public class WarpDataSource {
+    private static Server server;
     public final static String sqlitedb = "/uhomes.db";
     public final static String mhsqlitedb = "/homes.db.old";
     private final static String TABLE_NAME = "uhomeTable";
@@ -27,7 +31,9 @@ public class WarpDataSource {
             + "UNIQUE (`owner`,`name`)"
             + ");";
 
-    public static void initialize(boolean needImport) {
+    public static void initialize(boolean needImport, Server server) {
+        WarpDataSource.server = server;
+
         TableStatus status = tableExists();
     	if (status == TableStatus.NONE_EXIST) {
             // No tables exist, so create them.
@@ -287,6 +293,11 @@ public class WarpDataSource {
     		conn.commit();
     	} catch (SQLException ex) {
     		HomeLogger.severe("Home Insert Exception", ex);
+
+                Player owner = server.getPlayer(warp.owner);
+                if (owner != null) {
+                    owner.sendMessage(ChatColor.RED + "Failed to save your new home - Please contact an admin!");
+                }
     	} finally {
     		try {
     			if (ps != null) {
