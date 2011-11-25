@@ -47,7 +47,7 @@ public class PermissionsHandler implements IPermissionsHandler {
 		if (bPermPlugin != null && bPermPlugin.isEnabled()) {
 			if (!(handler instanceof BPermissionsHandler)) {
 				permplugin = PermHandler.BPERMISSIONS;
-				String version = permExPlugin.getDescription().getVersion();
+				String version = bPermPlugin.getDescription().getVersion();
 				HomeLogger.info("Access Control: Using bPermissions"+ version);
 			}
 			return;
