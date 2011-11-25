@@ -118,7 +118,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
 	}
 	
 	public static void overallPerm() {
-		Map<String, Boolean> fullmap = null;
+		Map<String, Boolean> fullmap = new LinkedHashMap<String, Boolean>();
 		fullmap.put("myhome.econ.free.*", true);
 		fullmap.put("myhome.bypass.*", true);
 		fullmap.put("myhome.home.soc.*", true);
