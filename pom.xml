@@ -3,7 +3,7 @@
   <groupId>me.taylorkelly.myhome</groupId>
   <artifactId>MyHome</artifactId>
   <name>MyHome</name>
-  <version>2.1a</version>
+  <version>2.1b</version>
   <url>http://www.bukkit.org</url>
   <dependencies>
     <dependency>

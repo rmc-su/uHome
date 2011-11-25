@@ -57,7 +57,7 @@ public class PermissionsHandler implements IPermissionsHandler {
 		if (GMplugin != null && GMplugin.isEnabled()) {
 			if (!(handler instanceof GroupManagerHandler)) {
 				permplugin = PermHandler.GROUPMANAGER;
-				String version = permExPlugin.getDescription().getVersion();
+				String version = GMplugin.getDescription().getVersion();
 				HomeLogger.info("Access Control: Using GroupManager v"+ version);
 				handler = new GroupManagerHandler(GMplugin);
 			}
@@ -69,14 +69,14 @@ public class PermissionsHandler implements IPermissionsHandler {
 			if (permPlugin.getDescription().getVersion().charAt(0) == '3') {
 				if (!(handler instanceof Permissions3Handler)) {
 					permplugin = PermHandler.PERMISSIONS3;
-					String version = permExPlugin.getDescription().getVersion();
+					String version = permPlugin.getDescription().getVersion();
 					HomeLogger.info("Access Control: Using Permissions v"+ version);
 					handler = new Permissions3Handler(permPlugin);
 				}
 			} else {
 				if (!(handler instanceof Permissions2Handler)) {
 					permplugin = PermHandler.PERMISSIONS2;
-					String version = permExPlugin.getDescription().getVersion();
+					String version = permPlugin.getDescription().getVersion();
 					HomeLogger.info("Access Control: Using Permissions v"+ version);
 					handler = new Permissions2Handler(permPlugin);
 				}
