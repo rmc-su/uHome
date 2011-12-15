@@ -9,12 +9,14 @@ import me.taylorkelly.myhome.locale.LocaleManager;
 import me.taylorkelly.myhome.permissions.HomePermissions;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
+    private static HashMap<String, Location> playerloc = new HashMap<String, Location>();
     private static Map<String, String> localedata = new HashMap<String, String>();
     public enum Reason {
     	DAMAGE, MOVEMENT, EVENTCANCEL, NONE
@@ -41,6 +43,7 @@ public class WarmUp {
             
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer*20);
             players.put(player.getName(), taskIndex);
+            playerloc.put(player.getName(), player.getLocation());
         } else {
             home.warp(player, plugin.getServer());
         }
@@ -57,6 +60,15 @@ public class WarmUp {
         home.warp(player, server);
     }
 
+    public static boolean hasMoved(Player player) {
+    	Location curloc = player.getLocation();
+    	Location cmdloc = playerloc.get(player.getName());
+    	if(cmdloc.distanceSquared(curloc) > 1 ) {
+    		return true;
+    	}
+    	return false;
+    }
+    
     public static boolean isWarming(Player player) {
     	if(players.containsKey(player.getName())) {
     		return true;
