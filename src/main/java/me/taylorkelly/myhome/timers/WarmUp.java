@@ -87,6 +87,7 @@ public class WarmUp {
     	if (isWarming(player)) {
    			plugin.getServer().getScheduler().cancelTask(players.get(player.getName()));
    			players.remove(player.getName());
+   			playerloc.remove(player.getName());
    			
    			if(reason == Reason.DAMAGE) { 
    				player.sendMessage(LocaleManager.getString("timer.home.combatabort"));
@@ -124,6 +125,7 @@ public class WarmUp {
         public void run() {
             sendPlayer(player, home, server);
             players.remove(player.getName());
+            playerloc.remove(player.getName());
         }
     }
 }
