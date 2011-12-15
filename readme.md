@@ -104,3 +104,5 @@ Credits:
 * Taufiq "Taufiqkh" Hoven for overhauling the Timer system and adding needed improvements
 * Thomas "tcarlsen" Carlsen for Danish translations of MyHome messages
 * BlancoLanda for the Spanish translations of MyHome messages
+* MisterFix for the Russian translations of MyHome messages
+* Maxs for the German translations of MyHome messages
