@@ -83,8 +83,10 @@ public class MHPlayerListener extends PlayerListener {
 		
 		if(HomeSettings.abortOnMove) {
 			Player player = event.getPlayer();
-			if(WarmUp.isWarming(player) && WarmUp.hasMoved(player)) {
-				WarmUp.cancelWarming(player, plugin, WarmUp.Reason.MOVEMENT);
+			if(WarmUp.isWarming(player)) {
+				if(WarmUp.hasMoved(player)) {
+					WarmUp.cancelWarming(player, plugin, WarmUp.Reason.MOVEMENT);
+				}
 			}
 		}
 	}
