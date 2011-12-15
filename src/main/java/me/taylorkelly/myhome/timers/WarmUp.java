@@ -63,7 +63,7 @@ public class WarmUp {
     public static boolean hasMoved(Player player) {
     	Location curloc = player.getLocation();
     	Location cmdloc = playerloc.get(player.getName());
-    	if(cmdloc.distanceSquared(curloc) > 1 ) {
+    	if(cmdloc.distanceSquared(curloc) > 2 ) {
     		return true;
     	}
     	return false;
