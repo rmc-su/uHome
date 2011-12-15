@@ -5,10 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
 
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.MyHome;
 import me.taylorkelly.myhome.griefcraft.Updater;
+import me.taylorkelly.myhome.locale.LocaleManager;
 import me.taylorkelly.myhome.sql.ConnectionManager;
 
 public class MHUtils {
@@ -106,4 +113,68 @@ public class MHUtils {
 			}
 		}
 	}
+
+	public static String checkDistance(Location playerloc, Location homeloc, int distance) {
+		Map<String, String> localedata = new HashMap<String, String>();
+		double tohomedistance = 0;
+		try {
+			tohomedistance = playerloc.distance(homeloc);
+		} catch (Exception e) {
+			tohomedistance = -1;
+		}
+		
+		if(((tohomedistance > distance) || tohomedistance == -1) && distance != 0) {
+			String movedistance;
+			if(tohomedistance == -1) {
+				movedistance = "a long way";
+			} else {
+				movedistance = Integer.toString((int)Math.round(tohomedistance - distance));
+			}
+			
+			float dir = (float)Math.toDegrees(Math.atan2(playerloc.getBlockX() - homeloc.getX(), homeloc.getZ() - playerloc.getBlockZ()));	
+			
+			localedata.put("DIST.MOVE", movedistance);
+			String direction = "direction." + getClosestFace(dir).toString().toLowerCase();
+			localedata.put("DIST.DIR", LocaleManager.getString(direction, localedata));
+			
+			String message = LocaleManager.getString("distance.move", localedata);
+			localedata.clear();
+			
+			return message;
+		} else { 
+			return null;
+		}
+	}
+	public static BlockFace getClosestFace(float direction){
+
+        direction = direction % 360;
+
+        if(direction < 0)
+            direction += 360;
+
+        direction = Math.round(direction / 45);
+
+        switch((int)direction){
+
+            case 0:
+                return BlockFace.WEST;
+            case 1:
+                return BlockFace.NORTH_WEST;
+            case 2:
+                return BlockFace.NORTH;
+            case 3:
+                return BlockFace.NORTH_EAST;
+            case 4:
+                return BlockFace.EAST;
+            case 5:
+                return BlockFace.SOUTH_EAST;
+            case 6:
+                return BlockFace.SOUTH;
+            case 7:
+                return BlockFace.SOUTH_WEST;
+            default:
+                return BlockFace.WEST;
+
+        }
+    }
 }

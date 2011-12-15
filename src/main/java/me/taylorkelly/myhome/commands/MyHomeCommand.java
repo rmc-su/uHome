@@ -70,7 +70,7 @@ public class MyHomeCommand implements CommandExecutor {
 					 *  /home reload
 					 */
 				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && HomePermissions.adminReloadConfig(player)) {
-					HomeSettings.initialize(plugin.getDataFolder());
+					HomeSettings.initialize(plugin.config, plugin.getDataFolder());
 					player.sendMessage(LocaleManager.getString("admin.reload"));
 					/**
 					 * /home convert
@@ -213,7 +213,7 @@ public class MyHomeCommand implements CommandExecutor {
 			if (split.length == 2 && split[0].equalsIgnoreCase("clear")) {
 					homeList.consoleClearHome(split[1]);
 			} else if(split.length == 1 && split[0].equalsIgnoreCase("reload")) {
-				HomeSettings.initialize(plugin.getDataFolder());
+				HomeSettings.initialize(plugin.config, plugin.getDataFolder());
 				HomeLogger.info(LocaleManager.getString("admin.reload"));
 			} else if (split.length == 1 && split[0].equalsIgnoreCase("convert")) {
 				if (!warning) {

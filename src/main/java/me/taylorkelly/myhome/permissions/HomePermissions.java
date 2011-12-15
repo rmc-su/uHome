@@ -111,4 +111,10 @@ public class HomePermissions {
 		
 		return permissionsHandler.hasPermission(player, "myhome.bypass.moveaborting", player.isOp());
 	}
+	
+	public static boolean bypassDistance(Player player) {
+		if(!HomeSettings.enableDistanceBypass) return false;
+
+		return permissionsHandler.hasPermission(player, "myhome.bypass.distance", player.isOp());
+	}
 }

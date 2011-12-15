@@ -15,13 +15,19 @@ import me.taylorkelly.myhome.timers.HomeCoolDown;
 import me.taylorkelly.myhome.timers.WarmUp;
 import me.taylorkelly.myhome.timers.SetHomeCoolDown;
 import me.taylorkelly.myhome.utils.HomeLogger;
+import me.taylorkelly.myhome.utils.MHUtils;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
 public class HomeList {
 	private HashMap<String, Home> homeList;
+	//private HashMap<String, HashMap<String, Home>> worldList;
+	
 	private Map<String, String> localedata = new HashMap<String, String>();
 	private Server server;
 	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
@@ -109,10 +115,31 @@ public class HomeList {
 		MatchList matches = this.getMatches(name, player);
 		name = matches.getMatch(name);
 		int cost = 0;
+		int distance = 0;
 		if (homeList.containsKey(name)) {
 			Home warp = homeList.get(name);
 			if (warp.playerCanWarp(player) || HomePermissions.adminAnyHome(player)) {
 				if (homeCoolDown.playerHasCooled(player)) {
+					if (HomeSettings.applyDistanceLimits && !HomePermissions.bypassDistance(player)) {
+						if (HomeSettings.distanceByPerms) {
+							distance = HomePermissions.integer(player, "myhome.distance.home", HomeSettings.maxDistance);
+							if(HomeSettings.additionalDistance) {
+								distance += HomeSettings.maxDistance;
+							}
+						} else {
+							distance = HomeSettings.maxDistance;
+						}
+						
+						Location playerloc = player.getLocation();
+						Location homeloc = warp.getLocation(server);
+
+						String checkdistance = MHUtils.checkDistance(playerloc, homeloc, distance);
+						if(checkdistance != null) {
+							player.sendMessage(checkdistance);
+							return;
+						} 
+					}
+					
 					if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player)) {
 						if (HomeSettings.costByPerms) {
 							cost = HomePermissions.integer(player, "myhome.costs.home", HomeSettings.homeCost);
@@ -158,9 +185,31 @@ public class HomeList {
 
 	public void sendPlayerHome(Player player, Plugin plugin) {
 		int cost = 0;
+		int distance = 0;
+
 		if (homeList.containsKey(player.getName())) {
 			if (homeCoolDown.playerHasCooled(player)) {
-				if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player) ) {
+				
+				if (HomeSettings.applyDistanceLimits && !HomePermissions.bypassDistance(player)) {
+					if (HomeSettings.distanceByPerms) {
+						distance = HomePermissions.integer(player, "myhome.distance.home", HomeSettings.maxDistance);
+						if(HomeSettings.additionalDistance) {
+							distance += HomeSettings.maxDistance;
+						}
+					} else {
+						distance = HomeSettings.maxDistance;
+					}
+					
+					Location playerloc = player.getLocation();
+					Location homeloc = homeList.get(player.getName()).getLocation(server);
+
+					String checkdistance = MHUtils.checkDistance(playerloc, homeloc, distance);
+					if(checkdistance != null) {
+						player.sendMessage(checkdistance);
+						return;
+					} 
+				}
+				if (HomeSettings.eConomyEnabled && !HomePermissions.homeFree(player)) {
 					if (HomeSettings.costByPerms) {
 						cost = HomePermissions.integer(player, "myhome.costs.home", HomeSettings.homeCost);
 						if(HomeSettings.additionalCosts) {

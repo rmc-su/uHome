@@ -17,8 +17,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class MyHome extends JavaPlugin {
+	
 	private MHPlayerListener playerListener;
 	private MHEntityListener entityListener;
 	private MHPluginListener pluginListener;
@@ -27,6 +29,7 @@ public class MyHome extends JavaPlugin {
 	public String version;
 	public PluginManager pm;
 	private MHUtils utils;
+	public FileConfiguration config;
 
 	@Override
 	public void onDisable() {
@@ -40,8 +43,15 @@ public class MyHome extends JavaPlugin {
 		this.name = this.getDescription().getName();
 		this.version = this.getDescription().getVersion();
 		this.utils = new MHUtils(this);
+		this.config = this.getConfig();
 		
-		HomeSettings.initialize(getDataFolder());
+		try {
+			this.config.options().copyDefaults(true);
+			this.saveConfig();
+			HomeSettings.initialize(config, getDataFolder());
+		} catch (Exception e) {
+			HomeLogger.severe("Failed to load configuration!");
+		}
 
 		utils.startupChecks();
 	
