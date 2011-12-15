@@ -1,6 +1,3 @@
-#
-# MyHome Configuration File
-#
 settings:
   compassPointer: true
   allowSetHome: true
