@@ -6,6 +6,7 @@ settings:
   bedsDuringDay: false
   enableBypassPerms: true
   loadChunks: true
+  opPermissions: true
 locale:
   locale: 'en'
   useColors: true

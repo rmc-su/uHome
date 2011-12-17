@@ -2,6 +2,9 @@ package me.taylorkelly.myhome.permissions;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import me.taylorkelly.myhome.HomeSettings;
+
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
@@ -18,6 +21,9 @@ public class SuperpermsHandler implements IPermissionsHandler {
 	
 	@Override
 	public boolean hasPermission(final Player player, final String node, boolean defaultPerm) {
+		if(player.isOp() && HomeSettings.opPermissions) {
+			return true;
+		}
 		if (player.hasPermission("-" + node)) {
 			return false;
 		}
@@ -36,6 +42,9 @@ public class SuperpermsHandler implements IPermissionsHandler {
 
 	@Override
 	public int getInteger(final Player player, final String node, final int defaultInt) {
+		if(player.isOp() && HomeSettings.opPermissions) {
+			return 0;
+		}
 		return defaultInt;
 	}
 	

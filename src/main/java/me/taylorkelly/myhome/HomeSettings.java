@@ -36,6 +36,7 @@ public class HomeSettings {
 	public static boolean homesArePublic;
 	public static int bedsCanSethome;
 	public static boolean bedsDuringDay;
+	public static boolean opPermissions;
 	//public static boolean oneHomeAllWorlds;
 
 	public static boolean loadChunks; 
@@ -93,6 +94,7 @@ public class HomeSettings {
 			bedsDuringDay = confsettings.getBoolean("bedsDuringDay", false);
 			enableBypassPerms = confsettings.getBoolean("enableBypassPerms", true);
 			loadChunks = confsettings.getBoolean("loadChunks", false);
+			opPermissions = confsettings.getBoolean("opPermissions", true);
 
 			// Economy
 			eConomyEnabled = confeconomy.getBoolean("enabled", false);
