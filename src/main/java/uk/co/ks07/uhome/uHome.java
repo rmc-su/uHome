@@ -185,6 +185,12 @@ public class uHome extends JavaPlugin {
 		String commandName = command.getName().toLowerCase();
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
+
+                        // Workaround for ticket 8.
+                        if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
+                            return true;
+                        }
+
 			/**
 			 * /sethome support
 			 */

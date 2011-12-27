@@ -3,6 +3,9 @@ package uk.co.ks07.uhome;
 import org.bukkit.entity.Player;
 
 public class SuperPermsManager {
+    // Deny permission (default override)
+    public static final String denyPerm    = "uhome.deny";
+    
     // Home owners
     public static final String ownWarp     = "uhome.own.warp";
     public static final String ownSet      = "uhome.own.set";

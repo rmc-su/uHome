@@ -10,6 +10,7 @@ public class HomeConfig {
 	public static String locale;
         public static boolean useColors;
         public static boolean enableInvite;
+        public static boolean enableDenyPerm;
 
 	public static boolean downloadLibs;
 	public static boolean sqliteLib;
@@ -67,6 +68,7 @@ public class HomeConfig {
                 bedsDuringDay = settings.getBoolean("bedsDuringDay", false);
                 loadChunks = settings.getBoolean("loadChunks", false);
                 enableInvite = settings.getBoolean("enableInvite", true);
+                enableDenyPerm = settings.getBoolean("enableDenyPerm", false);
 
                 downloadLibs = dlLibs.getBoolean("enable", true);
                 mysqlLib = dlLibs.getBoolean("mysqlLib", true);
