@@ -29,6 +29,7 @@ public class SuperPermsManager {
     public static final String bypassWarmupDamage    = "uhome.bypass.warmup.damage";
     public static final String bypassWarmupMovement  = "uhome.bypass.warmup.movement";
     public static final String bypassCooldown        = "uhome.bypass.cooldown";
+    public static final String allowCrossWorld       = "uhome.crossworld";
 
     // Home limit variables
     public static final String limitA      = "uhome.limit.a";

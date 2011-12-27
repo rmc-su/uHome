@@ -85,7 +85,7 @@ public class Home {
 	public boolean playerCanWarp(Player player) {
 		return (this.playerIsCreator(player.getName()) || this.playerIsInvited(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
 	}
-
+        
 	public void warp(Player player, Server server) {
 		World currWorld = null;
 		if (world.equals("0")) {
@@ -96,8 +96,12 @@ public class Home {
 		if (currWorld == null) {
 			player.sendMessage(ChatColor.RED + "Uh oh. The world with that home doesn't exist!");
 		} else {
-			Location location = new Location(currWorld, x, y, z, yaw, pitch);
-			player.teleport(location);
+			if (player.getLocation().getWorld() == currWorld || SuperPermsManager.hasPermission(player, SuperPermsManager.allowCrossWorld)) {
+                            Location location = new Location(currWorld, x, y, z, yaw, pitch);
+                            player.teleport(location);
+                        } else {
+                            player.sendMessage("Sorry, you can't warp to a home in another world!");
+                        }
 		}
 	}
 

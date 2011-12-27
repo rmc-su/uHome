@@ -114,3 +114,5 @@ permissions:
     description: Gives the player the cooldown time a set in the config.
   uhome.deny:
     description: Removes access to uHome - fix for ticket 8 on DBO.
+  uhome.crossworld:
+    description: Allows the player to warp across worlds.
