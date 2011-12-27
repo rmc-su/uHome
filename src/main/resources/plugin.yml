@@ -71,6 +71,7 @@ permissions:
     description: Allows you to bypass all restrictions.
     default: op
     children:
+      uhome.crossworld: true
       uhome.bypass.bed: true
       uhome.bypass.cooldown: true
       uhome.bypass.warmup: true
