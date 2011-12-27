@@ -6,7 +6,7 @@ settings:
   locale: 'en'
   useColors: true
   enableInvite: true
-  enabledDenyPerm: false
+  enableDenyPerm: false
   downloadLibs:
     enable: true
     mysqlLib: true
