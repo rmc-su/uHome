@@ -287,6 +287,19 @@ public class HomeList {
             }
         }
 
+        public void listRequests(Player player) {
+            String results[] = this.getRequestList(player.getName());
+
+            if (results == null) {
+                    player.sendMessage(ChatColor.RED + "You haven't invited anyone!");
+            } else {
+                    player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
+                    for (String s : results) {
+                        player.sendMessage(s);
+                    }
+            }
+        }
+
 	public void listOther(Player player, String owner) {
                 String results = this.getPlayerList(owner);
 
@@ -318,6 +331,39 @@ public class HomeList {
                 }
 
                 return ret.delete(ret.length() - 2, ret.length() - 1).toString();
+            } else {
+                return null;
+            }
+        }
+
+        public String[] getRequestList(String owner) {
+            if (this.hasHomes(owner)) {
+                String[] reqs = new String[this.getPlayerWarpNo(owner)];
+                boolean anyInvites = false;
+                int i = -1;
+
+                for (Home home : homeList.get(owner).values()) {
+                    if (home.hasInvitees()) {
+                        anyInvites = true;
+                        i += 1;
+
+                        StringBuilder temp = new StringBuilder(32);
+                        temp.append(home.name).append(" - (");
+                        
+                        for (String invitee : home.getInvitees()) {
+                            temp.append(invitee).append(", ");
+                        }
+                        temp.delete(temp.length() - 2, temp.length() - 1).append(")");
+                        
+                        reqs[i] = temp.toString();
+                    }
+                }
+
+                if (anyInvites) {
+                    return reqs;
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }

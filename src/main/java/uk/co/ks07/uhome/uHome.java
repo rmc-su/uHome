@@ -264,8 +264,13 @@ public class uHome extends JavaPlugin {
 					/**
 					 * /home invites
 					 */
-				} else if (split.length == 2 && split[0].equalsIgnoreCase("invites") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("invites") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
 					homeList.listInvitedTo(player);
+					/**
+					 * /home requests
+					 */
+				} else if (split.length == 1 && split[0].equalsIgnoreCase("requests") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
+					homeList.listRequests(player);
 					/**
 					 * /home list
 					 */

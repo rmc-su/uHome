@@ -1,6 +1,7 @@
 package uk.co.ks07.uhome;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -159,5 +160,13 @@ public class Home {
 
         public boolean playerIsInvited(String player) {
             return (this.invitees != null) && (HomeConfig.enableInvite) && (this.invitees.contains(player));
+        }
+
+        public boolean hasInvitees() {
+            return (this.invitees != null) && (HomeConfig.enableInvite) && (!this.invitees.isEmpty());
+        }
+
+        public Collection<String> getInvitees() {
+            return this.invitees;
         }
 }
