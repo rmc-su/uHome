@@ -262,6 +262,11 @@ public class uHome extends JavaPlugin {
 				} else if (split.length == 2 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
 					homeList.listOther(player, split[1]);
 					/**
+					 * /home invites
+					 */
+				} else if (split.length == 2 && split[0].equalsIgnoreCase("invites") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
+					homeList.listInvitedTo(player);
+					/**
 					 * /home list
 					 */
 				} else if (split.length == 1 && split[0].equalsIgnoreCase("list") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {

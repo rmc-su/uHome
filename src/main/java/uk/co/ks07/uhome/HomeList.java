@@ -4,6 +4,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.WarmUp;
@@ -17,10 +18,12 @@ public class HomeList {
 	private Server server;
 	private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
 	private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
+        private HashMap<String, HashSet<Home>> inviteList;
 
 	public HomeList(Server server, boolean needImport) {
 		WarpDataSource.initialize(needImport, server);
 		homeList = WarpDataSource.getMap();
+                inviteList = new HashMap<String, HashSet<Home>>();
 		this.server = server;
 	}
 
@@ -153,11 +156,27 @@ public class HomeList {
         public void invitePlayer(Player owner, String player, String name) {
                 homeList.get(owner.getName()).get(name).addInvitees(player);
                 owner.sendMessage("Invited " + player + " to your home " + name);
+                if (!inviteList.containsKey(player)) {
+                    inviteList.put(player, new HashSet<Home>());
+                }
+                inviteList.get(player).add(homeList.get(owner.getName()).get(name));
+                owner.sendMessage("Invited " + player + " to your home " + name);
+                Player invitee = server.getPlayerExact(player);
+                if (invitee != null) {
+                    invitee.sendMessage("You have been invited to " + owner.getName() + "'s home " + name);
+                }
         }
 
         public void uninvitePlayer(Player owner, String player, String name) {
                 homeList.get(owner.getName()).get(name).removeInvitee(player);
+                if (inviteList.containsKey(player)) {
+                    inviteList.get(player).remove(homeList.get(owner.getName()).get(name));
+                }
                 owner.sendMessage("Uninvited " + player + " from your home " + name);
+                Player invitee = server.getPlayerExact(player);
+                if (invitee != null) {
+                    invitee.sendMessage("You have been uninvited from " + owner.getName() + "'s home " + name);
+                }
         }
         
         public int getPlayerWarpNo(String owner) {
@@ -242,6 +261,10 @@ public class HomeList {
                 return (homeList.containsKey(player) && homeList.get(player).size() > 0);
 	}
 
+	public boolean hasInvitedToHomes(String player) {
+                return (inviteList.containsKey(player) && inviteList.get(player).size() > 0);
+	}
+
 	public void list(Player player) {
             String results = this.getPlayerList(player.getName());
 
@@ -252,6 +275,17 @@ public class HomeList {
                     player.sendMessage(results);
             }
 	}
+
+        public void listInvitedTo(Player player) {
+            String results = this.getInvitedToList(player.getName());
+
+            if (results == null) {
+                    player.sendMessage(ChatColor.RED + "You have no invites!");
+            } else {
+                    player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
+                    player.sendMessage(results);
+            }
+        }
 
 	public void listOther(Player player, String owner) {
                 String results = this.getPlayerList(owner);
@@ -274,6 +308,20 @@ public class HomeList {
                     return null;
                 }
 	}
+
+        public String getInvitedToList(String owner) {
+            if (this.hasInvitedToHomes(owner)) {
+                StringBuilder ret = new StringBuilder(32);
+
+                for (Home home : inviteList.get(owner)) {
+                    ret.append(home.owner).append(" ").append(home.name).append(", ");
+                }
+
+                return ret.delete(ret.length() - 2, ret.length() - 1).toString();
+            } else {
+                return null;
+            }
+        }
         
         public int getTotalWarps() {
                 int ret = 0;
