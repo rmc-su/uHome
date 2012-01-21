@@ -17,7 +17,7 @@ commands:
     permission: uhome.own.set
 
 permissions:
-  uhome.*:
+  uhome.all:
     description: Givess access to all uHome commands.
     children:
       uhome.admin: true
