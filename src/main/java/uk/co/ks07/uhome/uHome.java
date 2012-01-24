@@ -10,6 +10,7 @@ import uk.co.ks07.uhome.locale.LocaleManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -231,6 +232,22 @@ public class uHome extends JavaPlugin {
 				} else if(split.length == 1 && split[0].equalsIgnoreCase("reload") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
 					HomeConfig.initialize(this.config, getDataFolder());
 					player.sendMessage("[uHome] Reloading config");
+					/**
+					 *  /home limit
+					 */
+				} else if(split.length == 1 && split[0].equalsIgnoreCase("limit") && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
+					player.sendMessage("You can set up to " + homeList.playerGetLimit(player) + " homes.");
+					/**
+					 *  /home limit [player]
+					 */
+				} else if(split.length == 2 && split[0].equalsIgnoreCase("limit") && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
+                                        Player target = this.getServer().getPlayer(split[1]);
+
+                                        if (target != null) {
+                                            player.sendMessage(target.getName() + " can set up to " + homeList.playerGetLimit(target) + " homes.");
+                                        } else {
+                                            player.sendMessage("Player not found.");
+                                        }
 					/**
 					 * /home set
 					 */

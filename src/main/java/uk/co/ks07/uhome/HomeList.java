@@ -184,11 +184,16 @@ public class HomeList {
         }
 
         public boolean playerCanSet(Player player) {
-                if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassLimit)) {
-                    return true;
-                }
+            int playerWarps = homeList.get(player.getName()).size();
+            int playerMaxWarps = this.playerGetLimit(player);
 
-                int playerWarps = homeList.get(player.getName()).size();
+            return ((playerMaxWarps < 0) || (playerWarps < playerMaxWarps));
+        }
+
+        public int playerGetLimit(Player player) {
+            if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassLimit)) {
+                    return -1;
+            } else {
                 int playerMaxWarps;
 
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitA)) {
@@ -204,8 +209,9 @@ public class HomeList {
                 } else {
                     playerMaxWarps = HomeConfig.defaultLimit;
                 }
-                
-                return (playerWarps < playerMaxWarps);
+
+                return playerMaxWarps;
+            }
         }
 
 	public void deleteHome(Player player) {
