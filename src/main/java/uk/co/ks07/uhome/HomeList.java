@@ -307,7 +307,7 @@ public class HomeList {
         }
 
 	public void listOther(Player player, String owner) {
-                String results = this.getPlayerList(owner);
+                String results = this.getPlayerList(owner.toLowerCase());
 
 		if (results == null) {
 			player.sendMessage(ChatColor.RED + "That player has no homes.");
