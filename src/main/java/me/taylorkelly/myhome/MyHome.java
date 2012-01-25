@@ -56,20 +56,19 @@ public class MyHome extends JavaPlugin {
 		utils.startupChecks();
 	
 		homeList = new HomeList(getServer());
-		MyHomeCommand cmdmgr = new MyHomeCommand(this, homeList);
-		getCommand("myhome").setExecutor(cmdmgr);
-		getCommand("home").setExecutor(cmdmgr);
-		getCommand("sethome").setExecutor(cmdmgr);
-		
 		LocaleManager.init();
 		HomePermissions.initialize(this);
 		HomeHelp.initialize(this);
 		HomeEconomy.init(this);
 		
+		MyHomeCommand cmdmgr = new MyHomeCommand(this, homeList);
+		getCommand("myhome").setExecutor(cmdmgr);
+		getCommand("home").setExecutor(cmdmgr);
+		getCommand("sethome").setExecutor(cmdmgr);
+		
 		this.playerListener = new MHPlayerListener(homeList, this);
 		this.entityListener = new MHEntityListener(this);
 		this.pluginListener = new MHPluginListener(this);
-		
 		registerEvents();
 
 		HomeLogger.info(name + " " + version + " enabled");
