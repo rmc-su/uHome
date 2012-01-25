@@ -14,7 +14,8 @@ public class ConnectionManager {
 		try {
 			if(HomeSettings.usemySQL) {
 				Class.forName("com.mysql.jdbc.Driver");
-				conn = DriverManager.getConnection(HomeSettings.mySQLconn, HomeSettings.mySQLuname, HomeSettings.mySQLpass);
+				String mySQLconn = "jdbc:mysql://" + HomeSettings.mySQLhost + ":" + HomeSettings.mySQLport + "/" + HomeSettings.mySQLdb; 
+				conn = DriverManager.getConnection(mySQLconn, HomeSettings.mySQLuname, HomeSettings.mySQLpass);
 				conn.setAutoCommit(false);
 				return conn;
 			} else {

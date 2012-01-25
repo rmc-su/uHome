@@ -51,7 +51,10 @@ public class HomeSettings {
 	public static boolean usemySQL;
 	public static String mySQLuname;
 	public static String mySQLpass;
-	public static String mySQLconn;
+	public static String mySQLdb;
+	public static String mySQLtable;
+	public static String mySQLhost;
+	public static int mySQLport;
 	
 	public static boolean applyDistanceLimits;
 	public static boolean enableDistanceBypass;
@@ -111,9 +114,12 @@ public class HomeSettings {
 
 			// Database
 			usemySQL = confdatabase.getBoolean("enabled", false);
-			mySQLconn = confdatabase.getString("connection", "'jdbc:mysql://localhost:3306/minecraft'");
+			mySQLhost = confdatabase.getString("host", "'localhost'");
+			mySQLport = confdatabase.getInt("port", 3306);
 			mySQLuname = confdatabase.getString("username", "'root'");
 			mySQLpass = confdatabase.getString("password", "'password'");
+			mySQLdb = confdatabase.getString("database", "'minecraft'");
+			mySQLtable = confdatabase.getString("table", "'homeTable'");
 			
 			// Distances
 			applyDistanceLimits = confdist.getBoolean("applyDistanceLimits", false);

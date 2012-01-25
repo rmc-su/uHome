@@ -16,7 +16,7 @@ import me.taylorkelly.myhome.utils.HomeLogger;
 
 public class WarpDataSource {
     public final static String sqlitedb = "/homes.db";
-    private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `homeTable` (" 
+    private final static String HOME_TABLE = "CREATE TABLE IF NOT EXISTS `"+ HomeSettings.mySQLtable +"` (" 
     	    + "`id` INTEGER PRIMARY KEY," 
     	    + "`name` varchar(32) NOT NULL DEFAULT 'Player',"
             + "`world` varchar(32) NOT NULL DEFAULT '0'," 
@@ -45,7 +45,7 @@ public class WarpDataSource {
     		Connection conn = ConnectionManager.getConnection();
 
     		statement = conn.createStatement();
-    		set = statement.executeQuery("SELECT * FROM homeTable");
+    		set = statement.executeQuery("SELECT * FROM `"+ HomeSettings.mySQLtable + "`");
     		int size = 0;
     		while (set.next()) {
     			size++;
@@ -86,7 +86,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
     		DatabaseMetaData dbm = conn.getMetaData();
-    		rs = dbm.getTables(null, null, "homeTable", null);
+    		rs = dbm.getTables(null, null, HomeSettings.mySQLtable, null);
     		if (!rs.next()) {
     			return false;
     		}
@@ -118,7 +118,7 @@ public class WarpDataSource {
 
     		if(HomeSettings.usemySQL){ 
     			// We need to set auto increment on SQL.
-    			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
+    			String sql = "ALTER TABLE `"+ HomeSettings.mySQLtable + "` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
     			HomeLogger.info("Modifying database for MySQL support");
     			st = conn.createStatement();
     			st.executeUpdate(sql);
@@ -135,7 +135,7 @@ public class WarpDataSource {
     				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeSettings.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
     				Statement slstatement = sqliteconn.createStatement();
-    				ResultSet slset = slstatement.executeQuery("SELECT * FROM homeTable");
+    				ResultSet slset = slstatement.executeQuery("SELECT * FROM `"+ HomeSettings.mySQLtable + "`");
 
     				int size = 0;
     				while (slset.next()) {
@@ -192,7 +192,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
 
-    		ps = conn.prepareStatement("INSERT INTO homeTable (id, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+    		ps = conn.prepareStatement("INSERT INTO `"+ HomeSettings.mySQLtable + "` (id, name, world, x, y, z, yaw, pitch, publicAll, permissions, welcomeMessage) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
     		ps.setInt(1, warp.index);
     		ps.setString(2, warp.name);
     		ps.setString(3, warp.world);
@@ -225,7 +225,7 @@ public class WarpDataSource {
     	try {
     		Connection conn = ConnectionManager.getConnection();
 
-    		ps = conn.prepareStatement("DELETE FROM homeTable WHERE id = ?");
+    		ps = conn.prepareStatement("DELETE FROM `"+ HomeSettings.mySQLtable + "` WHERE id = ?");
     		ps.setInt(1, warp.index);
     		ps.executeUpdate();
     		conn.commit();
@@ -250,7 +250,7 @@ public class WarpDataSource {
     	ResultSet set = null;
     	try {
     		Connection conn = ConnectionManager.getConnection();
-    		ps = conn.prepareStatement("UPDATE homeTable SET publicAll = ? WHERE id = ?");
+    		ps = conn.prepareStatement("UPDATE `"+ HomeSettings.mySQLtable + "` SET publicAll = ? WHERE id = ?");
     		ps.setInt(1, publicAll);
     		ps.setInt(2, warp.index);
     		ps.executeUpdate();
@@ -277,7 +277,7 @@ public class WarpDataSource {
 
     	try {
     		Connection conn = ConnectionManager.getConnection();
-    		ps = conn.prepareStatement("UPDATE homeTable SET permissions = ? WHERE id = ?");
+    		ps = conn.prepareStatement("UPDATE `"+ HomeSettings.mySQLtable + "` SET permissions = ? WHERE id = ?");
     		ps.setString(1, warp.permissionsString());
     		ps.setInt(2, warp.index);
     		ps.executeUpdate();
@@ -304,7 +304,7 @@ public class WarpDataSource {
 
     	try {
     		Connection conn = ConnectionManager.getConnection();
-    		ps = conn.prepareStatement("UPDATE homeTable SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
+    		ps = conn.prepareStatement("UPDATE `"+ HomeSettings.mySQLtable + "` SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
     		ps.setDouble(1, warp.x);
     		ps.setDouble(2, warp.y);
     		ps.setDouble(3, warp.z);
@@ -383,7 +383,7 @@ public class WarpDataSource {
     		DatabaseMetaData meta = conn.getMetaData();
 
     		ResultSet colRS = null;
-    		colRS = meta.getColumns(null, null, "homeTable", null);
+    		colRS = meta.getColumns(null, null, HomeSettings.mySQLtable, null);
     		while (colRS.next()) {
     			String colName = colRS.getString("COLUMN_NAME");
     			String colType = colRS.getString("TYPE_NAME");
@@ -391,7 +391,7 @@ public class WarpDataSource {
     			if (colName.equals(field) && !colType.equals(type))
     			{
     				Statement stm = conn.createStatement();
-    				stm.executeUpdate("ALTER TABLE homeTable MODIFY " + field + " " + type + "; ");
+    				stm.executeUpdate("ALTER TABLE `"+ HomeSettings.mySQLtable + "` MODIFY " + field + " " + type + "; ");
     				conn.commit();
     				stm.close();
     				break;
