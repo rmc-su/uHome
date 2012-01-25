@@ -39,6 +39,9 @@ libraries:
   mysqlLib: true
 mysql:
   enabled: false
-  connection: 'jdbc:mysql://localhost:3306/minecraft'
+  host: 'localhost'
+  port: 3306
+  database: 'minecraft'
+  table: 'homeTable'
   username: 'root'
   password: 'password'
