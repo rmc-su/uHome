@@ -110,8 +110,38 @@ public class HomeCommand implements CommandExecutor {
             }
         } else {
             // User is not in game.
+            switch (args.length) {
+                case 1:
+                    if ("reload".equalsIgnoreCase(args[0])) {
+                        // /home reload
+                        this.reloadSettings(sender);
+                    } else if ("help".equalsIgnoreCase(args[0])) {
+                        // /home help
+                        this.showAllHelp(sender);
+                    }
+                    break;
+                case 2:
+                    if ("list".equalsIgnoreCase(args[0])) {
+                        // /home list (player)
+                        this.showHomeList(sender, args[1]);
+                    } else if ("limit".equalsIgnoreCase(args[0])) {
+                        // /home limit (player)
+                        this.showOtherLimit(sender, args[1]);
+                    }
+                    break;
+                case 3:
+                    if ("info".equalsIgnoreCase(args[0])) {
+                        // /home info (player) (name)
+                        this.showHomeInfo(sender, args[2], args[1]);
+                    } else if ("delete".equalsIgnoreCase(args[0])) {
+                        // /home delete (player) (name)
+                        this.deleteOtherHome(sender, args[1], args[2]);
+                    }
+                    break;
+                default:
+                    return false;
+            }
         }
-
         return true;
     }
 
@@ -397,8 +427,8 @@ public class HomeCommand implements CommandExecutor {
         this.homeList.deleteHome(player, homeName);
     }
 
-    public void deleteOtherHome(Player player, String owner, String name) {
-        this.homeList.deleteHome(owner, name, player);
+    public void deleteOtherHome(CommandSender sender, String owner, String name) {
+        this.homeList.deleteHome(owner, name, sender);
     }
 
     public void goToUnknownTarget(Player player, String target) {
@@ -452,17 +482,17 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void showHomeInfo(Player user, String targetHome, String targetOwner) {
+    public void showHomeInfo(CommandSender user, String targetHome, String targetOwner) {
         Location homeLoc = homeList.getHomeLocation(targetOwner, targetHome);
-        user.sendMessage("Warp details: " + targetOwner + " : " + targetHome + " " + homeLoc.toString());
+        user.sendMessage("Home details: " + targetOwner + " : " + targetHome + " " + homeLoc.toString());
     }
 
     public void showHomeList(Player player) {
         this.homeList.list(player);
     }
 
-    public void showHomeList(Player player, String targetPlayer) {
-        this.homeList.list(player);
+    public void showHomeList(CommandSender sender, String targetPlayer) {
+        this.homeList.listOther(sender, targetPlayer);
     }
 
     public void showInviteList(Player player) {
@@ -477,18 +507,18 @@ public class HomeCommand implements CommandExecutor {
         player.sendMessage("You can set up to " + homeList.playerGetLimit(player) + " homes.");
     }
 
-    public void showOtherLimit(Player player, String targetPlayer) {
+    public void showOtherLimit(CommandSender sender, String targetPlayer) {
         Player target = plugin.getServer().getPlayer(targetPlayer);
 
         if (target != null) {
-            player.sendMessage(target.getName() + " can set up to " + homeList.playerGetLimit(target) + " homes.");
+            sender.sendMessage(target.getName() + " can set up to " + homeList.playerGetLimit(target) + " homes.");
         } else {
-            player.sendMessage("Player not found.");
+            sender.sendMessage("Player not found.");
         }
     }
     
-    public void reloadSettings(Player player) {
-        player.sendMessage("[uHome] Reloading config.");
+    public void reloadSettings(CommandSender user) {
+        user.sendMessage("[uHome] Reloading config.");
         HomeConfig.initialize(plugin.config, plugin.getDataFolder());
     }
 
@@ -543,5 +573,31 @@ public class HomeCommand implements CommandExecutor {
         for (String message : messages) {
             player.sendMessage(message);
         }
+    }
+
+    public void showAllHelp(CommandSender sender) {
+        // Send all help, no permissions checks.
+        sender.sendMessage(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
+        sender.sendMessage(ChatColor.RED + "/home" + ChatColor.WHITE + " -  Warp to your default home.");
+        sender.sendMessage(ChatColor.RED + "/home [name]" + ChatColor.WHITE + " -  Warp to the named home.");
+        sender.sendMessage(ChatColor.RED + "/home warp [name]" + ChatColor.WHITE + " -  Warp to a named home with a conflicting name.");
+        sender.sendMessage(ChatColor.RED + "/home [player]" + ChatColor.WHITE + " -  Warp to a player's home (if allowed).");
+        sender.sendMessage(ChatColor.RED + "/home [player] [name]" + ChatColor.WHITE + " -  Warp to a player's named home (if allowed).");
+        sender.sendMessage(ChatColor.RED + "/home set" + ChatColor.WHITE + " -  Set your default home to your current position.");
+        sender.sendMessage(ChatColor.RED + "/home set [name]" + ChatColor.WHITE + " -  Set a named home to your current position.");
+        sender.sendMessage(ChatColor.RED + "/home delete" + ChatColor.WHITE + " -  Delete your default home");
+        sender.sendMessage(ChatColor.RED + "/home delete [name]" + ChatColor.WHITE + " -  Delete the named home");
+        sender.sendMessage(ChatColor.RED + "/home delete [player]" + ChatColor.WHITE + " -  Delete a player's default home.");
+        sender.sendMessage(ChatColor.RED + "/home delete [player] [name]" + ChatColor.WHITE + " -  Delete a player's named home.");
+        sender.sendMessage(ChatColor.RED + "/home list" + ChatColor.WHITE + " -  List your homes.");
+        sender.sendMessage(ChatColor.RED + "/home list [player]" + ChatColor.WHITE + " -  List a player's homes.");
+        if (HomeConfig.enableInvite) {
+            sender.sendMessage(ChatColor.RED + "/home invite [player] [name]" + ChatColor.WHITE + " -  Invite a player to the named home.");
+            sender.sendMessage(ChatColor.RED + "/home uninvite [player] [name]" + ChatColor.WHITE + " -  Uninvite a player from the named home.");
+            sender.sendMessage(ChatColor.RED + "/home invites" + ChatColor.WHITE + " -  List the invites you have received.");
+            sender.sendMessage(ChatColor.RED + "/home requests" + ChatColor.WHITE + " -  List the invites you have sent.");
+        }
+        sender.sendMessage(ChatColor.RED + "/home limit" + ChatColor.WHITE + " -  Show your max homes.");
+        sender.sendMessage(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
     }
 }

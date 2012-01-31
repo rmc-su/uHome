@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -232,14 +233,14 @@ public class HomeList {
 		}
 	}
 
-	public void deleteHome(String owner, String name, Player player) {
+	public void deleteHome(String owner, String name, CommandSender sender) {
 		if (this.homeExists(owner, name)) {
 			Home warp = homeList.get(owner).get(name);
 			homeList.get(owner).remove(name);
 			WarpDataSource.deleteWarp(warp);
-			player.sendMessage(ChatColor.AQUA + "You have deleted "+owner+"'s home '"+name+"'.");
+			sender.sendMessage(ChatColor.AQUA + "You have deleted "+owner+"'s home '"+name+"'.");
 		} else {
-			player.sendMessage(ChatColor.RED + "There is no home '"+name+"' for " + owner + "!");
+			sender.sendMessage(ChatColor.RED + "There is no home '"+name+"' for " + owner + "!");
 		}
 	}
 
@@ -302,14 +303,14 @@ public class HomeList {
             }
         }
 
-	public void listOther(Player player, String owner) {
+	public void listOther(CommandSender sender, String owner) {
                 String results = this.getPlayerList(owner.toLowerCase());
 
 		if (results == null) {
-			player.sendMessage(ChatColor.RED + "That player has no homes.");
+			sender.sendMessage(ChatColor.RED + "That player has no homes.");
 		} else {
-			player.sendMessage(ChatColor.AQUA + "That player has the following homes:");
-			player.sendMessage(results);
+			sender.sendMessage(ChatColor.AQUA + "That player has the following homes:");
+			sender.sendMessage(results);
 		}
 	}
 
