@@ -31,11 +31,6 @@ public class HomeList {
 		this.server = server;
 	}
 
-        @Deprecated
-	public void addHome(Player player, Plugin plugin) {
-		this.addHome(player, plugin, "home");
-	}
-
 	public void addHome(Player player, Plugin plugin, String name) {
                 if (!(setHomeCoolDown.playerHasCooled(player))) {
                         player.sendMessage(ChatColor.RED + "You need to wait " +

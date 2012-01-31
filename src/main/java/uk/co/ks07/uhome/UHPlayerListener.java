@@ -29,7 +29,7 @@ public class UHPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
 		if(HomeConfig.bedsCanSethome != 0) {
-			homeList.addHome(event.getPlayer(), plugin);
+			homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME);
 		}
 	}
 
@@ -39,7 +39,7 @@ public class UHPlayerListener extends PlayerListener {
 		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		if(HomeConfig.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
 			if(HomeConfig.bedsCanSethome != 0) {
-				homeList.addHome(event.getPlayer(), plugin);
+				homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME);
 			}
 		}
 	}

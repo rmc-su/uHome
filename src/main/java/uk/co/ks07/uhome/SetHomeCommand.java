@@ -35,7 +35,7 @@ public class SetHomeCommand implements CommandExecutor {
                                         return true;
                                 }
 
-                                homeList.addHome(player, plugin);
+                                homeList.addHome(player, plugin, uHome.DEFAULT_HOME);
 				return true;
 			}
 			
