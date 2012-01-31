@@ -100,6 +100,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("info".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminInfo)) {
                         // /home info (player) (name)
                         this.showHomeInfo(player, args[2], args[1]);
+                    } else if ("delete".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminDelete)) {
+                        // /home delete (player) (name)
+                        this.deleteOtherHome(player, args[1], args[2]);
                     }
                     break;
                 default:
@@ -392,6 +395,10 @@ public class HomeCommand implements CommandExecutor {
 
     public void deleteHome(Player player, String homeName) {
         this.homeList.deleteHome(player, homeName);
+    }
+
+    public void deleteOtherHome(Player player, String owner, String name) {
+        this.homeList.deleteHome(owner, name, player);
     }
 
     public void goToUnknownTarget(Player player, String target) {
