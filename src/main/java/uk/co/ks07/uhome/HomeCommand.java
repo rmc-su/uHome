@@ -442,7 +442,7 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void goToHome(Player user) {
-        if (this.homeList.playerHasHome(user)) {
+        if (this.homeList.playerHasDefaultHome(user)) {
             this.homeList.sendPlayerHome(user, this.plugin);
         } else {
             user.sendMessage(ChatColor.RED + "You have no home :(");

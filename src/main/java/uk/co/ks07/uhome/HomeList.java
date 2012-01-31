@@ -124,7 +124,7 @@ public class HomeList {
 	public void sendPlayerHome(Player player, Plugin plugin) {
 		if (homeList.containsKey(player.getName())) {
 			if (homeCoolDown.playerHasCooled(player)) {
-					WarmUp.addPlayer(player, homeList.get(player.getName()).get("home"), plugin);
+					WarmUp.addPlayer(player, homeList.get(player.getName()).get(uHome.DEFAULT_HOME), plugin);
 					homeCoolDown.addPlayer(player, plugin);
 			} else {
 				player.sendMessage(ChatColor.RED + "You need to wait " +
@@ -138,8 +138,8 @@ public class HomeList {
                 return this.homeList.get(owner).get(name).getLocation;
         }
 
-	public boolean playerHasHome(Player player) {
-		return this.homeExists(player.getName(), "home");
+	public boolean playerHasDefaultHome(Player player) {
+		return this.homeExists(player.getName(), uHome.DEFAULT_HOME);
 	}
 
         public boolean playerHasHomes(Player player) {
@@ -212,9 +212,9 @@ public class HomeList {
         }
 
 	public void deleteHome(Player player) {
-		if (this.homeExists(player.getName(), "home")) {
-			Home warp = homeList.get(player.getName()).get("home");
-			homeList.get(player.getName()).remove("home");
+		if (this.playerHasDefaultHome(player)) {
+			Home warp = homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
+			homeList.get(player.getName()).remove(uHome.DEFAULT_HOME);
 			WarpDataSource.deleteWarp(warp);
 			player.sendMessage(ChatColor.AQUA + "You have deleted your home");
 		} else {
@@ -416,7 +416,7 @@ public class HomeList {
 	}
 
 	public Home getHomeFor(Player player) {
-		return homeList.get(player.getName()).get("home");
+		return homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
 	}
 }
 
