@@ -7,12 +7,13 @@ public class SuperPermsManager {
     public static final String denyPerm    = "uhome.deny";
     
     // Home owners
-    public static final String ownWarp     = "uhome.own.warp";
-    public static final String ownSet      = "uhome.own.set";
-    public static final String ownList     = "uhome.own.list";
-    public static final String ownDelete   = "uhome.own.delete";
-    public static final String ownInvite   = "uhome.own.invite";
-    public static final String ownUninvite   = "uhome.own.uninvite";
+    public static final String ownWarp          = "uhome.own.warp";
+    public static final String ownSet           = "uhome.own.set";
+    public static final String ownList          = "uhome.own.list";
+    public static final String ownListInvites   = "uhome.own.listinvites";
+    public static final String ownDelete        = "uhome.own.delete";
+    public static final String ownInvite        = "uhome.own.invite";
+    public static final String ownUninvite      = "uhome.own.uninvite";
 
     // Home admins
     public static final String adminWarp   = "uhome.admin.warp";

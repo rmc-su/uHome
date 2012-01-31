@@ -41,6 +41,8 @@ permissions:
     description: Allows you to delete your warps.
   uhome.own.list:
     description: Allows you to list your warps.
+  uhome.own.listinvites:
+    description: Allows you to list both sent and received invites.
   uhome.own.invite:
     description: Allows you to invite others to your homes.
   uhome.own.uninvite:
