@@ -208,7 +208,7 @@ public class WarpDataSource {
 
     		if(HomeConfig.usemySQL){ 
     			// We need to set auto increment on SQL.
-    			String sql = "ALTER TABLE `homeTable` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
+    			String sql = "ALTER TABLE `" + TABLE_NAME + "` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
     			HomeLogger.info("Modifying database for MySQL support");
     			st = conn.createStatement();
     			st.executeUpdate(sql);
