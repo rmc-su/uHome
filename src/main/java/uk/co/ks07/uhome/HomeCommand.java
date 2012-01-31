@@ -384,7 +384,7 @@ public class HomeCommand implements CommandExecutor {
 //                                        if(homeList.getPlayerList(target) == null) {
 //                                            sender.sendMessage("[uHome] The player " + target + " has no homes!");
 //                                        } else {
-//                                            sender.sendMessage("[uHome] That player has the following homes ("+homeList.getPlayerWarpNo(target) +"):");
+//                                            sender.sendMessage("[uHome] That player has the following homes ("+homeList.getPlayerHomeCount(target) +"):");
 //                                            sender.sendMessage("[uHome] "+homeList.getPlayerList(target));
 //                                        }
 //                                /**

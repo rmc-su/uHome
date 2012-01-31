@@ -176,7 +176,7 @@ public class HomeList {
                 }
         }
         
-        public int getPlayerWarpNo(String owner) {
+        public int getPlayerHomeCount(String owner) {
                 return homeList.get(owner).size();
         }
 
@@ -341,7 +341,7 @@ public class HomeList {
 
         public String[] getRequestList(String owner) {
             if (this.hasHomes(owner)) {
-                String[] reqs = new String[this.getPlayerWarpNo(owner)];
+                String[] reqs = new String[this.getPlayerHomeCount(owner)];
                 boolean anyInvites = false;
                 int i = -1;
 
