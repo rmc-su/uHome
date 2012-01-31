@@ -27,6 +27,7 @@ public class HomeList {
 		this.server = server;
 	}
 
+        @Deprecated
 	public void addHome(Player player, Plugin plugin) {
 		this.addHome(player, plugin, "home");
 	}
@@ -92,10 +93,6 @@ public class HomeList {
                         WarpDataSource.moveWarp(warp);
                         player.sendMessage(ChatColor.AQUA + "Succesfully moved home for " + owner);
                 }
-	}
-
-	public void warpTo(Player player, Plugin plugin) {
-		this.warpTo(player.getName(), "home", player, plugin);
 	}
 
 	public void warpTo(String target, Player player, Plugin plugin) {

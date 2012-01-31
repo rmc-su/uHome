@@ -23,6 +23,8 @@ public class uHome extends JavaPlugin {
 	public PluginManager pm;
         public FileConfiguration config;
 
+        public static final String DEFAULT_HOME = "home";
+
 	@Override
 	public void onDisable() {
 		ConnectionManager.closeConnection();
