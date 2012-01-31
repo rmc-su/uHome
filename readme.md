@@ -4,7 +4,7 @@ uHome - A multiple private home warp plugin for Bukkit and Minecraft.
 
 Uses Bukkit's superperms for all permissions - works with all modern permissions systems!
 
-For simple set-up, give your users 'uhome.own' and your admins 'uhome.admin'. A 'uhome.*' superperms node is included for ease of use.
+For simple set-up, give your users 'uhome.own' and your admins 'uhome.admin'. A 'uhome.all' superperms node is included for ease of use.
 
 Commands & Permissions:
 
