@@ -41,9 +41,11 @@ Permissions:
     (uhome.bypass.warmup.damage) - Permission to ignore damage when warming-up
     (uhome.bypass.warmup.movement) - Permission to ignore movement when warming-up
     (uhome.bypass.bed) - Permission to use /sethome when bed usage is forced.
+    (uhome.crossworld) - Permission to warp to homes that are in another world.
+    (uhome.deny) - Permission to deny all access to the plugin - must be enabled in the config.
 
     Admin Permissions:
-    (uhome.*) - Has access to all commands in uHome
+    (uhome.all) - Has access to all commands in uHome
     (uhome.admin.reload) - Is able to reload uHome config.
 
 Configuration Options:
@@ -56,6 +58,7 @@ Configuration Options:
     coolDownSetHome - default: 0 - Global Timer: Time in seconds between uses of /sethome
     timerByPerms - defaut: false - Should cooldown/warmup timers be dictated by settings in a permissions plugin.
     additionalTime - default: false - Should group/user timers be IN ADDITION to the global timers.
+    enableDenyPerm - default: false - Should uHome stop players with uhome.deny from using the plugin?
 
     compassPointer - default: true - Should the compass point to a player's /home
 
