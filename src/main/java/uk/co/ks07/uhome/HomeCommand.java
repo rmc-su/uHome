@@ -30,29 +30,29 @@ public class HomeCommand implements CommandExecutor {
                     }
                     break;
                 case 1:
-                    if ("set".equalsIgnoreCase(args[0])) {
+                    if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home set
                         this.setHome(player, uHome.DEFAULT_HOME);
-                    } else if ("list".equalsIgnoreCase(args[0])) {
+                    } else if ("list".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
                         // /home list
                         this.showHomeList(player);
-                    } else if ("delete".equalsIgnoreCase(args[0])) {
+                    } else if ("delete".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
                         // /home delete
                         this.deleteHome(player, uHome.DEFAULT_HOME);
                     } else if ("help".equalsIgnoreCase(args[0])) {
                         // /home help
                         this.showHelp(player);
-                    } else if ("limit".equalsIgnoreCase(args[0])) {
+                    } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home limit
                         this.showHomeLimit(player);
                     } else if (HomeConfig.enableInvite) {
                         // /home invites|requests
-                        if ("invites".equalsIgnoreCase(args[0])) {
+                        if ("invites".equalsIgnoreCase(args[0])  && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
                             this.showInviteList(player);
-                        } else if ("requests".equalsIgnoreCase(args[0])) {
+                        } else if ("requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                             this.showRequestList(player);
                         }
-                    } else if ("reload".equalsIgnoreCase(args[0])) {
+                    } else if ("reload".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
                         // /home reload
                         this.reloadSettings(player);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
@@ -61,19 +61,19 @@ public class HomeCommand implements CommandExecutor {
                     }
                     break;
                 case 2:
-                    if ("set".equalsIgnoreCase(args[0])) {
+                    if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home set (name)
                         this.setHome(player, args[1]);
-                    } else if ("delete".equalsIgnoreCase(args[0])) {
+                    } else if ("delete".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
                         // /home delete (name)
                         this.deleteHome(player, args[1]);
-                    } else if ("list".equalsIgnoreCase(args[0])) {
+                    } else if ("list".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
                         // /home list (player)
                         this.showHomeList(player, args[1]);
-                    } else if ("limit".equalsIgnoreCase(args[0])) {
+                    } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home limit (player)
                         this.showOtherLimit(player, args[1]);
-                    } else if ("warp".equalsIgnoreCase(args[0])) {
+                    } else if ("warp".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
                         // /home warp (player|name)
                         this.goToUnknownTarget(player, args[1]);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
@@ -84,15 +84,15 @@ public class HomeCommand implements CommandExecutor {
                 case 3:
                     if (HomeConfig.enableInvite) {
                         // /home invite|uninvite (player) (name)
-                        if ("invite".equalsIgnoreCase(args[0])) {
+                        if ("invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
                             this.inviteToHome(player, args[1], args[2]);
-                        } else if ("uninvite".equalsIgnoreCase(args[0])) {
+                        } else if ("uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                             this.uninviteFromHome(player, args[1], args[2]);
                         }
-                    } else if ("set".equalsIgnoreCase(args[0])) {
+                    } else if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
                         // /home set (player) (name)
                         this.setOtherHome(player, args[2], args[1]);
-                    } else if ("info".equalsIgnoreCase(args[0])) {
+                    } else if ("info".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminInfo)) {
                         // /home info (player) (name)
                         this.showHomeInfo(player, args[2], args[1]);
                     }
