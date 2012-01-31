@@ -2,7 +2,6 @@ package uk.co.ks07.uhome;
 
 import uk.co.ks07.uhome.timers.WarmUp;
 
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
@@ -19,6 +18,7 @@ public class UHEntityListener extends EntityListener {
 		this.plugin = plugin;
 	}
 
+        @Override
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled() || !(event instanceof EntityDamageByEntityEvent) || !(event.getEntity() instanceof LivingEntity) || HomeConfig.abortOnDamage == 0)
 			return;

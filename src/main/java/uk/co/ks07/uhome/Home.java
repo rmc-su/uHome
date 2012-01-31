@@ -1,9 +1,13 @@
 package uk.co.ks07.uhome;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.TreeSet;
-import org.bukkit.*;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
+
 import org.bukkit.entity.Player;
 
 public class Home {

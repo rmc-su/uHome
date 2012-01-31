@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import uk.co.ks07.uhome.Home;
 import uk.co.ks07.uhome.HomeConfig;
+import uk.co.ks07.uhome.SuperPermsManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import uk.co.ks07.uhome.SuperPermsManager;
 
 public class WarmUp {
     private static HashMap<String, Integer> players = new HashMap<String, Integer>();
