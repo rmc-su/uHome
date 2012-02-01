@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import uk.co.ks07.uhome.HomeList.ExitStatus;
 
 public class HomeCommand implements CommandExecutor {
 
@@ -424,11 +425,23 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void deleteHome(Player player, String homeName) {
-        this.homeList.deleteHome(player, homeName, plugin.getLogger());
+        ExitStatus es = this.homeList.deleteHome(player, homeName, plugin.getLogger());
+
+        if (es == ExitStatus.NOT_EXISTS) {
+            player.sendMessage(ChatColor.RED + "You don't have a home called '" + homeName + "'!");
+        } else {
+            player.sendMessage(ChatColor.AQUA + "You have deleted your home '" + homeName + "'.");
+        }
     }
 
     public void deleteOtherHome(CommandSender sender, String owner, String name) {
-        this.homeList.deleteHome(owner, name, sender, plugin.getLogger());
+        ExitStatus es = this.homeList.deleteHome(owner, name, plugin.getLogger());
+
+        if (es == ExitStatus.NOT_EXISTS) {
+            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
+        } else {
+            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
+        }
     }
 
     public void goToUnknownTarget(Player player, String target) {

@@ -213,44 +213,29 @@ public class HomeList {
         }
     }
 
-    public void deleteHome(Player player, Logger log) {
-        if (this.playerHasDefaultHome(player)) {
-            Home warp = homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
-            homeList.get(player.getName()).remove(uHome.DEFAULT_HOME);
-            WarpDataSource.deleteWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "You have deleted your home");
-        } else {
-            player.sendMessage(ChatColor.RED + "You have no home to delete :(");
-        }
-    }
-
-    public void deleteHome(Player owner, String name, Logger log) {
+    public ExitStatus deleteHome(Player owner, String name, Logger log) {
         if (this.homeExists(owner.getName(), name)) {
             Home warp = homeList.get(owner.getName()).get(name);
             homeList.get(owner.getName()).remove(name);
             WarpDataSource.deleteWarp(warp, log);
-            owner.sendMessage(ChatColor.AQUA + "You have deleted your home '" + name + "'.");
+//            owner.sendMessage(ChatColor.AQUA + "You have deleted your home '" + name + "'.");
+            return ExitStatus.SUCCESS;
         } else {
-            owner.sendMessage(ChatColor.RED + "You don't have a home called '" + name + "'!");
+//            owner.sendMessage(ChatColor.RED + "You don't have a home called '" + name + "'!");
+            return ExitStatus.NOT_EXISTS;
         }
     }
 
-    public void deleteHome(String owner, String name, CommandSender sender, Logger log) {
+    public ExitStatus deleteHome(String owner, String name, Logger log) {
         if (this.homeExists(owner, name)) {
             Home warp = homeList.get(owner).get(name);
             homeList.get(owner).remove(name);
             WarpDataSource.deleteWarp(warp, log);
-            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
+//            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
+            return ExitStatus.SUCCESS;
         } else {
-            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
-        }
-    }
-
-    public void deleteHome(String owner, String name, Logger log) {
-        if (this.homeExists(owner, name)) {
-            Home warp = homeList.get(owner).get(name);
-            homeList.get(owner).remove(name);
-            WarpDataSource.deleteWarp(warp, log);
+//            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
+            return ExitStatus.NOT_EXISTS;
         }
     }
 
