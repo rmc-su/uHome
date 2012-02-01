@@ -103,7 +103,7 @@ public class UHomeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (HomeConfig.respawnToHome && homeList.homeExists(event.getPlayer().getName(), "home")) {
-            Location location = homeList.getHomeFor(event.getPlayer()).getLocation(plugin.getServer());
+            Location location = homeList.getHomeFor(event.getPlayer().getName()).getLocation(plugin.getServer());
             if (location != null) {
                 event.setRespawnLocation(location);
             }

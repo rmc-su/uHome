@@ -34,11 +34,9 @@ public class HomeList {
         this.server = server;
     }
 
-    public void addHome(Player player, Plugin plugin, String name, Logger log) {
+    public ExitStatus addHome(Player player, Plugin plugin, String name, Logger log) {
         if (!(setHomeCoolDown.playerHasCooled(player))) {
-            player.sendMessage(ChatColor.RED + "You need to wait "
-                    + setHomeCoolDown.estimateTimeLeft(player) + " more seconds of the "
-                    + setHomeCoolDown.getTimer(player) + " second cooldown before you can edit your homes.");
+            return ExitStatus.NEED_COOLDOWN;
         } else {
             if (!homeList.containsKey(player.getName())) {
                 // Player has no warps.
@@ -47,53 +45,52 @@ public class HomeList {
                 warps.put(name, warp);
                 homeList.put(player.getName(), warps);
                 WarpDataSource.addWarp(warp, log);
-                player.sendMessage(ChatColor.AQUA + "Welcome to your first home!");
                 setHomeCoolDown.addPlayer(player, plugin);
+                return ExitStatus.SUCCESS_FIRST;
             } else if (!this.homeExists(player.getName(), name)) {
                 if (this.playerCanSet(player)) {
                     // Player has warps, but not with the given name.
                     Home warp = new Home(player, name);
                     homeList.get(player.getName()).put(name, warp);
                     WarpDataSource.addWarp(warp, log);
-                    player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
                     setHomeCoolDown.addPlayer(player, plugin);
+                    return ExitStatus.SUCCESS;
                 } else {
-                    // Player cannot set a new warp as they are at their warp limit.
-                    player.sendMessage(ChatColor.RED + "You have too many homes! You must delete one before you can set a new home!");
+                    return ExitStatus.AT_LIMIT;
                 }
             } else {
                 // Player has a warp with the given name.
                 Home warp = homeList.get(player.getName()).get(name);
                 warp.setLocation(player.getLocation());
                 WarpDataSource.moveWarp(warp, log);
-                player.sendMessage(ChatColor.AQUA + "Succesfully moved your home.");
                 setHomeCoolDown.addPlayer(player, plugin);
+                return ExitStatus.SUCCESS_MOVED;
             }
         }
     }
 
-    public void adminAddHome(Player player, String owner, String name, Logger log) {
+    public ExitStatus adminAddHome(Location location, String owner, String name, Logger log) {
         // Adds a home ignoring limits, ownership and cooldown.
         if (!homeList.containsKey(owner)) {
             // Player has no warps.
             HashMap<String, Home> warps = new HashMap<String, Home>();
-            Home warp = new Home(owner, player.getLocation(), name);
+            Home warp = new Home(owner, location, name);
             warps.put(name, warp);
             homeList.put(owner, warps);
             WarpDataSource.addWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Created first home for " + owner);
+            return ExitStatus.SUCCESS_FIRST;
         } else if (!this.homeExists(owner, name)) {
             // Player has warps, but not with the given name.
-            Home warp = new Home(owner, player.getLocation(), name);
+            Home warp = new Home(owner, location, name);
             homeList.get(owner).put(name, warp);
             WarpDataSource.addWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Created new home for " + owner);
+            return ExitStatus.SUCCESS;
         } else {
             // Player has a warp with the given name.
             Home warp = homeList.get(owner).get(name);
-            warp.setLocation(player.getLocation());
+            warp.setLocation(location);
             WarpDataSource.moveWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Succesfully moved home for " + owner);
+            return ExitStatus.SUCCESS_MOVED;
         }
     }
 
@@ -402,14 +399,18 @@ public class HomeList {
         return new MatchList(exactMatches, matches);
     }
 
-    public Home getHomeFor(Player player) {
-        return homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
+    public Home getHomeFor(String player) {
+        return homeList.get(player).get(uHome.DEFAULT_HOME);
     }
 
     public static enum ExitStatus {
         SUCCESS,
+        SUCCESS_MOVED,
+        SUCCESS_FIRST,
         NOT_EXISTS,
         NOT_PERMITTED,
+        AT_LIMIT,
+        NEED_COOLDOWN,
         UNKNOWN;
     }
 }

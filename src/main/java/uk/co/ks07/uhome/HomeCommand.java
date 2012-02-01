@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.co.ks07.uhome.HomeList.ExitStatus;
+import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
 
@@ -416,12 +417,43 @@ public class HomeCommand implements CommandExecutor {
 //                }
 //		return false;
 //	}
-    public void setHome(Player user, String name) {
-        this.homeList.addHome(user, plugin, name, plugin.getLogger());
+    public void setHome(Player player, String name) {
+        ExitStatus es = this.homeList.addHome(player, plugin, name, plugin.getLogger());
+        
+        switch (es) {
+            case SUCCESS:
+                player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+                break;
+            case SUCCESS_FIRST:
+                player.sendMessage(ChatColor.AQUA + "Welcome to your first home!");
+                break;
+            case SUCCESS_MOVED:
+                player.sendMessage(ChatColor.AQUA + "Succesfully moved your home.");
+                break;
+            case AT_LIMIT:
+                player.sendMessage(ChatColor.RED + "You have too many homes! You must delete one before you can set a new home!");
+                break;
+            case NEED_COOLDOWN:
+                player.sendMessage(ChatColor.RED + "You need to wait "
+                    + SetHomeCoolDown.getInstance().estimateTimeLeft(player) + " more seconds of the "
+                    + SetHomeCoolDown.getInstance().getTimer(player) + " second cooldown before you can edit your homes.");
+        }
     }
 
-    public void setOtherHome(Player user, String homeName, String owner) {
-        this.homeList.adminAddHome(user, owner, homeName, plugin.getLogger());
+    public void setOtherHome(Player player, String homeName, String owner) {
+        ExitStatus es = this.homeList.adminAddHome(player.getLocation(), owner, homeName, plugin.getLogger());
+        
+        switch (es) {
+            case SUCCESS:
+                player.sendMessage(ChatColor.AQUA + "Created new home for " + owner);
+                break;
+            case SUCCESS_FIRST:
+                player.sendMessage(ChatColor.AQUA + "Created first home for " + owner);
+                break;
+            case SUCCESS_MOVED:
+                player.sendMessage(ChatColor.AQUA + "Succesfully moved home for " + owner);
+                break;
+        }
     }
 
     public void deleteHome(Player player, String homeName) {
