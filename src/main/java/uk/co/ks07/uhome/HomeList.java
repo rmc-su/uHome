@@ -420,6 +420,13 @@ public class HomeList {
     public Home getHomeFor(Player player) {
         return homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
     }
+
+    public static enum ExitStatus {
+        SUCCESS,
+        NOT_EXISTS,
+        NOT_PERMITTED,
+        UNKNOWN;
+    }
 }
 
 class MatchList {
@@ -439,12 +446,5 @@ class MatchList {
             return matches.get(0).name;
         }
         return name;
-    }
-
-    public static enum ExitStatus {
-        SUCCESS,
-        NOT_EXISTS,
-        NOT_PERMITTED,
-        UNKNOWN;
     }
 }
