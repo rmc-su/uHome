@@ -416,19 +416,19 @@ public class HomeCommand implements CommandExecutor {
 //	}
 
     public void setHome(Player user, String name) {
-        this.homeList.addHome(user, plugin, name);
+        this.homeList.addHome(user, plugin, name, plugin.getLogger());
     }
 
     public void setOtherHome(Player user, String homeName, String owner) {
-        this.homeList.adminAddHome(user, owner, homeName);
+        this.homeList.adminAddHome(user, owner, homeName, plugin.getLogger());
     }
 
     public void deleteHome(Player player, String homeName) {
-        this.homeList.deleteHome(player, homeName);
+        this.homeList.deleteHome(player, homeName, plugin.getLogger());
     }
 
     public void deleteOtherHome(CommandSender sender, String owner, String name) {
-        this.homeList.deleteHome(owner, name, sender);
+        this.homeList.deleteHome(owner, name, sender, plugin.getLogger());
     }
 
     public void goToUnknownTarget(Player player, String target) {
@@ -519,7 +519,7 @@ public class HomeCommand implements CommandExecutor {
     
     public void reloadSettings(CommandSender user) {
         user.sendMessage("[uHome] Reloading config.");
-        HomeConfig.initialize(plugin.config, plugin.getDataFolder());
+        HomeConfig.initialize(plugin.config, plugin.getDataFolder(), plugin.getLogger());
     }
 
     public void showHelp(Player player) {

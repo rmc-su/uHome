@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.logging.Level;
 
 import uk.co.ks07.uhome.griefcraft.Updater;
 import uk.co.ks07.uhome.locale.LocaleManager;
@@ -25,8 +26,7 @@ public class uHome extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		ConnectionManager.closeConnection();
-		HomeLogger.info(name + " " + version + " disabled");
+		ConnectionManager.closeConnection(this.getLogger());
 	}
 
 	@Override
@@ -35,21 +35,23 @@ public class uHome extends JavaPlugin {
 		this.name = this.getDescription().getName();
 		this.version = this.getDescription().getVersion();
                 this.config = this.getConfig();
+
+                this.getLogger().setLevel(Level.INFO);
                 
                 try {
                     this.config.options().copyDefaults(true);
                     this.saveConfig();
-                    HomeConfig.initialize(config, getDataFolder());
+                    HomeConfig.initialize(config, getDataFolder(), this.getLogger());
                 } catch (Exception ex) {
-                    HomeLogger.severe("Could not load config!", ex);
+                    this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
                 }
 
 		libCheck();
 		boolean needImport = convertOldDB(getDataFolder());
 		if(!sqlCheck()) { return; }
 		
-		homeList = new HomeList(getServer(), needImport);
-		LocaleManager.init();
+		homeList = new HomeList(getServer(), needImport, this.getLogger());
+		LocaleManager.init(this.getLogger());
 		HomeHelp.initialize(this);
 		
 //		playerListener = new UHPlayerListener(homeList, this);
@@ -85,8 +87,6 @@ public class uHome extends JavaPlugin {
 //			// We don't need this if the beds dont sethome
 //			pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
 //		}
-
-		HomeLogger.info(name + " " + version + " enabled");
 	}
 
 
@@ -97,6 +97,7 @@ public class uHome extends JavaPlugin {
 				updater.check();
 				updater.update();
 			} catch (Exception e) {
+                            this.getLogger().log(Level.WARNING, "Failed to update libs.");
 			}
 		}
 	}
@@ -121,9 +122,9 @@ public class uHome extends JavaPlugin {
 	}
 
 	private boolean sqlCheck() {
-		Connection conn = ConnectionManager.initialize();
+		Connection conn = ConnectionManager.initialize(this.getLogger());
 		if (conn == null) {
-			HomeLogger.severe("Could not establish SQL connection. Disabling uHome");
+                        this.getLogger().log(Level.SEVERE, "Could not establish SQL connection.");
 			pm.disablePlugin(this);
 			return false;
 		} 
@@ -140,7 +141,7 @@ public class uHome extends JavaPlugin {
 		try {
 			newDatabase.createNewFile();
 		} catch (IOException ex) {
-			HomeLogger.severe("Could not create new database file", ex);
+                    this.getLogger().log(Level.SEVERE, "Could not create new database file", ex);
 		}
 	}
 

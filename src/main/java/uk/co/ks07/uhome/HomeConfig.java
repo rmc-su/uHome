@@ -2,6 +2,8 @@ package uk.co.ks07.uhome;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,7 +45,7 @@ public class HomeConfig {
         public static HashMap<String, Integer> limits;
         public static int defaultLimit;
 
-        public static void initialize(FileConfiguration config, File pluginDir) {
+        public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
             try {
                 dataDir = pluginDir;
                 if (!dataDir.exists()) {
@@ -106,7 +108,7 @@ public class HomeConfig {
                 warmUps.put("c", warmups.getInt("warmupC", 10));
                 defaultWarmUp = warmups.getInt("default", 0);
             } catch (Exception ex) {
-                HomeLogger.severe("Unable to load config", ex);
+                log.log(Level.SEVERE, "Unable to load config", ex);
             }
         }
 }

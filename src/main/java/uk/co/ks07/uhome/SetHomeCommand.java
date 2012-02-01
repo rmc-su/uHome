@@ -31,11 +31,11 @@ public class SetHomeCommand implements CommandExecutor {
 				}
 
                                 if (args.length == 1) {
-                                        homeList.addHome(player, plugin, args[0]);
+                                        homeList.addHome(player, plugin, args[0], plugin.getLogger());
                                         return true;
                                 }
 
-                                homeList.addHome(player, plugin, uHome.DEFAULT_HOME);
+                                homeList.addHome(player, plugin, uHome.DEFAULT_HOME, plugin.getLogger());
 				return true;
 			}
 			

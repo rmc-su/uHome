@@ -4,25 +4,26 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 
 import uk.co.ks07.uhome.HomeConfig;
-import uk.co.ks07.uhome.HomeLogger;
 
 public class LocaleManager {
 	private static final String LOCALE_BUNDLE = "uk.co.ks07.uhome.locale.uhome.uhome";
 	private static ResourceBundle locResBundle = null;
 
-	public static void init() {
+	public static void init(Logger log) {
 		String locale = HomeConfig.locale.toLowerCase();
 		try {
 			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
-			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
+			log.log(Level.INFO, "Using localization: {0} ({1})", new Object[]{locResBundle.getString("locale.name"), locale});
 		} catch (MissingResourceException e) {
 			// Failed to load requested locale file so fallback to en_us
 			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
-			HomeLogger.warning("Failed to find locale " + locale + ". Falling back to using English (en_us).");
+			log.log(Level.WARNING, "Failed to find locale {0}. Falling back to using English (en_us).", locale);
 		}
 	}
 

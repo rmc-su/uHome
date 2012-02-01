@@ -72,7 +72,7 @@ public class UHomeListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
         if (HomeConfig.bedsCanSethome != 0) {
-            homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME);
+            homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME, plugin.getLogger());
         }
     }
 
@@ -84,7 +84,7 @@ public class UHomeListener implements Listener {
 
         if (HomeConfig.bedsDuringDay && event.getClickedBlock().getType() == Material.BED_BLOCK) {
             if (HomeConfig.bedsCanSethome != 0) {
-                homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME);
+                homeList.addHome(event.getPlayer(), plugin, uHome.DEFAULT_HOME, plugin.getLogger());
             }
         }
     }

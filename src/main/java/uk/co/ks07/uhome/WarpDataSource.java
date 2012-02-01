@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -32,42 +34,42 @@ public class WarpDataSource {
             + "UNIQUE (`owner`,`name`)"
             + ");";
 
-    public static void initialize(boolean needImport, Server server) {
+    public static void initialize(boolean needImport, Server server, Logger log) {
         WarpDataSource.server = server;
 
-        TableStatus status = tableExists();
+        TableStatus status = tableExists(log);
     	if (status == TableStatus.NONE_EXIST) {
             // No tables exist, so create them.
-            createTable();
+            createTable(log);
             // Will only be true if using SQLite, so the table wouldn't exist (new file).
             if (needImport) {
-                importMyHome();
+                importMyHome(log);
             }
     	} else if (status == TableStatus.OLD_ONLY) {
             // Need to update the schema.
-            HomeLogger.info("Updating database to new format.");
+            log.info("Updating database to new format.");
             // Updates MyHome table to current format, including rename. MySQL only.
-            boolean tableChanged = dbTblCheck();
+            boolean tableChanged = dbTblCheck(log);
             // Update <v1.3a format to patched format. MySQL only.
             if (!tableChanged) {
-                patchMySQLTable();
+                patchMySQLTable(log);
             }
             // SQLite only, copy data into renamed new table. Not needed for MySQL.
-            importOldTable();
+            importOldTable(log);
         } else {
             // Tables are fine.
-            HomeLogger.info("Database is up-to-date.");
+            log.info("Database is up-to-date.");
         }
     }
 
-    private static void patchMySQLTable() {
+    private static void patchMySQLTable(Logger log) {
         if (HomeConfig.usemySQL) {
             String sqlOne = "ALTER TABLE `homeTable` DROP INDEX `owner`";
             String sqlTwo = "ALTER TABLE `homeTable` RENAME TO `"+TABLE_NAME+"`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
 
             Statement ps = null;
             try {
-                    Connection conn = ConnectionManager.getConnection();
+                    Connection conn = ConnectionManager.getConnection(log);
                     ps = conn.createStatement();
                     ps.executeUpdate(sqlOne);
                     conn.commit();
@@ -76,26 +78,26 @@ public class WarpDataSource {
                     ps.executeUpdate(sqlTwo);
                     conn.commit();
             } catch (SQLException ex) {
-                    HomeLogger.severe("Table Update Exception", ex);
+                    log.log(Level.SEVERE, "Table Update Exception", ex);
             } finally {
                     try {
                             if (ps != null) {
                                     ps.close();
                             }
                     } catch (SQLException ex) {
-                            HomeLogger.severe("Table Update Exception (on close)", ex);
+                            log.log(Level.SEVERE, "Table Update Exception (on close)", ex);
                     }
             }
         }
     }
 
-    private static void importOldTable() {
+    private static void importOldTable(Logger log) {
         if (!HomeConfig.usemySQL) {
             // Create the new table.
-            createTable();
+            createTable(log);
             Statement ps = null;
             try {
-                    Connection conn = ConnectionManager.getConnection();
+                    Connection conn = ConnectionManager.getConnection(log);
                     ps = conn.createStatement();
                     ps.executeUpdate("INSERT INTO "+TABLE_NAME+" SELECT * FROM homeTable");
                     conn.commit();
@@ -104,25 +106,25 @@ public class WarpDataSource {
                     ps.executeUpdate("DROP TABLE homeTable");
                     conn.commit();
             } catch (SQLException ex) {
-                    HomeLogger.severe("Home Import Exception", ex);
+                    log.log(Level.SEVERE, "Home Import Exception", ex);
             } finally {
                     try {
                             if (ps != null) {
                                     ps.close();
                             }
                     } catch (SQLException ex) {
-                            HomeLogger.severe("Home Import Exception (on close)", ex);
+                            log.log(Level.SEVERE, "Home Import Exception (on close)", ex);
                     }
             }
         }
     }
 
-    public static HashMap<String, HashMap<String, Home>> getMap() {
+    public static HashMap<String, HashMap<String, Home>> getMap(Logger log) {
     	HashMap<String, HashMap<String, Home>> ret = new HashMap<String, HashMap<String, Home>>();
     	Statement statement = null;
     	ResultSet set = null;
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
 
     		statement = conn.createStatement();
     		set = statement.executeQuery("SELECT * FROM "+TABLE_NAME);
@@ -147,9 +149,9 @@ public class WarpDataSource {
                             ret.put(owner, ownerWarps);
                         }
     		}
-    		HomeLogger.info(size + " homes loaded");
+    		log.log(Level.INFO, "{0} homes loaded", size);
     	} catch (SQLException ex) {
-    		HomeLogger.severe("Home Load Exception");
+    		log.severe("Home Load Exception");
     	} finally {
     		try {
     			if (statement != null) {
@@ -159,16 +161,16 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("Home Load Exception (on close)");
+    			log.severe("Home Load Exception (on close)");
     		}
     	}
     	return ret;
     }
 
-    private static TableStatus tableExists() {
+    private static TableStatus tableExists(Logger log) {
     	ResultSet rs = null;
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
     		DatabaseMetaData dbm = conn.getMetaData();
     		rs = dbm.getTables(null, null, TABLE_NAME, null);
     		if (!rs.next()) {
@@ -182,7 +184,7 @@ public class WarpDataSource {
     		
     		return TableStatus.UP_TO_DATE;
     	} catch (SQLException ex) {
-    		HomeLogger.severe("Table Check Exception", ex);
+    		log.log(Level.SEVERE, "Table Check Exception", ex);
     		return TableStatus.NONE_EXIST;
     	} finally {
     		try {
@@ -190,18 +192,18 @@ public class WarpDataSource {
     				rs.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("Table Check SQL Exception (on closing)");
+    			log.severe("Table Check SQL Exception (on closing)");
     		}
     	}
     }
 
 
 
-    private static void createTable() {
+    private static void createTable(Logger log) {
     	Statement st = null;
     	try {
-    		HomeLogger.info("Creating Database...");
-    		Connection conn = ConnectionManager.getConnection();
+    		log.info("Creating Database...");
+    		Connection conn = ConnectionManager.getConnection(log);
     		st = conn.createStatement();
     		st.executeUpdate(HOME_TABLE);
     		conn.commit();
@@ -209,7 +211,7 @@ public class WarpDataSource {
     		if(HomeConfig.usemySQL){ 
     			// We need to set auto increment on SQL.
     			String sql = "ALTER TABLE `" + TABLE_NAME + "` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
-    			HomeLogger.info("Modifying database for MySQL support");
+    			log.info("Modifying database for MySQL support");
     			st = conn.createStatement();
     			st.executeUpdate(sql);
     			conn.commit();
@@ -217,10 +219,10 @@ public class WarpDataSource {
     			// Check for old uhomes.db and import to mysql
     			File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     			if (!sqlitefile.exists()) {
-    				HomeLogger.info("Could not find old " + sqlitedb);
+    				log.info("Could not find old " + sqlitedb);
     				return;
     			} else {
-    				HomeLogger.info("Trying to import homes from uhomes.db");
+    				log.info("Trying to import homes from uhomes.db");
     				Class.forName("org.sqlite.JDBC");
     				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
     				sqliteconn.setAutoCommit(false);
@@ -240,12 +242,12 @@ public class WarpDataSource {
     					int yaw = slset.getInt("yaw");
     					int pitch = slset.getInt("pitch");
     					Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
-    					addWarp(warp);
+    					addWarp(warp, log);
     				}
-    				HomeLogger.info("Imported " + size + " homes from " + sqlitedb);
-    				HomeLogger.info("Renaming " + sqlitedb + " to " +sqlitedb + ".old");
+    				log.info("Imported " + size + " homes from " + sqlitedb);
+    				log.info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
     				if (!sqlitefile.renameTo(new File(HomeConfig.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
-    					HomeLogger.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
+    					log.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
     				}
 
     				if (slstatement != null) {
@@ -261,24 +263,24 @@ public class WarpDataSource {
     			}
     		}
     	} catch (SQLException e) {
-    		HomeLogger.severe("Create Table Exception", e);
+    		log.log(Level.SEVERE, "Create Table Exception", e);
     	} catch (ClassNotFoundException e) {
-    		HomeLogger.severe("You need the SQLite library.", e);
+    		log.log(Level.SEVERE, "You need the SQLite library.", e);
     	} finally {
     		try {
     			if (st != null) {
     				st.close();
     			}
     		} catch (SQLException e) {
-    			HomeLogger.severe("Could not create the table (on close)");
+    			log.severe("Could not create the table (on close)");
     		}
     	}
     }
 
-    public static void addWarp(Home warp) {
+    public static void addWarp(Home warp, Logger log) {
     	PreparedStatement ps = null;
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
 
     		ps = conn.prepareStatement("INSERT INTO "+TABLE_NAME+" (id, name, owner, world, x, y, z, yaw, pitch) VALUES (?,?,?,?,?,?,?,?,?)");
     		ps.setInt(1, warp.index);
@@ -293,7 +295,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("Home Insert Exception", ex);
+    		log.log(Level.SEVERE, "Home Insert Exception", ex);
 
                 Player owner = server.getPlayer(warp.owner);
                 if (owner != null) {
@@ -305,23 +307,23 @@ public class WarpDataSource {
     				ps.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("Home Insert Exception (on close)", ex);
+    			log.log(Level.SEVERE, "Home Insert Exception (on close)", ex);
     		}
     	}
     }
 
-    public static void deleteWarp(Home warp) {
+    public static void deleteWarp(Home warp, Logger log) {
     	PreparedStatement ps = null;
     	ResultSet set = null;
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
 
     		ps = conn.prepareStatement("DELETE FROM "+TABLE_NAME+" WHERE id = ?");
     		ps.setInt(1, warp.index);
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("Home Delete Exception", ex);
+    		log.log(Level.SEVERE, "Home Delete Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -331,17 +333,17 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("Home Delete Exception (on close)", ex);
+    			log.log(Level.SEVERE, "Home Delete Exception (on close)", ex);
     		}
     	}
     }
 
-    public static void moveWarp(Home warp) {
+    public static void moveWarp(Home warp, Logger log) {
     	PreparedStatement ps = null;
     	ResultSet set = null;
 
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
     		ps = conn.prepareStatement("UPDATE "+TABLE_NAME+" SET x = ?, y = ?, z = ?, world = ?, yaw = ?, pitch = ? WHERE id = ?");
     		ps.setDouble(1, warp.x);
     		ps.setDouble(2, warp.y);
@@ -353,7 +355,7 @@ public class WarpDataSource {
     		ps.executeUpdate();
     		conn.commit();
     	} catch (SQLException ex) {
-    		HomeLogger.severe("Home Move Exception", ex);
+    		log.log(Level.SEVERE, "Home Move Exception", ex);
     	} finally {
     		try {
     			if (ps != null) {
@@ -363,32 +365,32 @@ public class WarpDataSource {
     				set.close();
     			}
     		} catch (SQLException ex) {
-    			HomeLogger.severe("Home Move Exception (on close)", ex);
+    			log.log(Level.SEVERE, "Home Move Exception (on close)", ex);
     		}
     	}
     }
 
-    public static boolean dbTblCheck() {
+    public static boolean dbTblCheck(Logger log) {
         // SQLite does not support field renaming or deletion, so we can't alter the table this way.
         if (HomeConfig.usemySQL) {
             String test = "SELECT `owner` FROM `homeTable`";
             String sql = "ALTER TABLE `homeTable` RENAME TO `"+TABLE_NAME+"`, CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', DROP COLUMN `publicAll`, DROP COLUMN `permissions`, DROP COLUMN `welcomeMessage`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
-            return updateDB(test, sql);
+            return updateDB(test, sql, log);
         }
         // No changes.
         return false;
     }
 
-    private static void importMyHome() {
+    private static void importMyHome(Logger log) {
     	try {
     		if(!HomeConfig.usemySQL){
     			// Check for old homes.db and import to new db. Assume home name as 'home'
     			File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + mhsqlitedb);
     			if (!sqlitefile.exists()) {
-    				HomeLogger.info("Could not find " + mhsqlitedb);
+    				log.info("Could not find " + mhsqlitedb);
     				return;
     			} else {
-    				HomeLogger.info("Trying to import homes from homes.db.old");
+    				log.info("Trying to import homes from homes.db.old");
     				Class.forName("org.sqlite.JDBC");
     				Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + mhsqlitedb);
     				sqliteconn.setAutoCommit(false);
@@ -407,9 +409,9 @@ public class WarpDataSource {
     					int yaw = slset.getInt("yaw");
     					int pitch = slset.getInt("pitch");
     					Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch);
-    					addWarp(warp);
+    					addWarp(warp, log);
     				}
-    				HomeLogger.info("Imported " + size + " homes from " + mhsqlitedb);
+    				log.info("Imported " + size + " homes from " + mhsqlitedb);
 
     				if (slstatement != null) {
     					slstatement.close();
@@ -424,36 +426,36 @@ public class WarpDataSource {
     			}
     		}
     	} catch (SQLException e) {
-    		HomeLogger.severe("MyHome Import Exception", e);
+    		log.log(Level.SEVERE, "MyHome Import Exception", e);
     	} catch (ClassNotFoundException e) {
-    		HomeLogger.severe("You need the SQLite library.", e);
+    		log.log(Level.SEVERE, "You need the SQLite library.", e);
     	}
     }
 
-    public static boolean updateDB(String test, String sql) {
+    public static boolean updateDB(String test, String sql, Logger log) {
     	// Use same sql for both mysql/sqlite
-    	return updateDB(test, sql, sql);
+    	return updateDB(test, sql, sql, log);
     }
 
-    public static boolean updateDB(String test, String sqlite, String mysql) {
+    public static boolean updateDB(String test, String sqlite, String mysql, Logger log) {
     	// Allowing for differences in the SQL statements for mysql/sqlite.
     	try {
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
     		Statement statement = conn.createStatement();
     		statement.executeQuery(test);
     		statement.close();
                 // No changes made, return false.
-                HomeLogger.info("DB test passed, no changes made.");
+                log.info("DB test passed, no changes made.");
                 return false;
     	} catch(SQLException ex) {
-    		HomeLogger.info("Backing up database for update.");
+    		log.info("Backing up database for update.");
     		// Failed the test so we need to execute the updates
     		try {
-                        Connection conn = ConnectionManager.getConnection();
+                        Connection conn = ConnectionManager.getConnection(log);
                         Statement bkpStatement = conn.createStatement();
                         bkpStatement.executeUpdate("DROP TABLE IF EXISTS "+TABLE_NAME+"Backup");
                         bkpStatement.close();
-                        HomeLogger.info("Updating database.");
+                        log.info("Updating database.");
                         bkpStatement = conn.createStatement();
                         bkpStatement.executeUpdate("CREATE TABLE "+TABLE_NAME+"Backup SELECT * FROM "+TABLE_NAME);
                         bkpStatement.close();
@@ -472,24 +474,24 @@ public class WarpDataSource {
     			conn.commit();
     			sqlst.close();
                         // Table modified, return true.
-                        HomeLogger.info("DB was updated.");
+                        log.info("DB was updated.");
                         return true;
     		} catch (SQLException exc) {
-    			HomeLogger.severe("Failed to update the database to the new version - ", exc);
+    			log.log(Level.SEVERE, "Failed to update the database to the new version - ", exc);
     			ex.printStackTrace();
                         return false;
     		}	
     	}
     }
 
-    public static void updateFieldType(String field, String type) {
+    public static void updateFieldType(String field, String type, Logger log) {
     	try {
     		// SQLite uses dynamic field typing so we dont need to process these.  
     		if (!HomeConfig.usemySQL) return;
 
-    		HomeLogger.info("Updating database");
+    		log.info("Updating database");
 
-    		Connection conn = ConnectionManager.getConnection();
+    		Connection conn = ConnectionManager.getConnection(log);
     		DatabaseMetaData meta = conn.getMetaData();
 
     		ResultSet colRS = null;
@@ -509,7 +511,7 @@ public class WarpDataSource {
     		}
     		colRS.close();
     	} catch(SQLException ex) {
-    		HomeLogger.severe("Failed to update the database to the new version - ", ex);
+    		log.log(Level.SEVERE, "Failed to update the database to the new version - ", ex);
     		ex.printStackTrace();
     	}
     }
