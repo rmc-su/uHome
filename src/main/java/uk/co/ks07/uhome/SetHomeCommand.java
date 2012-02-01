@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetHomeCommand implements CommandExecutor {
+
     private uHome plugin;
     private HomeList homeList;
 
@@ -16,30 +17,30 @@ public class SetHomeCommand implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
 
-                        // Workaround for ticket 8.
-                        if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
-                            return true;
-                        }
-                        
-			if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
-				if(HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
-					player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
-					return true;
-				}
+            // Workaround for ticket 8.
+            if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
+                return true;
+            }
 
-                                if (args.length == 1) {
-                                        homeList.addHome(player, plugin, args[0], plugin.getLogger());
-                                        return true;
-                                }
+            if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
+                if (HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
+                    player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
+                    return true;
+                }
 
-                                homeList.addHome(player, plugin, uHome.DEFAULT_HOME, plugin.getLogger());
-				return true;
-			}
-			
-		}
-		return false;
-	}
+                if (args.length == 1) {
+                    homeList.addHome(player, plugin, args[0], plugin.getLogger());
+                    return true;
+                }
+
+                homeList.addHome(player, plugin, uHome.DEFAULT_HOME, plugin.getLogger());
+                return true;
+            }
+
+        }
+        return false;
+    }
 }

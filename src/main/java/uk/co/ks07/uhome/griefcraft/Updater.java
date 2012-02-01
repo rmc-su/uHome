@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.co.ks07.uhome.griefcraft;
 
 import java.io.File;
@@ -32,125 +31,121 @@ import uk.co.ks07.uhome.HomeConfig;
 
 public class Updater {
 
-	private static final Logger logger = Logger.getLogger("Minecraft");
+    private static final Logger logger = Logger.getLogger("Minecraft");
+    private final static String UPDATE_SITE = "http://www.playminecraft.net/MyHome/";
+    private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
 
-	private final static String UPDATE_SITE = "http://www.playminecraft.net/MyHome/";
+    public Updater() {
+    }
 
-	private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
-
-	public Updater() {
-	}
-
-	public void check() {
-		ArrayList<String> paths = new ArrayList<String>();
-		if(HomeConfig.sqliteLib) {
-			paths.add("lib/sqlite.jar");
-			paths.add("lib/" + getOSSpecificFileName());
-		}
-		if(HomeConfig.mysqlLib) 
-			paths.add("lib/mysql-connector-java-bin.jar");
-		
-		
-		for (String path : paths) {
-			File file = new File(path);
-
-			if (file != null && !file.exists() && !file.isDirectory()) {
-				UpdaterFile updaterFile = new UpdaterFile(UPDATE_SITE + path);
-				updaterFile.setLocalLocation(path);
-				needsUpdating.add(updaterFile);
-			}
-		}
-	}
+    public void check() {
+        ArrayList<String> paths = new ArrayList<String>();
+        if (HomeConfig.sqliteLib) {
+            paths.add("lib/sqlite.jar");
+            paths.add("lib/" + getOSSpecificFileName());
+        }
+        if (HomeConfig.mysqlLib) {
+            paths.add("lib/mysql-connector-java-bin.jar");
+        }
 
 
-	/**
-	 * Get the OS specific sqlite file name (arch specific, too, for linux)
-	 * 
-	 * @return
-	 */
-	public String getOSSpecificFileName() {
-		String osname = System.getProperty("os.name").toLowerCase();
-		String arch = System.getProperty("os.arch");
+        for (String path : paths) {
+            File file = new File(path);
 
-		if (osname.contains("windows")) {
-			osname = "win";
-			arch = "x86";
-		} else if (osname.contains("mac")) {
-			osname = "mac";
-			arch = "universal";
-		} else if (osname.contains("nix")) {
-			osname = "linux";
-		} else if (osname.equals("sunos")) {
-			osname = "linux";
-		}
+            if (file != null && !file.exists() && !file.isDirectory()) {
+                UpdaterFile updaterFile = new UpdaterFile(UPDATE_SITE + path);
+                updaterFile.setLocalLocation(path);
+                needsUpdating.add(updaterFile);
+            }
+        }
+    }
 
-		if (arch.startsWith("i") && arch.endsWith("86")) {
-			arch = "x86";
-		}
+    /**
+     * Get the OS specific sqlite file name (arch specific, too, for linux)
+     *
+     * @return
+     */
+    public String getOSSpecificFileName() {
+        String osname = System.getProperty("os.name").toLowerCase();
+        String arch = System.getProperty("os.arch");
 
-		return osname + "-" + arch + ".lib";
-	}
+        if (osname.contains("windows")) {
+            osname = "win";
+            arch = "x86";
+        } else if (osname.contains("mac")) {
+            osname = "mac";
+            arch = "universal";
+        } else if (osname.contains("nix")) {
+            osname = "linux";
+        } else if (osname.equals("sunos")) {
+            osname = "linux";
+        }
 
-	/**
-	 * Ensure we have all of the required files (if not, download them)
-	 */
-	public void update() throws Exception {
-		if (needsUpdating.isEmpty()) {
-			return;
-		}
+        if (arch.startsWith("i") && arch.endsWith("86")) {
+            arch = "x86";
+        }
 
-		File folder = new File("lib");
+        return osname + "-" + arch + ".lib";
+    }
 
-		if (folder.exists() && !folder.isDirectory()) {
-			throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
-		} else if (!folder.exists()) {
-			logger.info("Creating folder : lib");
-			folder.mkdir();
-		}
+    /**
+     * Ensure we have all of the required files (if not, download them)
+     */
+    public void update() throws Exception {
+        if (needsUpdating.isEmpty()) {
+            return;
+        }
 
-		logger.info("Need to download " + needsUpdating.size() + " object(s)");
+        File folder = new File("lib");
 
-		Iterator<UpdaterFile> iterator = needsUpdating.iterator();
-		
-		while(iterator.hasNext()) {
-			UpdaterFile item = iterator.next();
-			
-			logger.info(" - Downloading file : " + item.getRemoteLocation());
+        if (folder.exists() && !folder.isDirectory()) {
+            throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
+        } else if (!folder.exists()) {
+            logger.info("Creating folder : lib");
+            folder.mkdir();
+        }
 
-			URL url = new URL(item.getRemoteLocation());
-			File file = new File(item.getLocalLocation());
+        logger.info("Need to download " + needsUpdating.size() + " object(s)");
 
-			if (file.exists()) {
-				file.delete();
-			}
+        Iterator<UpdaterFile> iterator = needsUpdating.iterator();
 
-			InputStream inputStream = url.openStream();
-			OutputStream outputStream = new FileOutputStream(file);
+        while (iterator.hasNext()) {
+            UpdaterFile item = iterator.next();
 
-			saveTo(inputStream, outputStream);
+            logger.info(" - Downloading file : " + item.getRemoteLocation());
 
-			inputStream.close();
-			outputStream.close();
+            URL url = new URL(item.getRemoteLocation());
+            File file = new File(item.getLocalLocation());
 
-			logger.info("  + Download complete");
-			iterator.remove();
-		}
-	}
+            if (file.exists()) {
+                file.delete();
+            }
 
+            InputStream inputStream = url.openStream();
+            OutputStream outputStream = new FileOutputStream(file);
 
-	/**
-	 * Write an input stream to an output stream
-	 * 
-	 * @param inputStream
-	 * @param outputStream
-	 */
-	private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
-		byte[] buffer = new byte[1024];
-		int len = 0;
+            saveTo(inputStream, outputStream);
 
-		while ((len = inputStream.read(buffer)) > 0) {
-			outputStream.write(buffer, 0, len);
-		}
-	}
+            inputStream.close();
+            outputStream.close();
 
+            logger.info("  + Download complete");
+            iterator.remove();
+        }
+    }
+
+    /**
+     * Write an input stream to an output stream
+     *
+     * @param inputStream
+     * @param outputStream
+     */
+    private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int len = 0;
+
+        while ((len = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, len);
+        }
+    }
 }

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class HomeCommand implements CommandExecutor {
+
     private uHome plugin;
     private HomeList homeList;
 
@@ -21,7 +22,7 @@ public class HomeCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            
+
             // Workaround for DBO ticket 8.
             if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
                 return true;
@@ -52,7 +53,7 @@ public class HomeCommand implements CommandExecutor {
                         this.showHomeLimit(player);
                     } else if (HomeConfig.enableInvite) {
                         // /home invites|requests
-                        if ("invites".equalsIgnoreCase(args[0])  && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                        if ("invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                             this.showInviteList(player);
                         } else if ("requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                             this.showRequestList(player);
@@ -414,7 +415,6 @@ public class HomeCommand implements CommandExecutor {
 //                }
 //		return false;
 //	}
-
     public void setHome(Player user, String name) {
         this.homeList.addHome(user, plugin, name, plugin.getLogger());
     }
@@ -446,7 +446,7 @@ public class HomeCommand implements CommandExecutor {
             this.homeList.sendPlayerHome(user, this.plugin);
         } else {
             user.sendMessage(ChatColor.RED + "You have no home :(");
-            if(HomeConfig.bedsCanSethome == 2) {
+            if (HomeConfig.bedsCanSethome == 2) {
                 user.sendMessage("You need to sleep in a bed to set your default home");
             } else {
                 user.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
@@ -459,7 +459,7 @@ public class HomeCommand implements CommandExecutor {
             if (this.homeList.playerCanWarp(user, targetOwner, targetHome)) {
                 this.homeList.warpTo(targetOwner, targetHome, user, this.plugin);
             } else {
-                user.sendMessage("You aren't invited to "+targetOwner+"'s home '"+targetHome+"'!");
+                user.sendMessage("You aren't invited to " + targetOwner + "'s home '" + targetHome + "'!");
             }
         } else {
             user.sendMessage("The home " + targetHome + " doesn't exist!");
@@ -516,7 +516,7 @@ public class HomeCommand implements CommandExecutor {
             sender.sendMessage("Player not found.");
         }
     }
-    
+
     public void reloadSettings(CommandSender user) {
         user.sendMessage("[uHome] Reloading config.");
         HomeConfig.initialize(plugin.config, plugin.getDataFolder(), plugin.getLogger());

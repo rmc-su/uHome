@@ -4,8 +4,8 @@ package uk.co.ks07.uhome.timers;
  * Simple class for Encapsulates details of a player cooldown task.
  */
 class PlayerTaskDetails {
-    private final int taskIndex;
 
+    private final int taskIndex;
     private final long finishTime;
 
     /**

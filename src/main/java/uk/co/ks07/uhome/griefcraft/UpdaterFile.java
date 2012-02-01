@@ -14,56 +14,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.co.ks07.uhome.griefcraft;
 
 public class UpdaterFile {
 
-	/**
-	 * The remote url location
-	 */
-	private String remoteLocation;
+    /**
+     * The remote url location
+     */
+    private String remoteLocation;
+    /**
+     * The local url location
+     */
+    private String localLocation;
 
-	/**
-	 * The local url location
-	 */
-	private String localLocation;
+    public UpdaterFile(String location) {
+        remoteLocation = location;
+        localLocation = location;
+    }
 
-	public UpdaterFile(String location) {
-		remoteLocation = location;
-		localLocation = location;
-	}
+    /**
+     * @return the local file location
+     */
+    public String getLocalLocation() {
+        return localLocation;
+    }
 
-	/**
-	 * @return the local file location
-	 */
-	public String getLocalLocation() {
-		return localLocation;
-	}
+    /**
+     * @return the remote url location
+     */
+    public String getRemoteLocation() {
+        return remoteLocation;
+    }
 
-	/**
-	 * @return the remote url location
-	 */
-	public String getRemoteLocation() {
-		return remoteLocation;
-	}
+    /**
+     * Set the local file location
+     *
+     * @param localLocation
+     */
+    public void setLocalLocation(String localLocation) {
+        this.localLocation = localLocation;
+    }
 
-	/**
-	 * Set the local file location
-	 * 
-	 * @param localLocation
-	 */
-	public void setLocalLocation(String localLocation) {
-		this.localLocation = localLocation;
-	}
-
-	/**
-	 * Set the remote url location
-	 * 
-	 * @param remoteLocation
-	 */
-	public void setRemoteLocation(String remoteLocation) {
-		this.remoteLocation = remoteLocation;
-	}
-
+    /**
+     * Set the remote url location
+     *
+     * @param remoteLocation
+     */
+    public void setRemoteLocation(String remoteLocation) {
+        this.remoteLocation = remoteLocation;
+    }
 }

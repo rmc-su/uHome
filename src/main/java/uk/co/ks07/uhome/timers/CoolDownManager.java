@@ -12,9 +12,9 @@ import org.bukkit.plugin.Plugin;
  * Manages cooldown for a command. Subclasses determine specific settings that
  * determine cooldown timings and applicability.
  */
-public abstract class CoolDownManager{
-    private static final int SERVER_TICKS_PER_SEC = 20;
+public abstract class CoolDownManager {
 
+    private static final int SERVER_TICKS_PER_SEC = 20;
     private final HashMap<String, PlayerTaskDetails> players =
             new HashMap<String, PlayerTaskDetails>();
 
@@ -34,7 +34,7 @@ public abstract class CoolDownManager{
         }
         int timer = getTimer(player);
 
-        if(timer > 0) {
+        if (timer > 0) {
             if (players.containsKey(player.getName())) {
                 plugin.getServer().getScheduler().cancelTask(
                         players.get(player.getName()).getTaskIndex());
@@ -89,7 +89,7 @@ public abstract class CoolDownManager{
         if (taskDetails == null) {
             return 0;
         }
-        int secondsLeft =(int) TimeUnit.MILLISECONDS.toSeconds(
+        int secondsLeft = (int) TimeUnit.MILLISECONDS.toSeconds(
                 taskDetails.getFinishTime() - System.currentTimeMillis());
         return (secondsLeft > 0) ? secondsLeft : 0;
     }
@@ -128,7 +128,7 @@ public abstract class CoolDownManager{
      * @return  Currently configured cooldown time.
      */
     protected abstract int getDefaultCoolDownSetting();
-    
+
     /**
      * Removes the player with the specified name from the cooldown list.
      * 
@@ -155,7 +155,8 @@ public abstract class CoolDownManager{
      * @param player
      *            Player for whom the cooldown has expired.
      */
-    protected void onCoolDownExpiry(Player player) {}
+    protected void onCoolDownExpiry(Player player) {
+    }
 
     /**
      * Task used for scheduling, invoked when cooldown has expired.
@@ -163,7 +164,6 @@ public abstract class CoolDownManager{
     private static class CoolTask implements Runnable {
 
         private final Player player;
-
         private final CoolDownManager coolDownManager;
 
         public CoolTask(Player player, CoolDownManager coolDownManager) {

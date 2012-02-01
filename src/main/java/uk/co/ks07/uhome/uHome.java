@@ -15,141 +15,141 @@ import org.bukkit.plugin.PluginManager;
 public class uHome extends JavaPlugin {
 //	private UHPlayerListener playerListener;
 //	private UHEntityListener entityListener;
-	private HomeList homeList;
-	public String name;
-	public String version;
-	private Updater updater;
-	public PluginManager pm;
-        public FileConfiguration config;
 
-        public static final String DEFAULT_HOME = "home";
+    private HomeList homeList;
+    public String name;
+    public String version;
+    private Updater updater;
+    public PluginManager pm;
+    public FileConfiguration config;
+    public static final String DEFAULT_HOME = "home";
 
-	@Override
-	public void onDisable() {
-		ConnectionManager.closeConnection(this.getLogger());
-	}
+    @Override
+    public void onDisable() {
+        ConnectionManager.closeConnection(this.getLogger());
+    }
 
-	@Override
-	public void onEnable() {
-		this.pm = getServer().getPluginManager();
-		this.name = this.getDescription().getName();
-		this.version = this.getDescription().getVersion();
-                this.config = this.getConfig();
+    @Override
+    public void onEnable() {
+        this.pm = getServer().getPluginManager();
+        this.name = this.getDescription().getName();
+        this.version = this.getDescription().getVersion();
+        this.config = this.getConfig();
 
-                this.getLogger().setLevel(Level.INFO);
-                
-                try {
-                    this.config.options().copyDefaults(true);
-                    this.saveConfig();
-                    HomeConfig.initialize(config, getDataFolder(), this.getLogger());
-                } catch (Exception ex) {
-                    this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
-                }
+        this.getLogger().setLevel(Level.INFO);
 
-		libCheck();
-		boolean needImport = convertOldDB(getDataFolder());
-		if(!sqlCheck()) { return; }
-		
-		homeList = new HomeList(getServer(), needImport, this.getLogger());
-		LocaleManager.init(this.getLogger());
-		HomeHelp.initialize(this);
-		
-//		playerListener = new UHPlayerListener(homeList, this);
-//		entityListener = new UHEntityListener(this);
+        try {
+            this.config.options().copyDefaults(true);
+            this.saveConfig();
+            HomeConfig.initialize(config, getDataFolder(), this.getLogger());
+        } catch (Exception ex) {
+            this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
+        }
 
-                this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
-                this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
+        libCheck();
+        boolean needImport = convertOldDB(getDataFolder());
+        if (!sqlCheck()) {
+            return;
+        }
 
-                this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
+        homeList = new HomeList(getServer(), needImport, this.getLogger());
+        LocaleManager.init(this.getLogger());
+        HomeHelp.initialize(this);
 
-//		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+//        playerListener = new UHPlayerListener(homeList, this);
+//        entityListener = new UHEntityListener(this);
+
+        this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
+        this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
+
+        this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
+
+//        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 //
-//		if(HomeConfig.respawnToHome) {
-//			// Dont need this if we're not handling respawning.
-//			pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
-//		}
-//		if(HomeConfig.loadChunks) {
-//			// We dont need to register for teleporting if we dont want to load chunks.
-//			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-//		}
-//		if(HomeConfig.abortOnDamage != 0) {
-//			// We dont need this if we're not aborting warmups for combat.
-//			pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
-//		}
-//		if(HomeConfig.abortOnMove) {
-//			// We dont need this if we're not aborting if they move during warmup.
-//			pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
-//		}
-//		if(HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
-//			// We don't need this if the beds cannot be used during the day
-//			pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
-//		} else if(!HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
-//			// We don't need this if the beds dont sethome
-//			pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
-//		}
-	}
+//        if (HomeConfig.respawnToHome) {
+//            // Dont need this if we're not handling respawning.
+//            pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
+//        }
+//        if (HomeConfig.loadChunks) {
+//            // We dont need to register for teleporting if we dont want to load chunks.
+//            pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
+//        }
+//        if (HomeConfig.abortOnDamage != 0) {
+//            // We dont need this if we're not aborting warmups for combat.
+//            pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
+//        }
+//        if (HomeConfig.abortOnMove) {
+//            // We dont need this if we're not aborting if they move during warmup.
+//            pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
+//        }
+//        if (HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
+//            // We don't need this if the beds cannot be used during the day
+//            pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
+//        } else if (!HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
+//            // We don't need this if the beds dont sethome
+//            pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
+//        }
+    }
 
+    private void libCheck() {
+        if (HomeConfig.downloadLibs) {
+            updater = new Updater();
+            try {
+                updater.check();
+                updater.update();
+            } catch (Exception e) {
+                this.getLogger().log(Level.WARNING, "Failed to update libs.");
+            }
+        }
+    }
 
-	private void libCheck(){
-		if(HomeConfig.downloadLibs){ 
-			updater = new Updater();
-			try {
-				updater.check();
-				updater.update();
-			} catch (Exception e) {
-                            this.getLogger().log(Level.WARNING, "Failed to update libs.");
-			}
-		}
-	}
+    private boolean convertOldDB(File df) {
+        File oldDatabase = new File(df, "homes.db");
+        File newDatabase = new File(df, "uhomes.db");
+        if (!newDatabase.exists() && oldDatabase.exists()) {
+            // Create new database file.
+            updateFiles(newDatabase);
+            oldDatabase.renameTo(new File(df, "homes.db.old"));
 
-	private boolean convertOldDB(File df) {
-		File oldDatabase = new File(df, "homes.db");
-		File newDatabase = new File(df, "uhomes.db");
-		if (!newDatabase.exists() && oldDatabase.exists()) {
-                        // Create new database file.
-			updateFiles(newDatabase);
-			oldDatabase.renameTo(new File(df, "homes.db.old"));
+            // Return true if importing is required (sqlite only).
+            if (!HomeConfig.usemySQL) {
+                return true;
+            }
+        } else if (newDatabase.exists() && oldDatabase.exists()) {
+            // We no longer need this file since uhomes.db exists
+            oldDatabase.renameTo(new File(df, "homes.db.old"));
+        }
+        return false;
+    }
 
-                        // Return true if importing is required (sqlite only).
-                        if (!HomeConfig.usemySQL) {
-                            return true;
-                        }
-		} else if (newDatabase.exists() && oldDatabase.exists()) {
-			// We no longer need this file since uhomes.db exists
-			oldDatabase.renameTo(new File(df, "homes.db.old"));
-		}
-                return false;
-	}
+    private boolean sqlCheck() {
+        Connection conn = ConnectionManager.initialize(this.getLogger());
+        if (conn == null) {
+            this.getLogger().log(Level.SEVERE, "Could not establish SQL connection.");
+            pm.disablePlugin(this);
+            return false;
+        }
+        return true;
+    }
 
-	private boolean sqlCheck() {
-		Connection conn = ConnectionManager.initialize(this.getLogger());
-		if (conn == null) {
-                        this.getLogger().log(Level.SEVERE, "Could not establish SQL connection.");
-			pm.disablePlugin(this);
-			return false;
-		} 
-		return true;
-	}
-
-	private void updateFiles(File newDatabase) {
-		if (!getDataFolder().exists()) {
-			getDataFolder().mkdirs();
-		}
-		if (newDatabase.exists()) {
-			newDatabase.delete();
-		}
-		try {
-			newDatabase.createNewFile();
-		} catch (IOException ex) {
-                    this.getLogger().log(Level.SEVERE, "Could not create new database file", ex);
-		}
-	}
-
-	/**
-	 * File copier from xZise
-	 * @param fromFile
-	 * @param toFile
-	 */
+    private void updateFiles(File newDatabase) {
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
+        if (newDatabase.exists()) {
+            newDatabase.delete();
+        }
+        try {
+            newDatabase.createNewFile();
+        } catch (IOException ex) {
+            this.getLogger().log(Level.SEVERE, "Could not create new database file", ex);
+        }
+    }
+    /**
+     * File copier from xZise
+     * @param fromFile
+     * @param toFile
+     */
 //	private static void copyFile(File fromFile, File toFile) {
 //		FileInputStream from = null;
 //		FileOutputStream to = null;
@@ -178,5 +178,4 @@ public class uHome extends JavaPlugin {
 //			}
 //		}
 //	}
-
 }
