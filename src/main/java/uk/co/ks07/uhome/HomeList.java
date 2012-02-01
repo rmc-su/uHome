@@ -440,4 +440,11 @@ class MatchList {
         }
         return name;
     }
+
+    public static enum ExitStatus {
+        SUCCESS,
+        NOT_EXISTS,
+        NOT_PERMITTED,
+        UNKNOWN;
+    }
 }
