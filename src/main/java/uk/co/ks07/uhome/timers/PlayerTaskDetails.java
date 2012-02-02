@@ -1,7 +1,7 @@
 package uk.co.ks07.uhome.timers;
 
 /**
- * Simple class for Encapsulates details of a player cooldown task.
+ * Simple class to encapsulate details of a player cooldown task.
  */
 class PlayerTaskDetails {
 
