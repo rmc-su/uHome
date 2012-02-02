@@ -223,10 +223,8 @@ public class HomeList {
             Home warp = homeList.get(owner).get(name);
             homeList.get(owner).remove(name);
             WarpDataSource.deleteWarp(warp, log);
-//            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
             return ExitStatus.SUCCESS;
         } else {
-//            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
             return ExitStatus.NOT_EXISTS;
         }
     }
