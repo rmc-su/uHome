@@ -18,6 +18,7 @@ public class SuperPermsManager {
     public static final String adminWarp = "uhome.admin.warp";
     public static final String adminSet = "uhome.admin.set";
     public static final String adminList = "uhome.admin.list";
+    public static final String adminListInvites = "uhome.admin.listinvites";
     public static final String adminDelete = "uhome.admin.delete";
     public static final String adminInfo = "uhome.admin.info";
     public static final String adminReload = "uhome.admin.reload";

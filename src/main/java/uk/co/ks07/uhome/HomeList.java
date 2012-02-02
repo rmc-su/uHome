@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -34,11 +33,9 @@ public class HomeList {
         this.server = server;
     }
 
-    public void addHome(Player player, Plugin plugin, String name, Logger log) {
+    public ExitStatus addHome(Player player, Plugin plugin, String name, Logger log) {
         if (!(setHomeCoolDown.playerHasCooled(player))) {
-            player.sendMessage(ChatColor.RED + "You need to wait "
-                    + setHomeCoolDown.estimateTimeLeft(player) + " more seconds of the "
-                    + setHomeCoolDown.getTimer(player) + " second cooldown before you can edit your homes.");
+            return ExitStatus.NEED_COOLDOWN;
         } else {
             if (!homeList.containsKey(player.getName())) {
                 // Player has no warps.
@@ -47,53 +44,52 @@ public class HomeList {
                 warps.put(name, warp);
                 homeList.put(player.getName(), warps);
                 WarpDataSource.addWarp(warp, log);
-                player.sendMessage(ChatColor.AQUA + "Welcome to your first home!");
                 setHomeCoolDown.addPlayer(player, plugin);
+                return ExitStatus.SUCCESS_FIRST;
             } else if (!this.homeExists(player.getName(), name)) {
                 if (this.playerCanSet(player)) {
                     // Player has warps, but not with the given name.
                     Home warp = new Home(player, name);
                     homeList.get(player.getName()).put(name, warp);
                     WarpDataSource.addWarp(warp, log);
-                    player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
                     setHomeCoolDown.addPlayer(player, plugin);
+                    return ExitStatus.SUCCESS;
                 } else {
-                    // Player cannot set a new warp as they are at their warp limit.
-                    player.sendMessage(ChatColor.RED + "You have too many homes! You must delete one before you can set a new home!");
+                    return ExitStatus.AT_LIMIT;
                 }
             } else {
                 // Player has a warp with the given name.
                 Home warp = homeList.get(player.getName()).get(name);
                 warp.setLocation(player.getLocation());
                 WarpDataSource.moveWarp(warp, log);
-                player.sendMessage(ChatColor.AQUA + "Succesfully moved your home.");
                 setHomeCoolDown.addPlayer(player, plugin);
+                return ExitStatus.SUCCESS_MOVED;
             }
         }
     }
 
-    public void adminAddHome(Player player, String owner, String name, Logger log) {
+    public ExitStatus adminAddHome(Location location, String owner, String name, Logger log) {
         // Adds a home ignoring limits, ownership and cooldown.
         if (!homeList.containsKey(owner)) {
             // Player has no warps.
             HashMap<String, Home> warps = new HashMap<String, Home>();
-            Home warp = new Home(owner, player.getLocation(), name);
+            Home warp = new Home(owner, location, name);
             warps.put(name, warp);
             homeList.put(owner, warps);
             WarpDataSource.addWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Created first home for " + owner);
+            return ExitStatus.SUCCESS_FIRST;
         } else if (!this.homeExists(owner, name)) {
             // Player has warps, but not with the given name.
-            Home warp = new Home(owner, player.getLocation(), name);
+            Home warp = new Home(owner, location, name);
             homeList.get(owner).put(name, warp);
             WarpDataSource.addWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Created new home for " + owner);
+            return ExitStatus.SUCCESS;
         } else {
             // Player has a warp with the given name.
             Home warp = homeList.get(owner).get(name);
-            warp.setLocation(player.getLocation());
+            warp.setLocation(location);
             WarpDataSource.moveWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "Succesfully moved home for " + owner);
+            return ExitStatus.SUCCESS_MOVED;
         }
     }
 
@@ -140,41 +136,50 @@ public class HomeList {
         return this.homeList.get(owner).get(name).getLocation;
     }
 
-    public boolean playerHasDefaultHome(Player player) {
-        return this.homeExists(player.getName(), uHome.DEFAULT_HOME);
+    public boolean playerHasDefaultHome(String player) {
+        return this.homeExists(player, uHome.DEFAULT_HOME);
     }
 
-    public boolean playerHasHomes(Player player) {
-        return this.homeList.containsKey(player.getName());
+    public boolean playerHasHomes(String player) {
+        return this.homeList.containsKey(player) && this.getPlayerHomeCount(player) > 0;
     }
 
     public boolean playerCanWarp(Player player, String owner, String name) {
         return homeList.get(owner).get(name).playerCanWarp(player);
     }
 
-    public void invitePlayer(Player owner, String player, String name) {
-        homeList.get(owner.getName()).get(name).addInvitees(player);
-        owner.sendMessage("Invited " + player + " to your home " + name);
+    public boolean invitePlayer(String owner, String player, String name) {
+        homeList.get(owner).get(name).addInvitees(player);
+
         if (!inviteList.containsKey(player)) {
             inviteList.put(player, new HashSet<Home>());
         }
-        inviteList.get(player).add(homeList.get(owner.getName()).get(name));
-        owner.sendMessage("Invited " + player + " to your home " + name);
-        Player invitee = server.getPlayerExact(player);
-        if (invitee != null) {
-            invitee.sendMessage("You have been invited to " + owner.getName() + "'s home " + name);
+
+        if (!inviteList.get(player).contains(homeList.get(owner).get(name))) {
+            inviteList.get(player).add(homeList.get(owner).get(name));
+            Player invitee = server.getPlayerExact(player);
+            if (invitee != null) {
+                invitee.sendMessage("You have been invited to " + owner + "'s home " + name);
+            }
+
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public void uninvitePlayer(Player owner, String player, String name) {
-        homeList.get(owner.getName()).get(name).removeInvitee(player);
+    public boolean uninvitePlayer(String owner, String player, String name) {
+        homeList.get(owner).get(name).removeInvitee(player);
         if (inviteList.containsKey(player)) {
-            inviteList.get(player).remove(homeList.get(owner.getName()).get(name));
-        }
-        owner.sendMessage("Uninvited " + player + " from your home " + name);
-        Player invitee = server.getPlayerExact(player);
-        if (invitee != null) {
-            invitee.sendMessage("You have been uninvited from " + owner.getName() + "'s home " + name);
+            inviteList.get(player).remove(homeList.get(owner).get(name));
+            Player invitee = server.getPlayerExact(player);
+            if (invitee != null) {
+                invitee.sendMessage("You have been uninvited from " + owner + "'s home " + name);
+            }
+
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -213,44 +218,14 @@ public class HomeList {
         }
     }
 
-    public void deleteHome(Player player, Logger log) {
-        if (this.playerHasDefaultHome(player)) {
-            Home warp = homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
-            homeList.get(player.getName()).remove(uHome.DEFAULT_HOME);
-            WarpDataSource.deleteWarp(warp, log);
-            player.sendMessage(ChatColor.AQUA + "You have deleted your home");
-        } else {
-            player.sendMessage(ChatColor.RED + "You have no home to delete :(");
-        }
-    }
-
-    public void deleteHome(Player owner, String name, Logger log) {
-        if (this.homeExists(owner.getName(), name)) {
-            Home warp = homeList.get(owner.getName()).get(name);
-            homeList.get(owner.getName()).remove(name);
-            WarpDataSource.deleteWarp(warp, log);
-            owner.sendMessage(ChatColor.AQUA + "You have deleted your home '" + name + "'.");
-        } else {
-            owner.sendMessage(ChatColor.RED + "You don't have a home called '" + name + "'!");
-        }
-    }
-
-    public void deleteHome(String owner, String name, CommandSender sender, Logger log) {
+    public ExitStatus deleteHome(String owner, String name, Logger log) {
         if (this.homeExists(owner, name)) {
             Home warp = homeList.get(owner).get(name);
             homeList.get(owner).remove(name);
             WarpDataSource.deleteWarp(warp, log);
-            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
+            return ExitStatus.SUCCESS;
         } else {
-            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
-        }
-    }
-
-    public void deleteHome(String owner, String name, Logger log) {
-        if (this.homeExists(owner, name)) {
-            Home warp = homeList.get(owner).get(name);
-            homeList.get(owner).remove(name);
-            WarpDataSource.deleteWarp(warp, log);
+            return ExitStatus.NOT_EXISTS;
         }
     }
 
@@ -268,52 +243,6 @@ public class HomeList {
 
     public boolean hasInvitedToHomes(String player) {
         return (inviteList.containsKey(player) && inviteList.get(player).size() > 0);
-    }
-
-    public void list(Player player) {
-        String results = this.getPlayerList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You have no homes!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have the following homes:");
-            player.sendMessage(results);
-        }
-    }
-
-    public void listInvitedTo(Player player) {
-        String results = this.getInvitedToList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You have no invites!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
-            player.sendMessage(results);
-        }
-    }
-
-    public void listRequests(Player player) {
-        String results[] = this.getRequestList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You haven't invited anyone!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
-            for (String s : results) {
-                player.sendMessage(s);
-            }
-        }
-    }
-
-    public void listOther(CommandSender sender, String owner) {
-        String results = this.getPlayerList(owner.toLowerCase());
-
-        if (results == null) {
-            sender.sendMessage(ChatColor.RED + "That player has no homes.");
-        } else {
-            sender.sendMessage(ChatColor.AQUA + "That player has the following homes:");
-            sender.sendMessage(results);
-        }
     }
 
     public String getPlayerList(String owner) {
@@ -417,8 +346,19 @@ public class HomeList {
         return new MatchList(exactMatches, matches);
     }
 
-    public Home getHomeFor(Player player) {
-        return homeList.get(player.getName()).get(uHome.DEFAULT_HOME);
+    public Home getPlayerDefaultHome(String player) {
+        return homeList.get(player).get(uHome.DEFAULT_HOME);
+    }
+
+    public static enum ExitStatus {
+        SUCCESS,
+        SUCCESS_MOVED,
+        SUCCESS_FIRST,
+        NOT_EXISTS,
+        NOT_PERMITTED,
+        AT_LIMIT,
+        NEED_COOLDOWN,
+        UNKNOWN;
     }
 }
 

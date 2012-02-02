@@ -31,6 +31,7 @@ permissions:
       uhome.own.warp: true
       uhome.own.delete: true
       uhome.own.list: true
+      uhome.own.listinvites: true
       uhome.own.invite: true
       uhome.own.uninvite: true
   uhome.own.set:
@@ -55,6 +56,7 @@ permissions:
       uhome.admin.set: true
       uhome.admin.delete: true
       uhome.admin.list: true
+      uhome.admin.listinvites: true
       uhome.admin.reload: true
       uhome.admin.info: true
   uhome.admin.set:
@@ -65,6 +67,8 @@ permissions:
     description: Allows you to delete other's warps.
   uhome.admin.list:
     description: Allows you to list other's warps.
+  uhome.admin.listinvites:
+    description: Allows you to list other's sent and received invites.
   uhome.admin.reload:
     description: Allows you to reload uHome.
   uhome.admin.info:
