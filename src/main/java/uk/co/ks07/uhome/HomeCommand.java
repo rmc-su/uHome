@@ -561,7 +561,7 @@ public class HomeCommand implements CommandExecutor {
             sender.sendMessage(hList);
         }
     }
-
+    
     public void showInviteList(Player player) {
         String iList = this.homeList.getInvitedToList(player.getName());
 
@@ -570,6 +570,17 @@ public class HomeCommand implements CommandExecutor {
         } else {
             player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
             player.sendMessage(iList);
+        }
+    }
+
+    public void showInviteList(CommandSender sender, String player) {
+        String iList = this.homeList.getInvitedToList(player);
+
+        if (iList == null) {
+            sender.sendMessage(ChatColor.RED + "That player has no invites!");
+        } else {
+            sender.sendMessage(ChatColor.AQUA + "That player has invites to the following homes:");
+            sender.sendMessage(iList);
         }
     }
 
@@ -582,6 +593,19 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
             for (String s : results) {
                 player.sendMessage(s);
+            }
+        }
+    }
+
+    public void showRequestList(CommandSender sender, String player) {
+        String results[] = this.homeList.getRequestList(player);
+
+        if (results == null) {
+            sender.sendMessage(ChatColor.RED + "That player hasn't invited anyone!");
+        } else {
+            sender.sendMessage(ChatColor.AQUA + "That player has invited others to the following homes:");
+            for (String s : results) {
+                sender.sendMessage(s);
             }
         }
     }
