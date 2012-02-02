@@ -53,18 +53,18 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home limit
                         this.showHomeLimit(player);
-                    } else if (HomeConfig.enableInvite) {
-                        // /home invites|requests
-                        if ("invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
-                            this.showInviteList(player);
-                        } else if ("requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
-                            this.showRequestList(player);
-                        }
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                        // /home invites
+                        this.showInviteList(player);
+                    } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                        // /home requests
+                        this.showRequestList(player);
                     } else if ("reload".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
                         // /home reload
                         this.reloadSettings(player);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player|name)
+                        player.sendMessage(args[0]);
                         this.goToUnknownTarget(player, args[0]);
                     }
                     break;
@@ -84,26 +84,24 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("warp".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
                         // /home warp (player|name)
                         this.goToUnknownTarget(player, args[1]);
-                    } else if (HomeConfig.enableInvite) {
-                        // /home invites|requests (player)
-                        if ("invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
-                            this.showInviteList(sender, args[1]);
-                        } else if ("requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
-                            this.showRequestList(sender, args[1]);
-                        }
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        // /home invites (player)
+                        this.showInviteList(sender, args[1]);
+                    } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        // /home requests (player)
+                        this.showRequestList(sender, args[1]);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
                     }
                     break;
                 case 3:
-                    if (HomeConfig.enableInvite) {
-                        // /home invite|uninvite (player) (name)
-                        if ("invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
-                            this.inviteToHome(player, args[1], args[2]);
-                        } else if ("uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
-                            this.uninviteFromHome(player, args[1], args[2]);
-                        }
+                    if (HomeConfig.enableInvite && "invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home invite (player) (name) 
+                        this.inviteToHome(player, args[1], args[2]);
+                    } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
+                        // /home uninvite (player) (name)
+                        this.uninviteFromHome(player, args[1], args[2]);
                     } else if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
                         // /home set (player) (name)
                         this.setOtherHome(player, args[2], args[1]);
@@ -222,8 +220,10 @@ public class HomeCommand implements CommandExecutor {
     public void goToUnknownTarget(Player player, String target) {
         if (homeList.homeExists(player.getName(), target)) {
             homeList.warpTo(target, player, plugin);
+            player.sendMessage("1");
         } else if (homeList.homeExists("home", target) && homeList.playerCanWarp(player, target, "home")) {
             homeList.warpTo(target, "home", player, plugin);
+            player.sendMessage("2");
         } else {
             player.sendMessage("The home " + target + " doesn't exist!");
         }
