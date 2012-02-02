@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.co.ks07.uhome.HomeList.ExitStatus;
 import uk.co.ks07.uhome.locale.LocaleManager;
-import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
 

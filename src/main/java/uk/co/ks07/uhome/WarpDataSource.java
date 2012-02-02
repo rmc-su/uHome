@@ -150,7 +150,7 @@ public class WarpDataSource {
                     ret.put(owner, ownerWarps);
                 }
             }
-            log.log(Level.INFO, "{0} homes loaded", size);
+            log.info(Integer.toString(size) + " homes loaded");
         } catch (SQLException ex) {
             log.severe("Home Load Exception");
         } finally {
@@ -243,7 +243,7 @@ public class WarpDataSource {
                         Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
                         addWarp(warp, log);
                     }
-                    log.log(Level.INFO, "Imported {0} homes from " + sqlitedb, Integer.toString(size));
+                    log.info("Imported " + Integer.toString(size) + "homes from " + sqlitedb);
                     log.info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
                     if (!sqlitefile.renameTo(new File(HomeConfig.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
                         log.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
@@ -410,7 +410,7 @@ public class WarpDataSource {
                         Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch);
                         addWarp(warp, log);
                     }
-                    log.log(Level.INFO, "Imported {0} homes from " + mhsqlitedb, Integer.toString(size));
+                    log.info("Imported " + Integer.toString(size) + " homes from " + mhsqlitedb);
 
                     if (slstatement != null) {
                         slstatement.close();
