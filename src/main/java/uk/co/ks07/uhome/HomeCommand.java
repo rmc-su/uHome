@@ -563,11 +563,27 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showInviteList(Player player) {
-        this.homeList.listInvitedTo(player);
+        String iList = this.homeList.getInvitedToList(player.getName());
+
+        if (iList == null) {
+            player.sendMessage(ChatColor.RED + "You have no invites!");
+        } else {
+            player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
+            player.sendMessage(iList);
+        }
     }
 
     public void showRequestList(Player player) {
-        this.homeList.listRequests(player);
+        String results[] = this.homeList.getRequestList(player.getName());
+
+        if (results == null) {
+            player.sendMessage(ChatColor.RED + "You haven't invited anyone!");
+        } else {
+            player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
+            for (String s : results) {
+                player.sendMessage(s);
+            }
+        }
     }
 
     public void showHomeLimit(Player player) {

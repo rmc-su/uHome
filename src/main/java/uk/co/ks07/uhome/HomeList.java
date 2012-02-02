@@ -245,30 +245,6 @@ public class HomeList {
         return (inviteList.containsKey(player) && inviteList.get(player).size() > 0);
     }
 
-    public void listInvitedTo(Player player) {
-        String results = this.getInvitedToList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You have no invites!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
-            player.sendMessage(results);
-        }
-    }
-
-    public void listRequests(Player player) {
-        String results[] = this.getRequestList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You haven't invited anyone!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
-            for (String s : results) {
-                player.sendMessage(s);
-            }
-        }
-    }
-
     public String getPlayerList(String owner) {
         if (this.hasHomes(owner)) {
             ArrayList<Home> results = new ArrayList(homeList.get(owner).values());
