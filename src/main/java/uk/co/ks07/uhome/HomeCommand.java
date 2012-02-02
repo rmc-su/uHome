@@ -220,10 +220,8 @@ public class HomeCommand implements CommandExecutor {
     public void goToUnknownTarget(Player player, String target) {
         if (homeList.homeExists(player.getName(), target)) {
             homeList.warpTo(target, player, plugin);
-            player.sendMessage("1");
         } else if (homeList.homeExists("home", target) && homeList.playerCanWarp(player, target, "home")) {
             homeList.warpTo(target, "home", player, plugin);
-            player.sendMessage("2");
         } else {
             player.sendMessage("The home " + target + " doesn't exist!");
         }
