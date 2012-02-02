@@ -457,7 +457,7 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void deleteHome(Player player, String homeName) {
-        ExitStatus es = this.homeList.deleteHome(player, homeName, plugin.getLogger());
+        ExitStatus es = this.homeList.deleteHome(player.getName(), homeName, plugin.getLogger());
 
         if (es == ExitStatus.NOT_EXISTS) {
             player.sendMessage(ChatColor.RED + "You don't have a home called '" + homeName + "'!");

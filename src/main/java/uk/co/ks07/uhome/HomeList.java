@@ -218,19 +218,6 @@ public class HomeList {
         }
     }
 
-    public ExitStatus deleteHome(Player owner, String name, Logger log) {
-        if (this.homeExists(owner.getName(), name)) {
-            Home warp = homeList.get(owner.getName()).get(name);
-            homeList.get(owner.getName()).remove(name);
-            WarpDataSource.deleteWarp(warp, log);
-//            owner.sendMessage(ChatColor.AQUA + "You have deleted your home '" + name + "'.");
-            return ExitStatus.SUCCESS;
-        } else {
-//            owner.sendMessage(ChatColor.RED + "You don't have a home called '" + name + "'!");
-            return ExitStatus.NOT_EXISTS;
-        }
-    }
-
     public ExitStatus deleteHome(String owner, String name, Logger log) {
         if (this.homeExists(owner, name)) {
             Home warp = homeList.get(owner).get(name);
