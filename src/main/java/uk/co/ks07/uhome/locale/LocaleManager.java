@@ -22,9 +22,9 @@ public class LocaleManager {
             locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
             log.log(Level.INFO, "Using localization: {0} ({1})", new Object[]{locResBundle.getString("locale.name"), locale});
         } catch (MissingResourceException e) {
-            // Failed to load requested locale file so fallback to en_us
+            // Failed to load requested locale file so fallback to en
             locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
-            log.log(Level.WARNING, "Failed to find locale {0}. Falling back to using English (en_us).", locale);
+            log.log(Level.WARNING, "Failed to find locale {0}. Falling back to using English (en).", locale);
         }
     }
 
