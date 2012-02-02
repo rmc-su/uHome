@@ -84,6 +84,13 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("warp".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
                         // /home warp (player|name)
                         this.goToUnknownTarget(player, args[1]);
+                    } else if (HomeConfig.enableInvite) {
+                        // /home invites|requests (player)
+                        if ("invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                            this.showInviteList(sender, args[1]);
+                        } else if ("requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                            this.showRequestList(sender, args[1]);
+                        }
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
@@ -130,6 +137,13 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("limit".equalsIgnoreCase(args[0])) {
                         // /home limit (player)
                         this.showOtherLimit(sender, args[1]);
+                    } else if (HomeConfig.enableInvite) {
+                        // /home invites|requests (player)
+                        if ("invites".equalsIgnoreCase(args[0])) {
+                            this.showInviteList(sender, args[1]);
+                        } else if ("requests".equalsIgnoreCase(args[0])) {
+                            this.showRequestList(sender, args[1]);
+                        }
                     }
                     break;
                 case 3:
