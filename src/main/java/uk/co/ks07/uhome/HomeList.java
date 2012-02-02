@@ -370,7 +370,7 @@ public class HomeList {
         return new MatchList(exactMatches, matches);
     }
 
-    public Home getHomeFor(String player) {
+    public Home getPlayerDefaultHome(String player) {
         return homeList.get(player).get(uHome.DEFAULT_HOME);
     }
 
