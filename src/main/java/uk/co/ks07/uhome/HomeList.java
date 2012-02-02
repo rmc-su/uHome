@@ -136,12 +136,12 @@ public class HomeList {
         return this.homeList.get(owner).get(name).getLocation;
     }
 
-    public boolean playerHasDefaultHome(Player player) {
-        return this.homeExists(player.getName(), uHome.DEFAULT_HOME);
+    public boolean playerHasDefaultHome(String player) {
+        return this.homeExists(player, uHome.DEFAULT_HOME);
     }
 
-    public boolean playerHasHomes(Player player) {
-        return this.homeList.containsKey(player.getName());
+    public boolean playerHasHomes(String player) {
+        return this.homeList.containsKey(player) && this.getPlayerHomeCount(player) > 0;
     }
 
     public boolean playerCanWarp(Player player, String owner, String name) {
