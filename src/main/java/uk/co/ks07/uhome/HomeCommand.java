@@ -1,6 +1,7 @@
 package uk.co.ks07.uhome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -8,13 +9,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import uk.co.ks07.uhome.HomeList.ExitStatus;
 import uk.co.ks07.uhome.locale.LocaleManager;
+import uk.co.ks07.uhome.timers.HomeCoolDown;
+import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
 
     private uHome plugin;
     private HomeList homeList;
+
+    private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
+    private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
 
     public HomeCommand(uHome uH, HomeList hL) {
         this.plugin = uH;
@@ -176,7 +183,12 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.set.atlimit"));
                 break;
             case NEED_COOLDOWN:
-                player.sendMessage(LocaleManager.getString("own.set.cooldown"));
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+                
+                player.sendMessage(LocaleManager.getString("own.set.cooldown", params));
+                break;
         }
     }
 
