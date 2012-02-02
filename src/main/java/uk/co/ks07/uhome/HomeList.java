@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -149,29 +148,38 @@ public class HomeList {
         return homeList.get(owner).get(name).playerCanWarp(player);
     }
 
-    public void invitePlayer(Player owner, String player, String name) {
-        homeList.get(owner.getName()).get(name).addInvitees(player);
-        owner.sendMessage("Invited " + player + " to your home " + name);
+    public boolean invitePlayer(String owner, String player, String name) {
+        homeList.get(owner).get(name).addInvitees(player);
+
         if (!inviteList.containsKey(player)) {
             inviteList.put(player, new HashSet<Home>());
         }
-        inviteList.get(player).add(homeList.get(owner.getName()).get(name));
-        owner.sendMessage("Invited " + player + " to your home " + name);
-        Player invitee = server.getPlayerExact(player);
-        if (invitee != null) {
-            invitee.sendMessage("You have been invited to " + owner.getName() + "'s home " + name);
+
+        if (!inviteList.get(player).contains(homeList.get(owner).get(name))) {
+            inviteList.get(player).add(homeList.get(owner).get(name));
+            Player invitee = server.getPlayerExact(player);
+            if (invitee != null) {
+                invitee.sendMessage("You have been invited to " + owner + "'s home " + name);
+            }
+
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public void uninvitePlayer(Player owner, String player, String name) {
-        homeList.get(owner.getName()).get(name).removeInvitee(player);
+    public boolean uninvitePlayer(String owner, String player, String name) {
+        homeList.get(owner).get(name).removeInvitee(player);
         if (inviteList.containsKey(player)) {
-            inviteList.get(player).remove(homeList.get(owner.getName()).get(name));
-        }
-        owner.sendMessage("Uninvited " + player + " from your home " + name);
-        Player invitee = server.getPlayerExact(player);
-        if (invitee != null) {
-            invitee.sendMessage("You have been uninvited from " + owner.getName() + "'s home " + name);
+            inviteList.get(player).remove(homeList.get(owner).get(name));
+            Player invitee = server.getPlayerExact(player);
+            if (invitee != null) {
+                invitee.sendMessage("You have been uninvited from " + owner + "'s home " + name);
+            }
+
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -252,17 +260,6 @@ public class HomeList {
         return (inviteList.containsKey(player) && inviteList.get(player).size() > 0);
     }
 
-    public void list(Player player) {
-        String results = this.getPlayerList(player.getName());
-
-        if (results == null) {
-            player.sendMessage(ChatColor.RED + "You have no homes!");
-        } else {
-            player.sendMessage(ChatColor.AQUA + "You have the following homes:");
-            player.sendMessage(results);
-        }
-    }
-
     public void listInvitedTo(Player player) {
         String results = this.getInvitedToList(player.getName());
 
@@ -284,17 +281,6 @@ public class HomeList {
             for (String s : results) {
                 player.sendMessage(s);
             }
-        }
-    }
-
-    public void listOther(CommandSender sender, String owner) {
-        String results = this.getPlayerList(owner.toLowerCase());
-
-        if (results == null) {
-            sender.sendMessage(ChatColor.RED + "That player has no homes.");
-        } else {
-            sender.sendMessage(ChatColor.AQUA + "That player has the following homes:");
-            sender.sendMessage(results);
         }
     }
 

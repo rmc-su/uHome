@@ -511,17 +511,25 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void inviteToHome(Player user, String targetPlayer, String targetHome) {
-        if (homeList.homeExists(user.getName(), targetHome)) {
-            homeList.invitePlayer(user, targetPlayer, targetHome);
+    public void inviteToHome(Player player, String targetPlayer, String targetHome) {
+        if (homeList.homeExists(player.getName(), targetHome)) {
+            if (homeList.invitePlayer(player.getName(), targetPlayer, targetHome)) {
+                player.sendMessage("Invited " + player + " to your home " + targetHome);
+            } else {
+                player.sendMessage(player + " was already invited to your home!");
+            }
         } else {
-            user.sendMessage("The home " + targetHome + " doesn't exist!");
+            player.sendMessage("The home " + targetHome + " doesn't exist!");
         }
     }
 
     public void uninviteFromHome(Player player, String targetPlayer, String targetHome) {
         if (homeList.homeExists(player.getName(), targetHome)) {
-            homeList.uninvitePlayer(player, targetPlayer, targetHome);
+            if (homeList.uninvitePlayer(player.getName(), targetPlayer, targetHome)) {
+                player.sendMessage("Uninvited " + player + " from your home " + targetHome);
+            } else {
+                player.sendMessage(player + " wasn't invited to your home!");
+            }
         } else {
             player.sendMessage("The home " + targetHome + " doesn't exist!");
         }
@@ -533,11 +541,25 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showHomeList(Player player) {
-        this.homeList.list(player);
+        String hList = this.homeList.getPlayerList(player.getName());
+
+        if (hList == null) {
+            player.sendMessage(ChatColor.RED + "You have no homes!");
+        } else {
+            player.sendMessage(ChatColor.AQUA + "You have the following homes:");
+            player.sendMessage(hList);
+        }
     }
 
     public void showHomeList(CommandSender sender, String targetPlayer) {
-        this.homeList.listOther(sender, targetPlayer);
+        String hList = this.homeList.getPlayerList(targetPlayer.toLowerCase());
+
+        if (hList == null) {
+            sender.sendMessage(ChatColor.RED + "That player has no homes.");
+        } else {
+            sender.sendMessage(ChatColor.AQUA + "That player has the following homes:");
+            sender.sendMessage(hList);
+        }
     }
 
     public void showInviteList(Player player) {
