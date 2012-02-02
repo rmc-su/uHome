@@ -64,7 +64,6 @@ public class HomeCommand implements CommandExecutor {
                         this.reloadSettings(player);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player|name)
-                        player.sendMessage(args[0]);
                         this.goToUnknownTarget(player, args[0]);
                     }
                     break;
