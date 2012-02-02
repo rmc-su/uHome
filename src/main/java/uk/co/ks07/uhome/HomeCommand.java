@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.co.ks07.uhome.HomeList.ExitStatus;
+import uk.co.ks07.uhome.locale.LocaleManager;
 import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
@@ -167,21 +168,19 @@ public class HomeCommand implements CommandExecutor {
         
         switch (es) {
             case SUCCESS:
-                player.sendMessage(ChatColor.AQUA + "Welcome to your new home :).");
+                player.sendMessage(LocaleManager.getString("own.set.new"));
                 break;
             case SUCCESS_FIRST:
-                player.sendMessage(ChatColor.AQUA + "Welcome to your first home!");
+                player.sendMessage(LocaleManager.getString("own.set.first"));
                 break;
             case SUCCESS_MOVED:
-                player.sendMessage(ChatColor.AQUA + "Succesfully moved your home.");
+                player.sendMessage(LocaleManager.getString("own.set.moved"));
                 break;
             case AT_LIMIT:
-                player.sendMessage(ChatColor.RED + "You have too many homes! You must delete one before you can set a new home!");
+                player.sendMessage(LocaleManager.getString("own.set.atlimit"));
                 break;
             case NEED_COOLDOWN:
-                player.sendMessage(ChatColor.RED + "You need to wait "
-                    + SetHomeCoolDown.getInstance().estimateTimeLeft(player) + " more seconds of the "
-                    + SetHomeCoolDown.getInstance().getTimer(player) + " second cooldown before you can edit your homes.");
+                player.sendMessage(LocaleManager.getString("own.set.cooldown"));
         }
     }
 
