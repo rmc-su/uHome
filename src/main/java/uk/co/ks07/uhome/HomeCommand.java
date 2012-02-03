@@ -19,7 +19,6 @@ public class HomeCommand implements CommandExecutor {
     private uHome plugin;
     private HomeList homeList;
 
-    private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
     private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
 
     public HomeCommand(uHome uH, HomeList hL) {
