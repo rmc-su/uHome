@@ -43,7 +43,7 @@ public class HomeList {
                 HashMap<String, Home> warps = new HashMap<String, Home>();
                 Home warp = new Home(player, name);
                 warps.put(name, warp);
-                homeList.put(player.getName(), warps);
+                homeList.put(player.getName().toLowerCase(), warps);
                 WarpDataSource.addWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
                 return ExitStatus.SUCCESS_FIRST;
@@ -51,7 +51,7 @@ public class HomeList {
                 if (this.playerCanSet(player)) {
                     // Player has warps, but not with the given name.
                     Home warp = new Home(player, name);
-                    homeList.get(player.getName()).put(name, warp);
+                    homeList.get(player.getName().toLowerCase()).put(name, warp);
                     WarpDataSource.addWarp(warp, log);
                     setHomeCoolDown.addPlayer(player, plugin);
                     return ExitStatus.SUCCESS;
@@ -60,7 +60,7 @@ public class HomeList {
                 }
             } else {
                 // Player has a warp with the given name.
-                Home warp = homeList.get(player.getName()).get(name);
+                Home warp = homeList.get(player.getName().toLowerCase()).get(name);
                 warp.setLocation(player.getLocation());
                 WarpDataSource.moveWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
@@ -71,23 +71,23 @@ public class HomeList {
 
     public ExitStatus adminAddHome(Location location, String owner, String name, Logger log) {
         // Adds a home ignoring limits, ownership and cooldown.
-        if (!homeList.containsKey(owner)) {
+        if (!homeList.containsKey(owner.toLowerCase())) {
             // Player has no warps.
             HashMap<String, Home> warps = new HashMap<String, Home>();
             Home warp = new Home(owner, location, name);
             warps.put(name, warp);
-            homeList.put(owner, warps);
+            homeList.put(owner.toLowerCase(), warps);
             WarpDataSource.addWarp(warp, log);
             return ExitStatus.SUCCESS_FIRST;
         } else if (!this.homeExists(owner, name)) {
             // Player has warps, but not with the given name.
             Home warp = new Home(owner, location, name);
-            homeList.get(owner).put(name, warp);
+            homeList.get(owner.toLowerCase()).put(name, warp);
             WarpDataSource.addWarp(warp, log);
             return ExitStatus.SUCCESS;
         } else {
             // Player has a warp with the given name.
-            Home warp = homeList.get(owner).get(name);
+            Home warp = homeList.get(owner.toLowerCase()).get(name);
             warp.setLocation(location);
             WarpDataSource.moveWarp(warp, log);
             return ExitStatus.SUCCESS_MOVED;
@@ -101,8 +101,8 @@ public class HomeList {
     public void warpTo(String targetOwner, String target, Player player, Plugin plugin) {
         MatchList matches = this.getMatches(target, player, targetOwner);
         target = matches.getMatch(target);
-        if (homeList.get(targetOwner).containsKey(target)) {
-            Home warp = homeList.get(targetOwner).get(target);
+        if (homeList.get(targetOwner.toLowerCase()).containsKey(target)) {
+            Home warp = homeList.get(targetOwner.toLowerCase()).get(target);
             if (warp.playerCanWarp(player)) {
                 if (homeCoolDown.playerHasCooled(player)) {
                     WarmUp.addPlayer(player, warp, plugin);
@@ -121,9 +121,9 @@ public class HomeList {
     }
 
     public void sendPlayerHome(Player player, Plugin plugin) {
-        if (homeList.containsKey(player.getName())) {
+        if (homeList.containsKey(player.getName().toLowerCase())) {
             if (homeCoolDown.playerHasCooled(player)) {
-                WarmUp.addPlayer(player, homeList.get(player.getName()).get(uHome.DEFAULT_HOME), plugin);
+                WarmUp.addPlayer(player, homeList.get(player.getName().toLowerCase()).get(uHome.DEFAULT_HOME), plugin);
                 homeCoolDown.addPlayer(player, plugin);
             } else {
                 player.sendMessage(ChatColor.RED + "You need to wait "
@@ -134,7 +134,7 @@ public class HomeList {
     }
 
     public Location getHomeLocation(String owner, String name) {
-        return this.homeList.get(owner).get(name).getLocation;
+        return this.homeList.get(owner.toLowerCase()).get(name).getLocation;
     }
 
     public boolean playerHasDefaultHome(String player) {
@@ -142,22 +142,22 @@ public class HomeList {
     }
 
     public boolean playerHasHomes(String player) {
-        return this.homeList.containsKey(player) && this.getPlayerHomeCount(player) > 0;
+        return this.homeList.containsKey(player.toLowerCase()) && this.getPlayerHomeCount(player) > 0;
     }
 
     public boolean playerCanWarp(Player player, String owner, String name) {
-        return homeList.get(owner).get(name).playerCanWarp(player);
+        return homeList.get(owner.toLowerCase()).get(name).playerCanWarp(player);
     }
 
     public boolean invitePlayer(String owner, String player, String name) {
-        homeList.get(owner).get(name).addInvitees(player);
+        homeList.get(owner.toLowerCase()).get(name).addInvitees(player);
 
-        if (!inviteList.containsKey(player)) {
-            inviteList.put(player, new HashSet<Home>());
+        if (!inviteList.containsKey(player.toLowerCase())) {
+            inviteList.put(player.toLowerCase(), new HashSet<Home>());
         }
 
-        if (!inviteList.get(player).contains(homeList.get(owner).get(name))) {
-            inviteList.get(player).add(homeList.get(owner).get(name));
+        if (!inviteList.get(player.toLowerCase()).contains(homeList.get(owner.toLowerCase()).get(name))) {
+            inviteList.get(player.toLowerCase()).add(homeList.get(owner.toLowerCase()).get(name));
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
                 invitee.sendMessage("You have been invited to " + owner + "'s home " + name);
@@ -170,9 +170,9 @@ public class HomeList {
     }
 
     public boolean uninvitePlayer(String owner, String player, String name) {
-        homeList.get(owner).get(name).removeInvitee(player);
-        if (inviteList.containsKey(player)) {
-            inviteList.get(player).remove(homeList.get(owner).get(name));
+        homeList.get(owner.toLowerCase()).get(name).removeInvitee(player);
+        if (inviteList.containsKey(player.toLowerCase())) {
+            inviteList.get(player.toLowerCase()).remove(homeList.get(owner.toLowerCase()).get(name));
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
                 invitee.sendMessage("You have been uninvited from " + owner + "'s home " + name);
@@ -185,11 +185,11 @@ public class HomeList {
     }
 
     public int getPlayerHomeCount(String owner) {
-        return homeList.get(owner).size();
+        return homeList.get(owner.toLowerCase()).size();
     }
 
     public boolean playerCanSet(Player player) {
-        int playerWarps = homeList.get(player.getName()).size();
+        int playerWarps = homeList.get(player.getName().toLowerCase()).size();
         int playerMaxWarps = this.playerGetLimit(player);
 
         return ((playerMaxWarps < 0) || (playerWarps < playerMaxWarps));
@@ -221,8 +221,8 @@ public class HomeList {
 
     public ExitStatus deleteHome(String owner, String name, Logger log) {
         if (this.homeExists(owner, name)) {
-            Home warp = homeList.get(owner).get(name);
-            homeList.get(owner).remove(name);
+            Home warp = homeList.get(owner.toLowerCase()).get(name);
+            homeList.get(owner.toLowerCase()).remove(name);
             WarpDataSource.deleteWarp(warp, log);
             return ExitStatus.SUCCESS;
         } else {
@@ -232,23 +232,23 @@ public class HomeList {
 
     public boolean homeExists(String owner, String name) {
         if (this.hasHomes(owner)) {
-            return homeList.get(owner).containsKey(name);
+            return homeList.get(owner.toLowerCase()).containsKey(name);
         } else {
             return false;
         }
     }
 
     public boolean hasHomes(String player) {
-        return (homeList.containsKey(player) && homeList.get(player).size() > 0);
+        return (homeList.containsKey(player.toLowerCase()) && homeList.get(player.toLowerCase()).size() > 0);
     }
 
     public boolean hasInvitedToHomes(String player) {
-        return (inviteList.containsKey(player) && inviteList.get(player).size() > 0);
+        return (inviteList.containsKey(player.toLowerCase()) && inviteList.get(player.toLowerCase()).size() > 0);
     }
 
     public String getPlayerList(String owner) {
         if (this.hasHomes(owner)) {
-            ArrayList<Home> results = new ArrayList(homeList.get(owner).values());
+            ArrayList<Home> results = new ArrayList(homeList.get(owner.toLowerCase()).values());
 
             String ret = results.toString().replace("[", "").replace("]", "");
             return ret;
@@ -261,7 +261,7 @@ public class HomeList {
         if (this.hasInvitedToHomes(owner)) {
             StringBuilder ret = new StringBuilder(32);
 
-            for (Home home : inviteList.get(owner)) {
+            for (Home home : inviteList.get(owner.toLowerCase())) {
                 ret.append(home.owner).append(" ").append(home.name).append(", ");
             }
 
@@ -277,7 +277,7 @@ public class HomeList {
             boolean anyInvites = false;
             int i = -1;
 
-            for (Home home : homeList.get(owner).values()) {
+            for (Home home : homeList.get(owner.toLowerCase()).values()) {
                 if (home.hasInvitees()) {
                     anyInvites = true;
                     i += 1;
@@ -320,14 +320,14 @@ public class HomeList {
             return new MatchList(exactMatches, matches);
         }
 
-        List<String> names = new ArrayList<String>(homeList.get(owner).keySet());
+        List<String> names = new ArrayList<String>(homeList.get(owner.toLowerCase()).keySet());
         Collator collator = Collator.getInstance();
         collator.setStrength(Collator.SECONDARY);
         Collections.sort(names, collator);
 
         for (int i = 0; i < names.size(); i++) {
             String currName = names.get(i);
-            Home warp = homeList.get(owner).get(currName);
+            Home warp = homeList.get(owner.toLowerCase()).get(currName);
             if (warp.playerCanWarp(player)) {
                 if (warp.name.equalsIgnoreCase(name)) {
                     exactMatches.add(warp);
@@ -348,7 +348,7 @@ public class HomeList {
     }
 
     public Home getPlayerDefaultHome(String player) {
-        return homeList.get(player).get(uHome.DEFAULT_HOME);
+        return homeList.get(player.toLowerCase()).get(uHome.DEFAULT_HOME);
     }
 
     public static String getOnlinePlayerCapitalisation(String name) {
