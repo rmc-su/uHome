@@ -194,16 +194,20 @@ public class HomeCommand implements CommandExecutor {
 
     public void setOtherHome(Player player, String homeName, String owner) {
         ExitStatus es = this.homeList.adminAddHome(player.getLocation(), owner, homeName, plugin.getLogger());
-        
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("OWNER", owner);
+        params.put("HOME", homeName);
+
         switch (es) {
             case SUCCESS:
-                player.sendMessage(ChatColor.AQUA + "Created new home for " + owner);
+                player.sendMessage(LocaleManager.getString("admin.set.new", params));
                 break;
             case SUCCESS_FIRST:
-                player.sendMessage(ChatColor.AQUA + "Created first home for " + owner);
+                player.sendMessage(LocaleManager.getString("admin.set.first", params));
                 break;
             case SUCCESS_MOVED:
-                player.sendMessage(ChatColor.AQUA + "Succesfully moved home for " + owner);
+                player.sendMessage(LocaleManager.getString("admin.set.moved", params));
                 break;
         }
     }
@@ -211,30 +215,41 @@ public class HomeCommand implements CommandExecutor {
     public void deleteHome(Player player, String homeName) {
         ExitStatus es = this.homeList.deleteHome(player.getName(), homeName, plugin.getLogger());
 
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", homeName);
+
         if (es == ExitStatus.NOT_EXISTS) {
-            player.sendMessage(ChatColor.RED + "You don't have a home called '" + homeName + "'!");
+            player.sendMessage(LocaleManager.getString("own.delete.notexists", params));
         } else {
-            player.sendMessage(ChatColor.AQUA + "You have deleted your home '" + homeName + "'.");
+            player.sendMessage(LocaleManager.getString("own.delete.ok", params));
         }
     }
 
     public void deleteOtherHome(CommandSender sender, String owner, String name) {
         ExitStatus es = this.homeList.deleteHome(owner, name, plugin.getLogger());
 
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", name);
+        params.put("OWNER", owner);
+
         if (es == ExitStatus.NOT_EXISTS) {
-            sender.sendMessage(ChatColor.RED + "There is no home '" + name + "' for " + owner + "!");
+            sender.sendMessage(LocaleManager.getString("admin.delete.notexists", params));
         } else {
-            sender.sendMessage(ChatColor.AQUA + "You have deleted " + owner + "'s home '" + name + "'.");
+            sender.sendMessage(LocaleManager.getString("admin.delete.ok", params));
         }
     }
 
     public void goToUnknownTarget(Player player, String target) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", target);
+        params.put("OWNER", player.getName());
+
         if (homeList.homeExists(player.getName(), target)) {
             homeList.warpTo(target, player, plugin);
         } else if (homeList.homeExists("home", target) && homeList.playerCanWarp(player, target, "home")) {
             homeList.warpTo(target, "home", player, plugin);
         } else {
-            player.sendMessage("The home " + target + " doesn't exist!");
+            player.sendMessage(LocaleManager.getString("own.warp.notexists", params));
         }
     }
 
@@ -242,45 +257,60 @@ public class HomeCommand implements CommandExecutor {
         if (this.homeList.playerHasDefaultHome(user.getName())) {
             this.homeList.sendPlayerHome(user, this.plugin);
         } else {
-            user.sendMessage(ChatColor.RED + "You have no home :(");
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("HOME", uHome.DEFAULT_HOME);
+
+            user.sendMessage(LocaleManager.getString("own.warp.notexists", params));
             if (HomeConfig.bedsCanSethome == 2) {
-                user.sendMessage("You need to sleep in a bed to set your default home");
+                user.sendMessage(LocaleManager.getString("usage.sleep"));
             } else {
-                user.sendMessage("Use: " + ChatColor.RED + "/home set" + ChatColor.WHITE + " to set a home");
+                user.sendMessage(LocaleManager.getString("usage.set"));
             }
         }
     }
 
     public void goToOtherHome(Player user, String targetHome, String targetOwner) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", targetHome);
+        params.put("OWNER", targetOwner);
+
         if (this.homeList.homeExists(targetOwner, targetHome)) {
             if (this.homeList.playerCanWarp(user, targetOwner, targetHome)) {
                 this.homeList.warpTo(targetOwner, targetHome, user, this.plugin);
             } else {
-                user.sendMessage("You aren't invited to " + targetOwner + "'s home '" + targetHome + "'!");
+                user.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
             }
         } else {
-            user.sendMessage("The home " + targetHome + " doesn't exist!");
+            user.sendMessage(LocaleManager.getString("other.warp.notexists", params));
         }
     }
 
     public void inviteToHome(Player player, String targetPlayer, String targetHome) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", targetHome);
+        params.put("INVITED", targetPlayer);
+        
         if (homeList.homeExists(player.getName(), targetHome)) {
             if (homeList.invitePlayer(player.getName(), targetPlayer, targetHome)) {
-                player.sendMessage("Invited " + player + " to your home " + targetHome);
+                player.sendMessage(LocaleManager.getString("own.invite.ok", params));
             } else {
-                player.sendMessage(player + " was already invited to your home!");
+                player.sendMessage(LocaleManager.getString("own.invite.already", params));
             }
         } else {
-            player.sendMessage("The home " + targetHome + " doesn't exist!");
+            player.sendMessage(LocaleManager.getString("own.invite.notexists", params));
         }
     }
 
     public void uninviteFromHome(Player player, String targetPlayer, String targetHome) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", targetHome);
+        params.put("INVITED", targetPlayer);
+        
         if (homeList.homeExists(player.getName(), targetHome)) {
             if (homeList.uninvitePlayer(player.getName(), targetPlayer, targetHome)) {
-                player.sendMessage("Uninvited " + player + " from your home " + targetHome);
+                player.sendMessage(LocaleManager.getString("own.uninvite.ok", params));
             } else {
-                player.sendMessage(player + " wasn't invited to your home!");
+                player.sendMessage(LocaleManager.getString("own.uninvite.notinvited", params));
             }
         } else {
             player.sendMessage("The home " + targetHome + " doesn't exist!");
@@ -288,61 +318,81 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showHomeInfo(CommandSender user, String targetHome, String targetOwner) {
-        Location homeLoc = homeList.getHomeLocation(targetOwner, targetHome);
-        user.sendMessage("Home details: " + targetOwner + " : " + targetHome + " " + homeLoc.toString());
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("HOME", targetHome);
+        params.put("OWNER", targetOwner);
+
+        if (homeList.homeExists(targetOwner, targetHome)) {
+            params.put("LOCATION", homeList.getHomeLocation(targetOwner, targetHome).toString());
+            user.sendMessage(LocaleManager.getString("admin.info.ok", params));
+        } else {
+            user.sendMessage(LocaleManager.getString("admin.info.notexists", params));
+        }
     }
 
     public void showHomeList(Player player) {
         String hList = this.homeList.getPlayerList(player.getName());
 
         if (hList == null) {
-            player.sendMessage(ChatColor.RED + "You have no homes!");
+            player.sendMessage(LocaleManager.getString("own.list.nohomes"));
         } else {
-            player.sendMessage(ChatColor.AQUA + "You have the following homes:");
+            player.sendMessage(LocaleManager.getString("own.list.ok"));
             player.sendMessage(hList);
         }
     }
 
     public void showHomeList(CommandSender sender, String targetPlayer) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("OWNER", targetPlayer);
+
         String hList = this.homeList.getPlayerList(targetPlayer.toLowerCase());
 
         if (hList == null) {
-            sender.sendMessage(ChatColor.RED + "That player has no homes.");
+            sender.sendMessage(LocaleManager.getString("admin.list.nohomes", params));
         } else {
-            sender.sendMessage(ChatColor.AQUA + "That player has the following homes:");
+            sender.sendMessage(LocaleManager.getString("admin.list.ok", params));
             sender.sendMessage(hList);
         }
     }
     
     public void showInviteList(Player player) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("INVITED", player.getName());
+
         String iList = this.homeList.getInvitedToList(player.getName());
 
         if (iList == null) {
-            player.sendMessage(ChatColor.RED + "You have no invites!");
+            player.sendMessage(LocaleManager.getString("own.invites.none", params));
         } else {
-            player.sendMessage(ChatColor.AQUA + "You have been invited to the following homes:");
+            player.sendMessage(LocaleManager.getString("own.invites.ok", params));
             player.sendMessage(iList);
         }
     }
 
     public void showInviteList(CommandSender sender, String player) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("INVITED", player);
+
         String iList = this.homeList.getInvitedToList(player);
 
         if (iList == null) {
-            sender.sendMessage(ChatColor.RED + "That player has no invites!");
+            sender.sendMessage(LocaleManager.getString("admin.invites.none", params));
         } else {
-            sender.sendMessage(ChatColor.AQUA + "That player has invites to the following homes:");
+            sender.sendMessage(LocaleManager.getString("admin.invites.ok", params));
             sender.sendMessage(iList);
         }
     }
 
     public void showRequestList(Player player) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("OWNER", player.getName());
+
         String results[] = this.homeList.getRequestList(player.getName());
 
         if (results == null) {
-            player.sendMessage(ChatColor.RED + "You haven't invited anyone!");
+            player.sendMessage(LocaleManager.getString("own.requests.none", params));
         } else {
-            player.sendMessage(ChatColor.AQUA + "You have invited others to the following homes:");
+            player.sendMessage(LocaleManager.getString("own.requests.ok", params));
             for (String s : results) {
                 player.sendMessage(s);
             }
@@ -350,12 +400,15 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showRequestList(CommandSender sender, String player) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("OWNER", player);
+
         String results[] = this.homeList.getRequestList(player);
 
         if (results == null) {
-            sender.sendMessage(ChatColor.RED + "That player hasn't invited anyone!");
+            sender.sendMessage(LocaleManager.getString("admin.requests.none", params));
         } else {
-            sender.sendMessage(ChatColor.AQUA + "That player has invited others to the following homes:");
+            sender.sendMessage(LocaleManager.getString("admin.requests.ok", params));
             for (String s : results) {
                 sender.sendMessage(s);
             }
@@ -363,21 +416,28 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showHomeLimit(Player player) {
-        player.sendMessage("You can set up to " + homeList.playerGetLimit(player) + " homes.");
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("LIMIT", Integer.toString(homeList.playerGetLimit(player)));
+        
+        player.sendMessage(LocaleManager.getString("own.limit.ok", params));
     }
 
     public void showOtherLimit(CommandSender sender, String targetPlayer) {
         Player target = plugin.getServer().getPlayer(targetPlayer);
 
         if (target != null) {
-            sender.sendMessage(target.getName() + " can set up to " + homeList.playerGetLimit(target) + " homes.");
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("LIMIT", Integer.toString(homeList.playerGetLimit(target)));
+            params.put("OWNER", targetPlayer);
+
+            sender.sendMessage(LocaleManager.getString("admin.limit.ok", params));
         } else {
-            sender.sendMessage("Player not found.");
+            sender.sendMessage(LocaleManager.getString("admin.limit.noplayer"));
         }
     }
 
     public void reloadSettings(CommandSender user) {
-        user.sendMessage("[uHome] Reloading config.");
+        user.sendMessage(LocaleManager.getString("admin.reload.ok"));
         HomeConfig.initialize(plugin.config, plugin.getDataFolder(), plugin.getLogger());
     }
 
