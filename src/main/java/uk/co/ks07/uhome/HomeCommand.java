@@ -283,6 +283,12 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void inviteToHome(Player player, String targetPlayer, String targetHome) {
+        Player tPlayer = plugin.getServer().getPlayer(targetPlayer);
+        
+        if (tPlayer != null) {
+            targetPlayer = tPlayer.getName();
+        }
+
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("HOME", targetHome);
         params.put("INVITED", targetPlayer);
