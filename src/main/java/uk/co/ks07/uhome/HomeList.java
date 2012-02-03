@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -348,6 +349,16 @@ public class HomeList {
 
     public Home getPlayerDefaultHome(String player) {
         return homeList.get(player).get(uHome.DEFAULT_HOME);
+    }
+
+    public static String getOnlinePlayerCapitalisation(String name) {
+        Player player = Bukkit.getPlayer(name);
+        
+        if (player != null && name.equalsIgnoreCase(player.getName())) {
+            return player.getName();
+        } else {
+            return name;
+        }
     }
 
     public static enum ExitStatus {
