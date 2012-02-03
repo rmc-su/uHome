@@ -287,7 +287,7 @@ public class HomeList {
                     for (String invitee : home.getInvitees()) {
                         temp.append(invitee).append(", ");
                     }
-                    temp.delete(temp.length() - 2, temp.length() - 1).append(")");
+                    temp.delete(temp.length() - 2, temp.length()).append(")");
 
                     reqs[i] = temp.toString();
                 }

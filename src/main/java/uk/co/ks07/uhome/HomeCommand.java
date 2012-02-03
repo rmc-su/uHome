@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import uk.co.ks07.uhome.HomeList.ExitStatus;
 import uk.co.ks07.uhome.locale.LocaleManager;
-import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
@@ -343,7 +342,7 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("OWNER", targetPlayer);
 
-        String hList = this.homeList.getPlayerList(targetPlayer.toLowerCase());
+        String hList = this.homeList.getPlayerList(targetPlayer);
 
         if (hList == null) {
             sender.sendMessage(LocaleManager.getString("admin.list.nohomes", params));
