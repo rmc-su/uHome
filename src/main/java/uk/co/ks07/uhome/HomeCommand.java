@@ -394,7 +394,9 @@ public class HomeCommand implements CommandExecutor {
         } else {
             player.sendMessage(LocaleManager.getString("own.requests.ok", params));
             for (String s : results) {
-                player.sendMessage(s);
+                if (s != null) {
+                    player.sendMessage(s);
+                }
             }
         }
     }
