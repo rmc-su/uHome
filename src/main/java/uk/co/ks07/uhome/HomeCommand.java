@@ -1,6 +1,7 @@
 package uk.co.ks07.uhome;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -365,13 +366,15 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("INVITED", player.getName());
 
-        String iList = this.homeList.getInvitedToList(player.getName());
+        Home[] iList = this.homeList.getInvitedToList(player.getName());
 
-        if (iList == null) {
+        if (iList == null || iList.length == 0) {
             player.sendMessage(LocaleManager.getString("own.invites.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.invites.ok", params));
-            player.sendMessage(iList);
+            for (Home home : iList) {
+                player.sendMessage(LocaleManager.getString("own.invites.output", params, home));
+            }
         }
     }
 
@@ -380,13 +383,13 @@ public class HomeCommand implements CommandExecutor {
         params.put("INVITED", player.getName());
         params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(from));
 
-        String iList = this.homeList.getInvitedToList(player.getName(), from);
+        Collection<Home> iList = this.homeList.getInvitedToList(player.getName(), from);
 
         if (iList == null) {
             player.sendMessage(LocaleManager.getString("own.invitesfrom.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.invitesfrom.ok", params));
-            player.sendMessage(iList);
+            player.sendMessage(iList.toString().replace("[", "").replace("]", ""));
         }
     }
 
@@ -394,13 +397,15 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("INVITED", player);
 
-        String iList = this.homeList.getInvitedToList(player);
+        Home[] iList = this.homeList.getInvitedToList(player);
 
         if (iList == null) {
             sender.sendMessage(LocaleManager.getString("admin.invites.none", params));
         } else {
             sender.sendMessage(LocaleManager.getString("admin.invites.ok", params));
-            sender.sendMessage(iList);
+            for (Home home : iList) {
+                sender.sendMessage(LocaleManager.getString("admin.invites.output", params, home));
+            }
         }
     }
 

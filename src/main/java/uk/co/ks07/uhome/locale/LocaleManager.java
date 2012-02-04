@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import uk.co.ks07.uhome.Home;
 
 import uk.co.ks07.uhome.HomeConfig;
 
@@ -33,6 +33,10 @@ public class LocaleManager {
     }
 
     public static String getString(String key, Map<String, String> params) {
+        return getString(key, params, null);
+    }
+
+    public static String getString(String key, Map<String, String> params, Home home) {
         try {
             String output = locResBundle.getString(key);
 
@@ -42,6 +46,12 @@ public class LocaleManager {
                     String evalue = e.getValue();
                     output = output.replaceAll("(?i)\\Q{{" + ekey + "}}\\E", evalue);
                 }
+            }
+            
+            if (home != null) {
+                    output = output.replaceAll("(?i)\\Q{{HOME}}\\E", home.name);
+                    output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", home.owner);
+                    output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", home.world);
             }
 
             if (HomeConfig.useColors) {

@@ -2,6 +2,7 @@ package uk.co.ks07.uhome;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -258,37 +259,25 @@ public class HomeList {
         }
     }
 
-    public String getInvitedToList(String owner) {
+    public Home[] getInvitedToList(String owner) {
         if (this.hasInvitedToHomes(owner)) {
-            StringBuilder ret = new StringBuilder(32);
-
-            for (Home home : inviteList.get(owner.toLowerCase())) {
-                ret.append(home.owner).append(" ").append(home.name).append(", ");
-            }
-
-            return ret.delete(ret.length() - 2, ret.length() - 1).toString();
+            return inviteList.get(owner.toLowerCase()).toArray(new Home[0]);
         } else {
             return null;
         }
     }
 
-    public String getInvitedToList(String owner, String invitedBy) {
+    public Collection<Home> getInvitedToList(String owner, String invitedBy) {
         if (this.hasInvitedToHomes(owner)) {
-            StringBuilder ret = new StringBuilder(32);
-            boolean found = false;
+            ArrayList<Home> ret = new ArrayList<Home>();
 
             for (Home home : inviteList.get(owner.toLowerCase())) {
                 if (home.owner.equalsIgnoreCase(invitedBy)) {
-                    found = true;
-                    ret.append(home.owner).append(" ").append(home.name).append(", ");
+                    ret.add(home);
                 }
             }
 
-            if (found) {
-                return ret.delete(ret.length() - 2, ret.length() - 1).toString();
-            } else {
-                return null;
-            }
+            return ret;
         } else {
             return null;
         }
