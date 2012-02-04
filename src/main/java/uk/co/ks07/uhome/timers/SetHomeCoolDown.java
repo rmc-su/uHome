@@ -30,15 +30,15 @@ public final class SetHomeCoolDown extends CoolDownManager {
 
         // TODO: Seperate cooldown limits for home and sethome.
         if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
-            ret = HomeConfig.coolDowns.get("a");
+            ret = HomeConfig.coolDowns[0];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
-            ret = HomeConfig.coolDowns.get("b");
+            ret = HomeConfig.coolDowns[1];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
-            ret = HomeConfig.coolDowns.get("c");
+            ret = HomeConfig.coolDowns[2];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownD)) {
-            ret = HomeConfig.coolDowns.get("d");
+            ret = HomeConfig.coolDowns[3];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownE)) {
-            ret = HomeConfig.coolDowns.get("e");
+            ret = HomeConfig.coolDowns[4];
         } else {
             ret = HomeConfig.defaultCoolDown;
         }

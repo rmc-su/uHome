@@ -101,11 +101,15 @@ public class WarmUp {
         int ret;
 
         if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
-            ret = HomeConfig.warmUps.get("a");
+            ret = HomeConfig.warmUps[0];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
-            ret = HomeConfig.warmUps.get("b");
+            ret = HomeConfig.warmUps[1];
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
-            ret = HomeConfig.warmUps.get("c");
+            ret = HomeConfig.warmUps[2];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupD)) {
+            ret = HomeConfig.warmUps[3];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupE)) {
+            ret = HomeConfig.warmUps[4];
         } else {
             ret = HomeConfig.defaultWarmUp;
         }

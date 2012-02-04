@@ -23,8 +23,8 @@ public class HomeConfig {
     public static int defaultCoolDown;
     public static boolean coolDownNotify;
     public static int defaultWarmUp;
-    public static HashMap<String, Integer> warmUps;
-    public static HashMap<String, Integer> coolDowns;
+    public static int[] warmUps;
+    public static int[] coolDowns;
     public static boolean warmUpNotify;
     public static int abortOnDamage;
     public static boolean abortOnMove;
@@ -56,8 +56,8 @@ public class HomeConfig {
             ConfigurationSection dlLibs = settings.getConfigurationSection("downloadLibs");
 
             limits = new int[5];
-            coolDowns = new HashMap<String, Integer>();
-            warmUps = new HashMap<String, Integer>();
+            coolDowns = new int[5];
+            warmUps = new int[5];
 
             locale = settings.getString("locale", "en");
             useColors = settings.getBoolean("useColors", true);
@@ -93,18 +93,18 @@ public class HomeConfig {
             abortOnMove = timers.getBoolean("abortOnMovement", false);
 
 
-            coolDowns.put("a", cooldowns.getInt("cooldownA", 0));
-            coolDowns.put("b", cooldowns.getInt("cooldownB", 5));
-            coolDowns.put("c", cooldowns.getInt("cooldownC", 10));
-            coolDowns.put("d", cooldowns.getInt("cooldownD", 15));
-            coolDowns.put("e", cooldowns.getInt("cooldownE", 20));
+            coolDowns[0] = cooldowns.getInt("cooldownA", 0);
+            coolDowns[1] = cooldowns.getInt("cooldownB", 5);
+            coolDowns[2] = cooldowns.getInt("cooldownC", 10);
+            coolDowns[3] = cooldowns.getInt("cooldownD", 15);
+            coolDowns[4] = cooldowns.getInt("cooldownE", 20);
             defaultCoolDown = cooldowns.getInt("default", 0);
 
-            warmUps.put("a", warmups.getInt("warmupA", 0));
-            warmUps.put("b", warmups.getInt("warmupB", 5));
-            warmUps.put("c", warmups.getInt("warmupC", 10));
-            warmUps.put("d", warmups.getInt("warmupD", 15));
-            warmUps.put("e", warmups.getInt("warmupE", 20));
+            warmUps[0] = warmups.getInt("warmupA", 0);
+            warmUps[1] = warmups.getInt("warmupB", 5);
+            warmUps[2] = warmups.getInt("warmupC", 10);
+            warmUps[3] = warmups.getInt("warmupD", 15);
+            warmUps[4] = warmups.getInt("warmupE", 20);
             defaultWarmUp = warmups.getInt("default", 0);
         } catch (Exception ex) {
             log.log(Level.SEVERE, "Unable to load config", ex);
