@@ -272,6 +272,28 @@ public class HomeList {
         }
     }
 
+    public String getInvitedToList(String owner, String invitedBy) {
+        if (this.hasInvitedToHomes(owner)) {
+            StringBuilder ret = new StringBuilder(32);
+            boolean found = false;
+
+            for (Home home : inviteList.get(owner.toLowerCase())) {
+                if (home.owner.equalsIgnoreCase(invitedBy)) {
+                    found = true;
+                    ret.append(home.owner).append(" ").append(home.name).append(", ");
+                }
+            }
+
+            if (found) {
+                return ret.delete(ret.length() - 2, ret.length() - 1).toString();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     public String[] getRequestList(String owner) {
         if (this.hasHomes(owner)) {
             String[] reqs = new String[this.getPlayerHomeCount(owner)];

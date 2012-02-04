@@ -105,6 +105,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                         // /home uninvite (player) (name)
                         this.uninviteFromHome(player, args[1], args[2]);
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && "from".equalsIgnoreCase(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        // /home invites from (player)
+                        this.showInviteList(sender, args[1]);
                     } else if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
                         // /home set (player) (name)
                         this.setOtherHome(player, args[2], args[1]);
@@ -368,6 +371,21 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(LocaleManager.getString("own.invites.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.invites.ok", params));
+            player.sendMessage(iList);
+        }
+    }
+
+    public void showInviteListFrom(Player player, String from) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("INVITED", player.getName());
+        params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(from));
+
+        String iList = this.homeList.getInvitedToList(player.getName(), from);
+
+        if (iList == null) {
+            player.sendMessage(LocaleManager.getString("own.invitesfrom.none", params));
+        } else {
+            player.sendMessage(LocaleManager.getString("own.invitesfrom.ok", params));
             player.sendMessage(iList);
         }
     }
