@@ -1,7 +1,8 @@
 package uk.co.ks07.uhome;
 
 import java.util.Collection;
-import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,7 +22,7 @@ public class Home {
     public double z;
     public int yaw;
     public int pitch;
-    public Collection<String> invitees;
+    public Set<String> invitees;
     public static int nextIndex = 1;
     Location getLocation;
 
@@ -51,7 +52,7 @@ public class Home {
         this.z = z;
         this.pitch = pitch;
         this.yaw = yaw;
-        this.invitees.addAll(invitees);
+        this.invitees = new HashSet<String>(invitees);
         if (index > nextIndex) {
             nextIndex = index;
         }
@@ -140,14 +141,22 @@ public class Home {
 
     public void addInvitees(String player) {
         if (this.invitees == null) {
-            this.invitees = new TreeSet<String>();
+            this.invitees = new HashSet<String>();
         }
         this.invitees.add(player);
     }
 
+    public void addInvitees(Set<String> players) {
+        if (this.invitees == null) {
+            this.invitees = players;
+        } else {
+            this.invitees.addAll(players);
+        }
+    }
+
     public void addInvitees(Collection<String> players) {
         if (this.invitees == null) {
-            this.invitees = new TreeSet<String>(players);
+            this.invitees = new HashSet<String>(players);
         } else {
             this.invitees.addAll(players);
         }

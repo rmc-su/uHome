@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,11 +35,18 @@ public class WarpDataSource {
             + "`pitch` smallint NOT NULL DEFAULT '0',"
             + "UNIQUE (`owner`,`name`)"
             + ");";
+    private final static String INV_TABLE_NAME = "uhomeInvites";
+    private final static String INV_TABLE = "CREATE TABLE IF NOT EXISTS `uhomeInvites` ("
+            + "`homeid` INTEGER NOT NULL DEFAULT '0',"
+            + "`player` varchar(32) NOT NULL DEFAULT 'Player',"
+            + "PRIMARY KEY (`homeid`,`player`)"
+            + ");";
 
     public static void initialize(boolean needImport, Server server, Logger log) {
         WarpDataSource.server = server;
 
-        TableStatus status = tableExists(log);
+        TableStatus status = homeTableExists(log);
+
         if (status == TableStatus.NONE_EXIST) {
             // No tables exist, so create them.
             createTable(log);
@@ -120,15 +128,19 @@ public class WarpDataSource {
         }
     }
 
-    public static HashMap<String, HashMap<String, Home>> getMap(Logger log) {
-        HashMap<String, HashMap<String, Home>> ret = new HashMap<String, HashMap<String, Home>>();
+    public static WarpData getMap(Logger log) {
+        HashMap<String, HashMap<String, Home>> retHL = new HashMap<String, HashMap<String, Home>>();
+        HashMap<String, HashSet<Home>> retIL = new HashMap<String, HashSet<Home>>();
         Statement statement = null;
+        Statement invStatement = null;
         ResultSet set = null;
+        ResultSet invSet = null;
+        
         try {
             Connection conn = ConnectionManager.getConnection(log);
 
             statement = conn.createStatement();
-            set = statement.executeQuery("SELECT * FROM " + TABLE_NAME);
+            set = statement.executeQuery("SELECT * FROM " + TABLE_NAME + ", " + INV_TABLE_NAME + " WHERE " + TABLE_NAME + ".id = " + INV_TABLE_NAME + ".homeid");
             int size = 0;
             while (set.next()) {
                 size++;
@@ -141,13 +153,38 @@ public class WarpDataSource {
                 double z = set.getDouble("z");
                 int yaw = set.getInt("yaw");
                 int pitch = set.getInt("pitch");
+
                 Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
-                if (ret.containsKey(owner)) {
-                    ret.get(owner).put(name, warp);
+
+                HashSet<String> invitees = new HashSet<String>();
+                
+                // Probably better to do this with a join...
+                invStatement = conn.createStatement();
+                invSet = invStatement.executeQuery("SELECT player FROM " + INV_TABLE_NAME + " WHERE homeid=" + index);
+                while (invSet.next()) {
+                    invitees.add(invSet.getString(1));
+                    
+                    String lowerInvitee = invSet.getString(1).toLowerCase();
+                    
+                    if (retIL.containsKey(lowerInvitee)) {
+                        retIL.get(lowerInvitee).add(warp);
+                    } else {
+                        HashSet<Home> invitedHomes = new HashSet<Home>();
+                        invitedHomes.add(warp);
+                        retIL.put(lowerInvitee, invitedHomes);
+                    }
+                }
+
+                if (!invitees.isEmpty()) {
+                    warp.addInvitees(invitees);
+                }
+                
+                if (retHL.containsKey(owner.toLowerCase())) {
+                    retHL.get(owner.toLowerCase()).put(name, warp);
                 } else {
                     HashMap<String, Home> ownerWarps = new HashMap<String, Home>();
                     ownerWarps.put(name, warp);
-                    ret.put(owner, ownerWarps);
+                    retHL.put(owner.toLowerCase(), ownerWarps);
                 }
             }
             log.info(Integer.toString(size) + " homes loaded");
@@ -165,10 +202,11 @@ public class WarpDataSource {
                 log.severe("Home Load Exception (on close)");
             }
         }
-        return ret;
+
+        return new WarpData(retHL, retIL);
     }
 
-    private static TableStatus tableExists(Logger log) {
+    private static TableStatus homeTableExists(Logger log) {
         ResultSet rs = null;
         try {
             Connection conn = ConnectionManager.getConnection(log);
@@ -209,8 +247,8 @@ public class WarpDataSource {
 
             if (HomeConfig.usemySQL) {
                 // We need to set auto increment on SQL.
-                String sql = "ALTER TABLE `" + TABLE_NAME + "` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
                 log.info("Modifying database for MySQL support");
+                String sql = "ALTER TABLE `" + TABLE_NAME + "` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT ";
                 st = conn.createStatement();
                 st.executeUpdate(sql);
                 conn.commit();
@@ -243,11 +281,7 @@ public class WarpDataSource {
                         Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
                         addWarp(warp, log);
                     }
-                    log.info("Imported " + Integer.toString(size) + "homes from " + sqlitedb);
-                    log.info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(HomeConfig.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
-                        log.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
-                    }
+                    log.info("Imported " + Integer.toString(size) + " homes from " + sqlitedb);
 
                     if (slstatement != null) {
                         slstatement.close();
@@ -272,6 +306,95 @@ public class WarpDataSource {
                 }
             } catch (SQLException e) {
                 log.severe("Could not create the table (on close)");
+            }
+        }
+
+        createInviteTable(log);
+    }
+
+    private static void createInviteTable(Logger log) {
+        Statement st = null;
+        try {
+            log.info("Creating Invite Table...");
+            Connection conn = ConnectionManager.getConnection(log);
+            st = conn.createStatement();
+            st.executeUpdate(INV_TABLE);
+            conn.commit();
+
+            if (HomeConfig.usemySQL) {
+                // Check for old uhomes.db and import to mysql
+                File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
+                if (!sqlitefile.exists()) {
+                    log.info("Could not find old " + sqlitedb);
+                    return;
+                } else {
+                    log.info("Trying to import invites from uhomes.db");
+                    Class.forName("org.sqlite.JDBC");
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
+                    sqliteconn.setAutoCommit(false);
+
+                    boolean invTabExists = false;
+                    ResultSet rs = null;
+
+                    try {
+                        DatabaseMetaData dbm = sqliteconn.getMetaData();
+                        rs = dbm.getTables(null, null, INV_TABLE_NAME, null);
+                        invTabExists = rs.next();
+                    } catch (SQLException ex) {
+                        log.log(Level.SEVERE, "Invite Table Check Exception", ex);
+                    } finally {
+                        try {
+                            if (rs != null) {
+                                rs.close();
+                            }
+                        } catch (SQLException ex) {
+                            log.severe("Invite Table Check SQL Exception (on closing)");
+                        }
+                    }
+
+                    if (invTabExists) {
+                        Statement slstatement = sqliteconn.createStatement();
+                        ResultSet slset = slstatement.executeQuery("SELECT * FROM " + INV_TABLE_NAME);
+
+                        int size = 0;
+                        while (slset.next()) {
+                            size++;
+                            int homeID = slset.getInt("homeid");
+                            String player = slset.getString("player");
+                            addInvite(homeID, player, log);
+                        }
+                        log.info("Imported " + Integer.toString(size) + " invites from " + sqlitedb);
+
+                        // Rename here, we should have inserted homes previously.
+                        log.info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
+                        if (!sqlitefile.renameTo(new File(HomeConfig.dataDir.getAbsolutePath(), sqlitedb + ".old"))) {
+                            log.warning("Failed to rename " + sqlitedb + "! Please rename this manually!");
+                        }
+
+                        if (slstatement != null) {
+                            slstatement.close();
+                        }
+                        if (slset != null) {
+                            slset.close();
+                        }
+                    }
+
+                    if (sqliteconn != null) {
+                        sqliteconn.close();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Create Invite Table Exception", e);
+        } catch (ClassNotFoundException e) {
+            log.log(Level.SEVERE, "You need the SQLite library.", e);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException e) {
+                log.severe("Could not create the invite table (on close)");
             }
         }
     }
@@ -307,6 +430,29 @@ public class WarpDataSource {
                 }
             } catch (SQLException ex) {
                 log.log(Level.SEVERE, "Home Insert Exception (on close)", ex);
+            }
+        }
+    }
+
+    public static void addInvite(int homeID, String player, Logger log) {
+        PreparedStatement ps = null;
+        try {
+            Connection conn = ConnectionManager.getConnection(log);
+
+            ps = conn.prepareStatement("INSERT INTO " + INV_TABLE_NAME + " (homeid, player) VALUES (?,?)");
+            ps.setInt(1, homeID);
+            ps.setString(2, player);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            log.log(Level.SEVERE, "Home Invite Insert Exception", ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "Home Invite Insert Exception (on close)", ex);
             }
         }
     }

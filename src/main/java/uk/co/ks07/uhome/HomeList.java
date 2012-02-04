@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -29,8 +29,9 @@ public class HomeList {
 
     public HomeList(Server server, boolean needImport, Logger log) {
         WarpDataSource.initialize(needImport, server, log);
-        homeList = WarpDataSource.getMap(log);
-        inviteList = new HashMap<String, HashSet<Home>>();
+        WarpData wD = WarpDataSource.getMap(log);
+        homeList = wD.homeMap;
+        inviteList = wD.inviteMap;
         this.server = server;
     }
 
