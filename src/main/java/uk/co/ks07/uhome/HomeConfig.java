@@ -37,7 +37,7 @@ public class HomeConfig {
     public static String mySQLuname;
     public static String mySQLpass;
     public static String mySQLconn;
-    public static HashMap<String, Integer> limits;
+    public static int[] limits;
     public static int defaultLimit;
 
     public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
@@ -55,7 +55,7 @@ public class HomeConfig {
             ConfigurationSection mysql = settings.getConfigurationSection("mysql");
             ConfigurationSection dlLibs = settings.getConfigurationSection("downloadLibs");
 
-            limits = new HashMap<String, Integer>();
+            limits = new int[5];
             coolDowns = new HashMap<String, Integer>();
             warmUps = new HashMap<String, Integer>();
 
@@ -78,11 +78,11 @@ public class HomeConfig {
             mySQLuname = mysql.getString("username", "minecraft");
             mySQLpass = mysql.getString("password", "password");
 
-            limits.put("a", homeLimits.getInt("limitA", 0));
-            limits.put("b", homeLimits.getInt("limitB", 20));
-            limits.put("c", homeLimits.getInt("limitC", 15));
-            limits.put("d", homeLimits.getInt("limitD", 10));
-            limits.put("e", homeLimits.getInt("limitE", 5));
+            limits[0] = homeLimits.getInt("limitA", 0);
+            limits[1] = homeLimits.getInt("limitB", 20);
+            limits[2] = homeLimits.getInt("limitC", 15);
+            limits[3] = homeLimits.getInt("limitD", 10);
+            limits[4] = homeLimits.getInt("limitE", 5);
             defaultLimit = homeLimits.getInt("default", 3);
 
             coolDownNotify = timers.getBoolean("cooldownNotify", false);
