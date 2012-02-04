@@ -35,6 +35,10 @@ public final class SetHomeCoolDown extends CoolDownManager {
             ret = HomeConfig.coolDowns.get("b");
         } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
             ret = HomeConfig.coolDowns.get("c");
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownD)) {
+            ret = HomeConfig.coolDowns.get("d");
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownE)) {
+            ret = HomeConfig.coolDowns.get("e");
         } else {
             ret = HomeConfig.defaultCoolDown;
         }

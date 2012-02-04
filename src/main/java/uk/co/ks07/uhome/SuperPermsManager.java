@@ -40,10 +40,14 @@ public class SuperPermsManager {
     public static final String warmupA = "uhome.warmup.a";
     public static final String warmupB = "uhome.warmup.b";
     public static final String warmupC = "uhome.warmup.c";
+    public static final String warmupD = "uhome.warmup.d";
+    public static final String warmupE = "uhome.warmup.e";
     // Cooldown timer variables
     public static final String cooldownA = "uhome.cooldown.a";
     public static final String cooldownB = "uhome.cooldown.b";
     public static final String cooldownC = "uhome.cooldown.c";
+    public static final String cooldownD = "uhome.cooldown.d";
+    public static final String cooldownE = "uhome.cooldown.e";
 
     public static boolean hasPermission(Player player, String permission) {
         return player.hasPermission(permission);

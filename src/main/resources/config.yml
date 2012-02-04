@@ -34,9 +34,13 @@ timers:
     cooldownA: 0
     cooldownB: 5
     cooldownC: 10
+    cooldownD: 15
+    cooldownE: 20
     default: 0
   warmups:
     warmupA: 0
     warmupB: 5
     warmupC: 10
+    warmupD: 15
+    warmupE: 20
     default: 0

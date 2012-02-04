@@ -113,12 +113,20 @@ permissions:
     description: Gives the player the warmup time b set in the config.
   uhome.warmup.c:
     description: Gives the player the warmup time c set in the config.
+  uhome.warmup.d:
+    description: Gives the player the warmup time d set in the config.
+  uhome.warmup.e:
+    description: Gives the player the warmup time e set in the config.
   uhome.cooldown.a:
     description: Gives the player the cooldown time a set in the config.
   uhome.cooldown.b:
-    description: Gives the player the cooldown time a set in the config.
+    description: Gives the player the cooldown time b set in the config.
   uhome.cooldown.c:
-    description: Gives the player the cooldown time a set in the config.
+    description: Gives the player the cooldown time c set in the config.
+  uhome.cooldown.d:
+    description: Gives the player the cooldown time d set in the config.
+  uhome.cooldown.e:
+    description: Gives the player the cooldown time e set in the config.
   uhome.deny:
     description: Removes access to uHome - fix for ticket 8 on DBO.
   uhome.crossworld:

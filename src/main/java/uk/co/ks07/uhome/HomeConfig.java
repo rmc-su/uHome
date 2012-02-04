@@ -96,11 +96,15 @@ public class HomeConfig {
             coolDowns.put("a", cooldowns.getInt("cooldownA", 0));
             coolDowns.put("b", cooldowns.getInt("cooldownB", 5));
             coolDowns.put("c", cooldowns.getInt("cooldownC", 10));
+            coolDowns.put("d", cooldowns.getInt("cooldownD", 15));
+            coolDowns.put("e", cooldowns.getInt("cooldownE", 20));
             defaultCoolDown = cooldowns.getInt("default", 0);
 
             warmUps.put("a", warmups.getInt("warmupA", 0));
             warmUps.put("b", warmups.getInt("warmupB", 5));
             warmUps.put("c", warmups.getInt("warmupC", 10));
+            warmUps.put("d", warmups.getInt("warmupD", 15));
+            warmUps.put("e", warmups.getInt("warmupE", 20));
             defaultWarmUp = warmups.getInt("default", 0);
         } catch (Exception ex) {
             log.log(Level.SEVERE, "Unable to load config", ex);
