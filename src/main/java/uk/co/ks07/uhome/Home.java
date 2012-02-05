@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-
 import org.bukkit.entity.Player;
+
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 public class Home {
 
@@ -101,13 +101,13 @@ public class Home {
             currWorld = server.getWorld(world);
         }
         if (currWorld == null) {
-            player.sendMessage(ChatColor.RED + "Uh oh. The world with that home doesn't exist!");
+            player.sendMessage(LocaleManager.getString("error.warp.noworld", null, this));
         } else {
             if (player.getLocation().getWorld() == currWorld || SuperPermsManager.hasPermission(player, SuperPermsManager.allowCrossWorld)) {
                 Location location = new Location(currWorld, x, y, z, yaw, pitch);
                 player.teleport(location);
             } else {
-                player.sendMessage("Sorry, you can't warp to a home in another world!");
+                player.sendMessage(LocaleManager.getString("error.warp.nocrossworld"));
             }
         }
     }
