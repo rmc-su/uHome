@@ -13,8 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 
 public class uHome extends JavaPlugin {
-//	private UHPlayerListener playerListener;
-//	private UHEntityListener entityListener;
 
     private HomeList homeList;
     public String name;
@@ -56,39 +54,10 @@ public class uHome extends JavaPlugin {
         LocaleManager.init(this.getLogger());
         HomeHelp.initialize(this);
 
-//        playerListener = new UHPlayerListener(homeList, this);
-//        entityListener = new UHEntityListener(this);
-
         this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
         this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
 
         this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
-
-//        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-//
-//        if (HomeConfig.respawnToHome) {
-//            // Dont need this if we're not handling respawning.
-//            pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Highest, this);
-//        }
-//        if (HomeConfig.loadChunks) {
-//            // We dont need to register for teleporting if we dont want to load chunks.
-//            pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-//        }
-//        if (HomeConfig.abortOnDamage != 0) {
-//            // We dont need this if we're not aborting warmups for combat.
-//            pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
-//        }
-//        if (HomeConfig.abortOnMove) {
-//            // We dont need this if we're not aborting if they move during warmup.
-//            pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
-//        }
-//        if (HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
-//            // We don't need this if the beds cannot be used during the day
-//            pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
-//        } else if (!HomeConfig.bedsDuringDay && HomeConfig.bedsCanSethome != 0) {
-//            // We don't need this if the beds dont sethome
-//            pm.registerEvent(Event.Type.PLAYER_BED_LEAVE, playerListener, Priority.Monitor, this);
-//        }
     }
 
     private void libCheck() {
