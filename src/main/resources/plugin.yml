@@ -4,8 +4,6 @@ author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
 website: http://ks07.co.uk/
-softdepend:
-  - Help
 commands:
   home:
     description: Access to the home commands.
