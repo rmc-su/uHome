@@ -326,7 +326,7 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.uninvite.notinvited", params));
             }
         } else {
-            player.sendMessage("The home " + targetHome + " doesn't exist!");
+            player.sendMessage(LocaleManager.getString("own.uninvite.notexists", params));
         }
     }
 

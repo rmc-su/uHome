@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.WarmUp;
@@ -110,9 +111,11 @@ public class HomeList {
                     WarmUp.addPlayer(player, warp, plugin);
                     homeCoolDown.addPlayer(player, plugin);
                 } else {
-                    player.sendMessage(ChatColor.RED + "You need to wait "
-                            + homeCoolDown.estimateTimeLeft(player) + " more seconds of the "
-                            + homeCoolDown.getTimer(player) + " second cooldown.");
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                    params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+
+                    player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                 }
             } else {
                 player.sendMessage(ChatColor.RED + "You do not have permission to warp to " + targetOwner + "'s home");

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import uk.co.ks07.uhome.SuperPermsManager;
 import uk.co.ks07.uhome.HomeConfig;
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 /**
  * Manages cooldown for the home command.
@@ -59,7 +60,7 @@ public final class HomeCoolDown extends CoolDownManager {
     protected void onCoolDownExpiry(Player player) {
         super.onCoolDownExpiry(player);
         if (HomeConfig.coolDownNotify) {
-            player.sendMessage(ChatColor.AQUA + "You have cooled down, feel free to /home");
+            player.sendMessage(LocaleManager.getString("cooldown.finished"));
         }
     }
 }
