@@ -29,7 +29,7 @@ public class HomeConfig {
     public static int abortOnDamage;
     public static boolean abortOnMove;
     public static boolean respawnToHome;
-    public static boolean allowSetHome;
+    public static boolean enableSethome;
     public static int bedsCanSethome;
     public static boolean bedsDuringDay;
     public static boolean loadChunks;
@@ -67,6 +67,7 @@ public class HomeConfig {
             loadChunks = settings.getBoolean("loadChunks", false);
             enableInvite = settings.getBoolean("enableInvite", true);
             enableDenyPerm = settings.getBoolean("enableDenyPerm", false);
+            enableSethome = settings.getBoolean("enableSethome", false);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
