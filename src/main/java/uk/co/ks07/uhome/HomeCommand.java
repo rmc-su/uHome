@@ -88,6 +88,12 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("warp".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
                         // /home warp (player|name)
                         this.goToUnknownTarget(player, args[1]);
+                    } else if (HomeConfig.enableInvite && "invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home invite (player)
+                        this.inviteToHome(player, args[1], uHome.DEFAULT_HOME);
+                    } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
+                        // /home uninvite (player)
+                        this.uninviteFromHome(player, args[1], uHome.DEFAULT_HOME);
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites (player)
                         this.showInviteList(sender, args[1]);
