@@ -283,34 +283,17 @@ public class HomeList {
         }
     }
 
-    public String[] getRequestList(String owner) {
+    public Collection<Home> getRequestList(String owner) {
         if (this.hasHomes(owner)) {
-            String[] reqs = new String[this.getPlayerHomeCount(owner)];
-            boolean anyInvites = false;
-            int i = -1;
+            ArrayList<Home> ret = new ArrayList<Home>();
 
             for (Home home : homeList.get(owner.toLowerCase()).values()) {
                 if (home.hasInvitees()) {
-                    anyInvites = true;
-                    i += 1;
-
-                    StringBuilder temp = new StringBuilder(32);
-                    temp.append(home.name).append(" - (");
-
-                    for (String invitee : home.getInvitees()) {
-                        temp.append(invitee).append(", ");
-                    }
-                    temp.delete(temp.length() - 2, temp.length()).append(")");
-
-                    reqs[i] = temp.toString();
+                    ret.add(home);
                 }
             }
 
-            if (anyInvites) {
-                return reqs;
-            } else {
-                return null;
-            }
+            return ret;
         } else {
             return null;
         }

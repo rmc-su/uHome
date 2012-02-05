@@ -183,4 +183,8 @@ public class Home {
     public Collection<String> getInvitees() {
         return this.invitees;
     }
+
+    public String inviteesToString() {
+        return this.invitees.toString().replace("[", "").replace("]", "");
+    }
 }

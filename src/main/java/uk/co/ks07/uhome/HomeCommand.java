@@ -385,7 +385,7 @@ public class HomeCommand implements CommandExecutor {
 
         Collection<Home> iList = this.homeList.getInvitedToList(player.getName(), from);
 
-        if (iList == null) {
+        if (iList == null || iList.isEmpty()) {
             player.sendMessage(LocaleManager.getString("own.invitesfrom.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.invitesfrom.ok", params));
@@ -395,7 +395,7 @@ public class HomeCommand implements CommandExecutor {
 
     public void showInviteList(CommandSender sender, String player) {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("INVITED", player);
+        params.put("INVITED", HomeList.getOnlinePlayerCapitalisation(player));
 
         Home[] iList = this.homeList.getInvitedToList(player);
 
@@ -413,32 +413,30 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("OWNER", player.getName());
 
-        String results[] = this.homeList.getRequestList(player.getName());
+        Collection<Home> results = this.homeList.getRequestList(player.getName());
 
-        if (results == null) {
+        if (results == null || results.isEmpty()) {
             player.sendMessage(LocaleManager.getString("own.requests.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.requests.ok", params));
-            for (String s : results) {
-                if (s != null) {
-                    player.sendMessage(s);
-                }
+            for (Home home : results) {
+                player.sendMessage(LocaleManager.getString("own.requests.output", params, home));
             }
         }
     }
 
     public void showRequestList(CommandSender sender, String player) {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("OWNER", player);
+        params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(player));
 
-        String results[] = this.homeList.getRequestList(player);
+        Collection<Home> results = this.homeList.getRequestList(player);
 
-        if (results == null) {
+        if (results == null || results.isEmpty()) {
             sender.sendMessage(LocaleManager.getString("admin.requests.none", params));
         } else {
             sender.sendMessage(LocaleManager.getString("admin.requests.ok", params));
-            for (String s : results) {
-                sender.sendMessage(s);
+            for (Home home : results) {
+                sender.sendMessage(LocaleManager.getString("admin.requests.output", params, home));
             }
         }
     }
