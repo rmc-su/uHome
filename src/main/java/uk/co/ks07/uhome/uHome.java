@@ -1,7 +1,9 @@
 package uk.co.ks07.uhome;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.util.logging.Level;
 
@@ -53,6 +55,11 @@ public class uHome extends JavaPlugin {
         homeList = new HomeList(getServer(), needImport, this.getLogger());
 
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
+
+        if (!customLocale.exists()) {
+            writeResource(this.getResource("customlocale.properties"), customLocale);
+        }
+        
         LocaleManager.init(customLocale, this.getLogger());
         
         HomeHelp.initialize(this);
@@ -117,37 +124,32 @@ public class uHome extends JavaPlugin {
             this.getLogger().log(Level.SEVERE, "Could not create new database file", ex);
         }
     }
-    /**
-     * File copier from xZise
-     * @param fromFile
-     * @param toFile
-     */
-//	private static void copyFile(File fromFile, File toFile) {
-//		FileInputStream from = null;
-//		FileOutputStream to = null;
-//		try {
-//			from = new FileInputStream(fromFile);
-//			to = new FileOutputStream(toFile);
-//			byte[] buffer = new byte[4096];
-//			int bytesRead;
-//
-//			while ((bytesRead = from.read(buffer)) != -1) {
-//				to.write(buffer, 0, bytesRead);
-//			}
-//		} catch (IOException ex) {
-//		} finally {
-//			if (from != null) {
-//				try {
-//					from.close();
-//				} catch (IOException e) {
-//				}
-//			}
-//			if (to != null) {
-//				try {
-//					to.close();
-//				} catch (IOException e) {
-//				}
-//			}
-//		}
-//	}
+
+    // Thanks to xZise for original code.
+    private static void writeResource(InputStream fromResource, File toFile) {
+        FileOutputStream to = null;
+        try {
+            to = new FileOutputStream(toFile);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+
+            while ((bytesRead = fromResource.read(buffer)) != -1) {
+                to.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException ex) {
+        } finally {
+            if (fromResource != null) {
+                try {
+                    fromResource.close();
+                } catch (IOException e) {
+                }
+            }
+            if (to != null) {
+                try {
+                    to.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
 }
