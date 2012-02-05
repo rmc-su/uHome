@@ -51,7 +51,10 @@ public class uHome extends JavaPlugin {
         }
 
         homeList = new HomeList(getServer(), needImport, this.getLogger());
-        LocaleManager.init(this.getLogger());
+
+        File customLocale = new File(this.getDataFolder(), "customlocale.properties");
+        LocaleManager.init(customLocale, this.getLogger());
+        
         HomeHelp.initialize(this);
 
         this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));

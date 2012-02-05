@@ -1,14 +1,19 @@
 package uk.co.ks07.uhome.locale;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import uk.co.ks07.uhome.Home;
 
+import uk.co.ks07.uhome.Home;
 import uk.co.ks07.uhome.HomeConfig;
 
 public class LocaleManager {
@@ -16,15 +21,31 @@ public class LocaleManager {
     private static final String LOCALE_BUNDLE = "uk.co.ks07.uhome.locale.uhome.uhome";
     private static ResourceBundle locResBundle = null;
 
-    public static void init(Logger log) {
+    public static void init(File customLocale, Logger log) {
         String locale = HomeConfig.locale.toLowerCase();
-        try {
-            locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
-            log.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
-        } catch (MissingResourceException e) {
-            // Failed to load requested locale file so fallback to en
-            locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
-            log.warning("Failed to find locale " + locale + ". Falling back to using English (en).");
+
+        if ("file".equals(locale)) {
+            try {
+                locResBundle = new PropertyResourceBundle(new FileInputStream(customLocale));
+                log.info("Using custom localization from customlocale.properties.");
+            } catch (FileNotFoundException e) {
+                // Failed to load custom locale file so fallback to en.
+                locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
+                log.warning("The locale file customlocale.properties does not exist! Falling back to using English (en).");
+            } catch (IOException e) {
+                // IO Error occured while loading custom locale file.
+                locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
+                log.warning("An error occured while reading customlocale.properties! Falling back to using English (en).");
+            }
+        } else {
+            try {
+                locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
+                log.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
+            } catch (MissingResourceException e) {
+                // Failed to load requested locale file so fallback to en
+                locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
+                log.warning("Failed to find locale " + locale + ". Falling back to using English (en).");
+            }
         }
     }
 
