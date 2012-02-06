@@ -331,10 +331,7 @@ public class HomeList {
             return new MatchList(exactMatches, matches);
         }
 
-        List<String> names = new ArrayList<String>(homeList.get(owner.toLowerCase()).keySet());
-
-        for (int i = 0; i < names.size(); i++) {
-            String currName = names.get(i);
+        for (String currName : homeList.get(owner.toLowerCase()).keySet()) {
             Home warp = homeList.get(owner.toLowerCase()).get(currName);
             if (warp.playerCanWarp(player)) {
                 if (warp.name.equalsIgnoreCase(name)) {
