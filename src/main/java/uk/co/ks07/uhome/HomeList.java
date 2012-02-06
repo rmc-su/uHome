@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -12,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.WarmUp;
@@ -168,17 +168,18 @@ public class HomeList {
     }
 
     public boolean invitePlayer(String owner, String player, String name) {
-        homeList.get(owner.toLowerCase()).get(name).addInvitees(player);
+        Home inviteTo = homeList.get(owner.toLowerCase()).get(name);
+        inviteTo.addInvitees(player);
 
         if (!inviteList.containsKey(player.toLowerCase())) {
             inviteList.put(player.toLowerCase(), new HashSet<Home>());
         }
 
-        if (!inviteList.get(player.toLowerCase()).contains(homeList.get(owner.toLowerCase()).get(name))) {
-            inviteList.get(player.toLowerCase()).add(homeList.get(owner.toLowerCase()).get(name));
+        if (!inviteList.get(player.toLowerCase()).contains(inviteTo)) {
+            inviteList.get(player.toLowerCase()).add(inviteTo);
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
-                invitee.sendMessage("You have been invited to " + owner + "'s home " + name);
+                invitee.sendMessage(LocaleManager.getString("own.invite.notify", null, inviteTo));
             }
 
             return true;
@@ -188,12 +189,13 @@ public class HomeList {
     }
 
     public boolean uninvitePlayer(String owner, String player, String name) {
-        homeList.get(owner.toLowerCase()).get(name).removeInvitee(player);
+        Home inviteHome = homeList.get(owner.toLowerCase()).get(name);
+        inviteHome.removeInvitee(player);
         if (inviteList.containsKey(player.toLowerCase())) {
-            inviteList.get(player.toLowerCase()).remove(homeList.get(owner.toLowerCase()).get(name));
+            inviteList.get(player.toLowerCase()).remove(inviteHome);
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
-                invitee.sendMessage("You have been uninvited from " + owner + "'s home " + name);
+                invitee.sendMessage(LocaleManager.getString("own.uninvite.notify", null, inviteHome));
             }
 
             return true;
