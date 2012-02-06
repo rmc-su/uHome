@@ -97,11 +97,11 @@ public class HomeList {
         }
     }
 
-    public void warpTo(String target, Player player, Plugin plugin) {
-        this.warpTo(player.getName(), target, player, plugin);
+    public ExitStatus warpTo(String target, Player player, Plugin plugin) {
+        return this.warpTo(player.getName(), target, player, plugin);
     }
 
-    public void warpTo(String targetOwner, String target, Player player, Plugin plugin) {
+    public ExitStatus warpTo(String targetOwner, String target, Player player, Plugin plugin) {
         MatchList matches = this.getMatches(target, player, targetOwner);
         target = matches.getMatch(target);
         if (homeList.get(targetOwner.toLowerCase()).containsKey(target)) {
@@ -110,18 +110,15 @@ public class HomeList {
                 if (homeCoolDown.playerHasCooled(player)) {
                     WarmUp.addPlayer(player, warp, plugin);
                     homeCoolDown.addPlayer(player, plugin);
+                    return ExitStatus.SUCCESS;
                 } else {
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                    params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
-
-                    player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+                    return ExitStatus.NEED_COOLDOWN;
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "You do not have permission to warp to " + targetOwner + "'s home");
+                return ExitStatus.NOT_PERMITTED;
             }
         } else {
-            player.sendMessage(ChatColor.RED + "The warp " + target + " doesn't exist!");
+            return ExitStatus.NOT_EXISTS;
         }
     }
 

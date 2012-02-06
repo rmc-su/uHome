@@ -252,11 +252,47 @@ public class HomeCommand implements CommandExecutor {
         params.put("OWNER", player.getName());
 
         if (homeList.homeExists(player.getName(), target)) {
-            homeList.warpTo(target, player, plugin);
-        } else if (homeList.homeExists("home", target) && homeList.playerCanWarp(player, target, "home")) {
-            homeList.warpTo(target, "home", player, plugin);
+            ExitStatus es = homeList.warpTo(target, player, plugin);
+
+            // If SUCCESS, the task has been passed on to the warmup handler.
+            if (es == ExitStatus.NEED_COOLDOWN) {
+                params = new HashMap<String, String>();
+                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+
+                player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+            }
+        } else if (homeList.playerHasDefaultHome(target) && homeList.playerCanWarp(player, target, uHome.DEFAULT_HOME)) {
+            ExitStatus es = homeList.warpTo(target, uHome.DEFAULT_HOME, player, plugin);
+
+            // If SUCCESS, the task has been passed on to the warmup handler.
+            switch (es) {
+                case NEED_COOLDOWN:
+                    params = new HashMap<String, String>();
+                    params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                    params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+
+                    player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+                    break;
+                case NOT_PERMITTED:
+                    params = new HashMap<String, String>();
+                    params.put("HOME", uHome.DEFAULT_HOME);
+                    params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(target));
+
+                    player.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
+                    break;
+            }
         } else {
+            params = new HashMap<String, String>();
+            params.put("HOME", target);
+
             player.sendMessage(LocaleManager.getString("own.warp.notexists", params));
+
+            if (HomeConfig.bedsCanSethome == 2) {
+                player.sendMessage(LocaleManager.getString("usage.sleep"));
+            } else {
+                player.sendMessage(LocaleManager.getString("usage.set"));
+            }
         }
     }
 
@@ -288,19 +324,27 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void goToOtherHome(Player user, String targetHome, String targetOwner) {
+    public void goToOtherHome(Player player, String targetHome, String targetOwner) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("HOME", targetHome);
         params.put("OWNER", targetOwner);
+        
+        ExitStatus es = this.homeList.warpTo(targetOwner, targetHome, player, this.plugin);
 
-        if (this.homeList.homeExists(targetOwner, targetHome)) {
-            if (this.homeList.playerCanWarp(user, targetOwner, targetHome)) {
-                this.homeList.warpTo(targetOwner, targetHome, user, this.plugin);
-            } else {
-                user.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
-            }
-        } else {
-            user.sendMessage(LocaleManager.getString("other.warp.notexists", params));
+        // If SUCCESS, the task has been passed on to the warmup handler.
+        switch (es) {
+            case NEED_COOLDOWN:
+                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+
+                player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+                break;
+            case NOT_PERMITTED:
+                player.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
+                break;
+            case NOT_EXISTS:
+                player.sendMessage(LocaleManager.getString("other.warp.notexists", params));
+                break;
         }
     }
 
