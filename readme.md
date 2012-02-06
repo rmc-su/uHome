@@ -12,6 +12,8 @@ Commands & Permissions:
     /home - (uhome.own.warp) - Takes you to your "home" home.
     /home set - (uhome.own.set) - Sets your "home" home to your current position.
     /home delete - (uhome.own.delete) - Deletes your home "home".
+    /home invite <player> - (uhome.own.invite) - Invites a player to your home "home".
+    /home uninvite <player> - (uhome.own.invite) - Uninvites a player from your home "home".
     /home help - Display help
 
     Multihome Commands:
@@ -19,6 +21,11 @@ Commands & Permissions:
     /home list - (uhome.own.list) - Displays the homes you own.
     /home set <name> - (uhome.own.set) - Sets a home called <name> to your current position.
     /home delete <name> - (uhome.own.delete) - Deletes your home named <name>.
+    /home invite <player> <home> - (uhome.own.invite) - Invites a player to your home <home>.
+    /home uninvite <player> <home> - (uhome.own.invite) - Uninvites a player from your home <home>.
+    /home invites - (uhome.own.invite) - List the invites you have received.
+    /home invites from <player> - (uhome.own.invite) - List the invites you have received from <player>.
+    /home requests - (uhome.own.invite) - List the invites you have sent.
 
     Admin Commands:
     /home list <player> - (uhome.admin.list) - Lists a player's homes.
@@ -26,13 +33,15 @@ Commands & Permissions:
     /home reload - (uhome.admin.reload) - Reload uHome's configuration - Do not use this for swapping to MySQL
     /home <player> <name> - (uhome.admin.warp) - Takes you to the home of <player> called <name>.
     /home set <player> <name> - (uhome.admin.set) - Sets another player's home to your location.
+    /home invites <player> - (uhome.admin.invite) - List the invites that player has received.
+    /home requests <player> - (uhome.own.invite) - List the invites that player has0000000000000000000000 0sent.
 
 Permissions:
 
     Variable Permissions:
     (uhome.limit.[a-e]) - Gives the player the home limit reflected by the config. E.g. if limitB=10, and the player has the permission "uhome.limit.b", the player can make up to 10 homes.
-    (uhome.cooldown.[a-c]) - Gives the player the cooldown time reflected by the config, as above.
-    (uhome.warmup.[a-c]) - Gives the player the warmup time reflected by the config, as above.
+    (uhome.cooldown.[a-e]) - Gives the player the cooldown time reflected by the config, as above.
+    (uhome.warmup.[a-e]) - Gives the player the warmup time reflected by the config, as above.
 
     Bypassing Timers/Limits Permisions:
     (uhome.bypass) - Bypass all limits (cooldowns, warmups, bed usage and home limit)
