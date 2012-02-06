@@ -260,19 +260,31 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void goToHome(Player user) {
-        if (this.homeList.playerHasDefaultHome(user.getName())) {
-            this.homeList.sendPlayerHome(user, this.plugin);
-        } else {
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("HOME", uHome.DEFAULT_HOME);
+    public void goToHome(Player player) {
+        ExitStatus es = this.homeList.sendPlayerHome(player, this.plugin);
+        HashMap<String, String> params;
 
-            user.sendMessage(LocaleManager.getString("own.warp.notexists", params));
-            if (HomeConfig.bedsCanSethome == 2) {
-                user.sendMessage(LocaleManager.getString("usage.sleep"));
-            } else {
-                user.sendMessage(LocaleManager.getString("usage.set"));
-            }
+        // If SUCCESS, the task has been passed on to the warmup handler.
+        switch (es) {
+            case NEED_COOLDOWN:
+                params = new HashMap<String, String>();
+                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+
+                player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+                break;
+            case NOT_EXISTS:
+                params = new HashMap<String, String>();
+                params.put("HOME", uHome.DEFAULT_HOME);
+
+                player.sendMessage(LocaleManager.getString("own.warp.notexists", params));
+
+                if (HomeConfig.bedsCanSethome == 2) {
+                    player.sendMessage(LocaleManager.getString("usage.sleep"));
+                } else {
+                    player.sendMessage(LocaleManager.getString("usage.set"));
+                }
+                break;
         }
     }
 

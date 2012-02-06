@@ -5,6 +5,7 @@ import java.util.HashMap;
 import uk.co.ks07.uhome.Home;
 import uk.co.ks07.uhome.HomeConfig;
 import uk.co.ks07.uhome.SuperPermsManager;
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -33,7 +34,10 @@ public class WarmUp {
             }
 
             if (HomeConfig.warmUpNotify) {
-                player.sendMessage(ChatColor.RED + "You will have to warm up for " + timer + " secs");
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("WU_TIME", Integer.toString(timer));
+
+                player.sendMessage(LocaleManager.getString("warmup.wait"));
             }
 
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer * 20);
@@ -50,7 +54,7 @@ public class WarmUp {
     private static void sendPlayer(Player player, Home home, Server server) {
         int timer = getTimer(player);
         if (HomeConfig.warmUpNotify && timer > 0) {
-            player.sendMessage(ChatColor.RED + "You have warmed up! Sending you /home");
+            player.sendMessage(LocaleManager.getString("warmup.finished"));
         }
         home.warp(player, server);
     }

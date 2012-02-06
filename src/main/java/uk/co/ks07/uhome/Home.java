@@ -106,6 +106,12 @@ public class Home {
             if (player.getLocation().getWorld() == currWorld || SuperPermsManager.hasPermission(player, SuperPermsManager.allowCrossWorld)) {
                 Location location = new Location(currWorld, x, y, z, yaw, pitch);
                 player.teleport(location);
+                
+                if (playerIsCreator(player.getName())) {
+                    player.sendMessage(LocaleManager.getString("own.warp.ok", null, this));
+                } else {
+                    player.sendMessage(LocaleManager.getString("other.warp.ok", null, this));
+                }
             } else {
                 player.sendMessage(LocaleManager.getString("error.warp.nocrossworld"));
             }
@@ -113,7 +119,7 @@ public class Home {
     }
 
     public boolean playerIsCreator(String player) {
-        return owner.equals(player);
+        return owner.equalsIgnoreCase(player);
     }
 
     @Override

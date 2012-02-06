@@ -125,16 +125,17 @@ public class HomeList {
         }
     }
 
-    public void sendPlayerHome(Player player, Plugin plugin) {
-        if (homeList.containsKey(player.getName().toLowerCase())) {
+    public ExitStatus sendPlayerHome(Player player, Plugin plugin) {
+        if (playerHasDefaultHome(player.getName())) {
             if (homeCoolDown.playerHasCooled(player)) {
                 WarmUp.addPlayer(player, homeList.get(player.getName().toLowerCase()).get(uHome.DEFAULT_HOME), plugin);
                 homeCoolDown.addPlayer(player, plugin);
+                return ExitStatus.SUCCESS;
             } else {
-                player.sendMessage(ChatColor.RED + "You need to wait "
-                        + homeCoolDown.estimateTimeLeft(player) + " more seconds of the "
-                        + homeCoolDown.getTimer(player) + " second cooldown.");
+                return ExitStatus.NEED_COOLDOWN;
             }
+        } else {
+            return ExitStatus.NOT_EXISTS;
         }
     }
 
@@ -347,6 +348,15 @@ public class HomeList {
 
     public Home getPlayerDefaultHome(String player) {
         return homeList.get(player.toLowerCase()).get(uHome.DEFAULT_HOME);
+    }
+    
+    public String guessHomeName(Player player, String owner, String name) {
+        MatchList matches = this.getMatches(name, player, owner);
+        return matches.getMatch(name);
+    }
+    
+    public Home getNamedHome(String owner, String name) {
+        return homeList.get(owner.toLowerCase()).get(name);
     }
 
     public static String getOnlinePlayerCapitalisation(String name) {
