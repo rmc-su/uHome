@@ -11,8 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import uk.co.ks07.uhome.locale.LocaleManager;
 
+import uk.co.ks07.uhome.locale.LocaleManager;
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.WarmUp;
 import uk.co.ks07.uhome.timers.SetHomeCoolDown;
@@ -175,8 +175,7 @@ public class HomeList {
             inviteList.put(player.toLowerCase(), new HashSet<Home>());
         }
 
-        if (!inviteList.get(player.toLowerCase()).contains(inviteTo)) {
-            inviteList.get(player.toLowerCase()).add(inviteTo);
+        if (inviteList.get(player.toLowerCase()).add(inviteTo)) {
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
                 invitee.sendMessage(LocaleManager.getString("own.invite.notify", null, inviteTo));
@@ -191,8 +190,7 @@ public class HomeList {
     public boolean uninvitePlayer(String owner, String player, String name) {
         Home inviteHome = homeList.get(owner.toLowerCase()).get(name);
         inviteHome.removeInvitee(player);
-        if (inviteList.containsKey(player.toLowerCase())) {
-            inviteList.get(player.toLowerCase()).remove(inviteHome);
+        if (inviteList.get(player.toLowerCase()).remove(inviteHome)) {
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
                 invitee.sendMessage(LocaleManager.getString("own.uninvite.notify", null, inviteHome));
