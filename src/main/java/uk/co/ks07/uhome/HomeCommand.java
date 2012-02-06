@@ -20,6 +20,7 @@ public class HomeCommand implements CommandExecutor {
     private HomeList homeList;
 
     private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
+    private static final int PAGINATION_SIZE = 7;
 
     public HomeCommand(uHome uH, HomeList hL) {
         this.plugin = uH;
@@ -79,13 +80,13 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("delete".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownDelete)) {
                         // /home delete (name)
                         this.deleteHome(player, args[1]);
-                    } else if ("list".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownList)) {
+                    } else if ("list".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
                         // /home list (player)
                         this.showHomeList(player, args[1]);
                     } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home limit (player)
                         this.showOtherLimit(player, args[1]);
-                    } else if ("warp".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
+                    } else if ("warp".equalsIgnoreCase(args[0]) && (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp))) {
                         // /home warp (player|name)
                         this.goToUnknownTarget(player, args[1]);
                     } else if (HomeConfig.enableInvite && "invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
@@ -608,5 +609,23 @@ public class HomeCommand implements CommandExecutor {
         }
         sender.sendMessage(ChatColor.RED + "/home limit" + ChatColor.WHITE + " -  Show your max homes.");
         sender.sendMessage(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
+    }
+
+    private static void sendPaginated(String header, ArrayList<String> messages, int printPage, CommandSender receiver) {
+        int atPageRemains = messages.size() - ((printPage - 1) * PAGINATION_SIZE);
+        int startIndex = (printPage - 1) * PAGINATION_SIZE;
+        int endIndex;
+        
+        if (atPageRemains < PAGINATION_SIZE) {
+            endIndex = startIndex + atPageRemains;
+        } else {
+            endIndex = startIndex + PAGINATION_SIZE;
+        }
+
+        receiver.sendMessage(header);
+        for (int i = startIndex; i < endIndex; i++) {
+            receiver.sendMessage(messages.get(i));
+        }
+
     }
 }
