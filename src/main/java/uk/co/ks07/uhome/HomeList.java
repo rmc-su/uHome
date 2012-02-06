@@ -122,6 +122,25 @@ public class HomeList {
         }
     }
 
+    public ExitStatus warpToExact(String targetOwner, String target, Player player, Plugin plugin) {
+        if (this.homeExists(targetOwner, target)) {
+            Home warp = homeList.get(targetOwner.toLowerCase()).get(target);
+            if (warp.playerCanWarp(player)) {
+                if (homeCoolDown.playerHasCooled(player)) {
+                    WarmUp.addPlayer(player, warp, plugin);
+                    homeCoolDown.addPlayer(player, plugin);
+                    return ExitStatus.SUCCESS;
+                } else {
+                    return ExitStatus.NEED_COOLDOWN;
+                }
+            } else {
+                return ExitStatus.NOT_PERMITTED;
+            }
+        } else {
+            return ExitStatus.NOT_EXISTS;
+        }
+    }
+
     public ExitStatus sendPlayerHome(Player player, Plugin plugin) {
         if (playerHasDefaultHome(player.getName())) {
             if (homeCoolDown.playerHasCooled(player)) {
