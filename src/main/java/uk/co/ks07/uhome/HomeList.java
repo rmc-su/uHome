@@ -336,9 +336,6 @@ public class HomeList {
         }
 
         List<String> names = new ArrayList<String>(homeList.get(owner.toLowerCase()).keySet());
-        Collator collator = Collator.getInstance();
-        collator.setStrength(Collator.SECONDARY);
-        Collections.sort(names, collator);
 
         for (int i = 0; i < names.size(); i++) {
             String currName = names.get(i);
