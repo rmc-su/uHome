@@ -1,10 +1,11 @@
 package uk.co.ks07.uhome;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 public class SetHomeCommand implements CommandExecutor {
 
@@ -28,7 +29,7 @@ public class SetHomeCommand implements CommandExecutor {
 
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                     if (HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
-                        player.sendMessage(ChatColor.RED + "You can only set a home by sleeping in a bed");
+                        player.sendMessage(LocaleManager.getString("usage.sleep"));
                         return true;
                     }
 

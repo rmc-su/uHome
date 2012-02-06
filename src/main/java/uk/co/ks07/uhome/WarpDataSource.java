@@ -13,9 +13,10 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+
+import uk.co.ks07.uhome.locale.LocaleManager;
 
 public class WarpDataSource {
 
@@ -421,7 +422,7 @@ public class WarpDataSource {
 
             Player owner = server.getPlayer(warp.owner);
             if (owner != null) {
-                owner.sendMessage(ChatColor.RED + "Failed to save your new home - Please contact an admin!");
+                owner.sendMessage(LocaleManager.getString("error.set.failed"));
             }
         } finally {
             try {
@@ -663,7 +664,6 @@ public class WarpDataSource {
     }
 
     private static enum TableStatus {
-
         NONE_EXIST,
         OLD_ONLY,
         UP_TO_DATE;

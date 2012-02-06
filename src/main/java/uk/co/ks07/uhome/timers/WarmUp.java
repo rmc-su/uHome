@@ -81,9 +81,9 @@ public class WarmUp {
             players.remove(player.getName());
 
             if (reason == Reason.DAMAGE) {
-                player.sendMessage(ChatColor.RED + "Your /home has been aborted due to combat");
+                player.sendMessage(LocaleManager.getString("warmup.aborted.combat"));
             } else if (reason == Reason.MOVEMENT) {
-                player.sendMessage(ChatColor.RED + "Your /home has been aborted due to movement");
+                player.sendMessage(LocaleManager.getString("warmup.aborted.movement"));
             }
         }
     }
