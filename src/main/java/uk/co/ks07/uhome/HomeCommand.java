@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,6 +22,7 @@ public class HomeCommand implements CommandExecutor {
 
     private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
     private static final int PAGINATION_SIZE = 8;
+    private static final Pattern integerPattern = Pattern.compile("^\\d+$");
 
     public HomeCommand(uHome uH, HomeList hL) {
         this.plugin = uH;
@@ -617,6 +619,10 @@ public class HomeCommand implements CommandExecutor {
         }
         sender.sendMessage(ChatColor.RED + "/home limit" + ChatColor.WHITE + " -  Show your max homes.");
         sender.sendMessage(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
+    }
+
+    private static boolean isInt(String input) {
+        return integerPattern.matcher(input).matches();
     }
 
     private static void sendPaginated(String header, ArrayList<String> messages, int printPage, CommandSender receiver) {
