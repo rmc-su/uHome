@@ -7,7 +7,6 @@ import uk.co.ks07.uhome.HomeConfig;
 import uk.co.ks07.uhome.SuperPermsManager;
 import uk.co.ks07.uhome.locale.LocaleManager;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

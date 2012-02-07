@@ -13,7 +13,6 @@ commands:
     description: Alias for /home set
     usage: /<command> - Sets the home position.
     permission: uhome.own.set
-
 permissions:
   uhome.all:
     description: Givess access to all uHome commands.

@@ -1,6 +1,5 @@
 package uk.co.ks07.uhome.timers;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import uk.co.ks07.uhome.SuperPermsManager;
