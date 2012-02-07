@@ -461,13 +461,12 @@ public class HomeCommand implements CommandExecutor {
         if (iList == null || iList.length == 0) {
             player.sendMessage(LocaleManager.getString("own.invites.none", params));
         } else {
-            player.sendMessage(LocaleManager.getString("own.invites.ok", params));
-
             ArrayList<String> messages = new ArrayList<String>(iList.length);
             for (Home home : iList) {
                 messages.add(LocaleManager.getString("own.invites.output", params, home));
             }
 
+            player.sendMessage(LocaleManager.getString("own.invites.ok", params));
             sendPaginated(null, messages, page, player);
         }
     }
@@ -496,13 +495,12 @@ public class HomeCommand implements CommandExecutor {
         if (iList == null) {
             sender.sendMessage(LocaleManager.getString("admin.invites.none", params));
         } else {
-            sender.sendMessage(LocaleManager.getString("admin.invites.ok", params));
-
             ArrayList<String> messages = new ArrayList<String>(iList.length);
             for (Home home : iList) {
                 messages.add(LocaleManager.getString("admin.invites.output", params, home));
             }
 
+            sender.sendMessage(LocaleManager.getString("admin.invites.ok", params));
             sendPaginated(null, messages, page, sender);
         }
     }
@@ -516,13 +514,12 @@ public class HomeCommand implements CommandExecutor {
         if (results == null || results.isEmpty()) {
             player.sendMessage(LocaleManager.getString("own.requests.none", params));
         } else {
-            player.sendMessage(LocaleManager.getString("own.requests.ok", params));
-
             ArrayList<String> messages = new ArrayList<String>(results.size());
             for (Home home : results) {
                 messages.add(LocaleManager.getString("own.requests.output", params, home));
             }
 
+            player.sendMessage(LocaleManager.getString("own.requests.ok", params));
             sendPaginated(null, messages, page, player);
         }
     }
@@ -536,13 +533,12 @@ public class HomeCommand implements CommandExecutor {
         if (results == null || results.isEmpty()) {
             sender.sendMessage(LocaleManager.getString("admin.requests.none", params));
         } else {
-            sender.sendMessage(LocaleManager.getString("admin.requests.ok", params));
-
             ArrayList<String> messages = new ArrayList<String>(results.size());
             for (Home home : results) {
                 messages.add(LocaleManager.getString("admin.requests.output", params, home));
             }
 
+            sender.sendMessage(LocaleManager.getString("admin.requests.ok", params));
             sendPaginated(null, messages, page, sender);
         }
     }
