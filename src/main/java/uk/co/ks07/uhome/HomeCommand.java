@@ -67,7 +67,7 @@ public class HomeCommand implements CommandExecutor {
                         this.showInviteList(player, 1);
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home requests
-                        this.showRequestList(player);
+                        this.showRequestList(player, 1);
                     } else if ("reload".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
                         // /home reload
                         this.reloadSettings(player);
@@ -101,6 +101,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && isPageNo(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home invites (page)
                         this.showInviteList(sender, args[1], 1);
+                    } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && isPageNo(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                        // /home requests (page)
+                        this.showRequestList(sender, args[1]);
                     }  else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites (player)
                         this.showInviteList(sender, args[1], 1);
@@ -491,7 +494,7 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void showRequestList(Player player) {
+    public void showRequestList(Player player, int page) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("OWNER", player.getName());
 
@@ -501,9 +504,13 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(LocaleManager.getString("own.requests.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.requests.ok", params));
+
+            ArrayList<String> messages = new ArrayList<String>(results.size());
             for (Home home : results) {
-                player.sendMessage(LocaleManager.getString("own.requests.output", params, home));
+                messages.add(LocaleManager.getString("own.requests.output", params, home));
             }
+
+            sendPaginated(null, messages, page, player);
         }
     }
 
