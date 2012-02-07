@@ -34,7 +34,8 @@ Commands & Permissions:
     /home <player> <name> - (uhome.admin.warp) - Takes you to the home of <player> called <name>.
     /home set <player> <name> - (uhome.admin.set) - Sets another player's home to your location.
     /home invites <player> - (uhome.admin.invite) - List the invites that player has received.
-    /home requests <player> - (uhome.own.invite) - List the invites that player has0000000000000000000000 0sent.
+    /home requests <player> - (uhome.own.invite) - List the invites that player has sent.
+    /home debug - (Console only) - Toggle the debug logging on or off.
 
 Permissions:
 
