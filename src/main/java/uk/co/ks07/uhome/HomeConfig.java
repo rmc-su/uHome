@@ -1,7 +1,6 @@
 package uk.co.ks07.uhome;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +38,7 @@ public class HomeConfig {
     public static String mySQLconn;
     public static int[] limits;
     public static int defaultLimit;
+    public static boolean debugLog;
 
     public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
         try {
@@ -68,6 +68,7 @@ public class HomeConfig {
             enableInvite = settings.getBoolean("enableInvite", true);
             enableDenyPerm = settings.getBoolean("enableDenyPerm", false);
             enableSethome = settings.getBoolean("enableSethome", false);
+            debugLog = settings.getBoolean("debugLog", false);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);

@@ -8,6 +8,7 @@ settings:
   enableInvite: true
   enableDenyPerm: false
   enableSethome: true
+  debugLog: false
   downloadLibs:
     enable: true
     mysqlLib: true
