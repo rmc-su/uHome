@@ -3,8 +3,13 @@ package uk.co.ks07.uhome;
 import org.bukkit.entity.Player;
 
 public class SuperPermsManager {
-    // Deny permission (default override)
+    public static uHome plugin;
 
+    public static void initialize(uHome plugin) {
+        SuperPermsManager.plugin = plugin;
+    }
+
+    // Deny permission (default override)
     public static final String denyPerm = "uhome.deny";
     // Home owners
     public static final String ownWarp = "uhome.own.warp";
@@ -50,6 +55,14 @@ public class SuperPermsManager {
     public static final String cooldownE = "uhome.cooldown.e";
 
     public static boolean hasPermission(Player player, String permission) {
-        return player.hasPermission(permission);
+        boolean ret = player.hasPermission(permission);
+        
+        if (ret) {
+            plugin.getLogger().fine(player.getName() + " returned true for the node " + permission);
+        } else {
+            plugin.getLogger().fine(player.getName() + " returned false for the node " + permission);
+        }
+        
+        return ret;
     }
 }
