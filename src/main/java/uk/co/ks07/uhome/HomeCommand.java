@@ -100,16 +100,16 @@ public class HomeCommand implements CommandExecutor {
                         this.uninviteFromHome(player, args[1], uHome.DEFAULT_HOME);
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && isPageNo(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home invites (page)
-                        this.showInviteList(sender, args[1], 1);
+                        this.showInviteList(player, getPageNo(args[1]));
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && isPageNo(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home requests (page)
-                        this.showRequestList(sender, args[1]);
-                    }  else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        this.showRequestList(player, getPageNo(args[1]));
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites (player)
                         this.showInviteList(sender, args[1], 1);
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home requests (player)
-                        this.showRequestList(sender, args[1]);
+                        this.showRequestList(sender, args[1], 1);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
@@ -122,9 +122,15 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                         // /home uninvite (player) (name)
                         this.uninviteFromHome(player, args[1], args[2]);
-                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && "from".equalsIgnoreCase(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && "from".equalsIgnoreCase(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home invites from (player)
                         this.showInviteList(sender, args[1], 1);
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && isPageNo(args[2]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        // /home invites (player) (page)
+                        this.showInviteList(sender, args[1], getPageNo(args[2]));
+                    } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && isPageNo(args[2]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                        // /home requests (player) (page)
+                        this.showRequestList(player, args[1], getPageNo(args[2]));
                     } else if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
                         // /home set (player) (name)
                         this.setOtherHome(player, args[2], args[1]);
@@ -166,7 +172,7 @@ public class HomeCommand implements CommandExecutor {
                         if ("invites".equalsIgnoreCase(args[0])) {
                             this.showInviteList(sender, args[1], 1);
                         } else if ("requests".equalsIgnoreCase(args[0])) {
-                            this.showRequestList(sender, args[1]);
+                            this.showRequestList(sender, args[1], 1);
                         }
                     }
                     break;
@@ -177,6 +183,13 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("delete".equalsIgnoreCase(args[0])) {
                         // /home delete (player) (name)
                         this.deleteOtherHome(sender, args[1], args[2]);
+                    } else if (HomeConfig.enableInvite && isPageNo(args[2])) {
+                        // /home invites|requests (player) (page)
+                        if ("invites".equalsIgnoreCase(args[0])) {
+                            this.showInviteList(sender, args[1], getPageNo(args[2]));
+                        } else if ("requests".equalsIgnoreCase(args[0])) {
+                            this.showRequestList(sender, args[1], getPageNo(args[2]));
+                        }
                     }
                     break;
                 default:
@@ -514,7 +527,7 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void showRequestList(CommandSender sender, String player) {
+    public void showRequestList(CommandSender sender, String player, int page) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(player));
 
@@ -524,9 +537,13 @@ public class HomeCommand implements CommandExecutor {
             sender.sendMessage(LocaleManager.getString("admin.requests.none", params));
         } else {
             sender.sendMessage(LocaleManager.getString("admin.requests.ok", params));
+
+            ArrayList<String> messages = new ArrayList<String>(results.size());
             for (Home home : results) {
-                sender.sendMessage(LocaleManager.getString("admin.requests.output", params, home));
+                messages.add(LocaleManager.getString("admin.requests.output", params, home));
             }
+
+            sendPaginated(null, messages, page, sender);
         }
     }
 
@@ -646,6 +663,18 @@ public class HomeCommand implements CommandExecutor {
 
     private static boolean isPageNo(String input) {
         return (input.length() < 3) && integerPattern.matcher(input).matches();
+    }
+
+    private static int getPageNo(String input) {
+        int ret = 1;
+        
+        try {
+            ret = Integer.parseInt(input);
+        } catch (NumberFormatException ex) {
+            // Presume 1.
+        } finally {
+            return ret;
+        }
     }
 
     private static void sendPaginated(String header, ArrayList<String> messages, int printPage, CommandSender receiver) {
