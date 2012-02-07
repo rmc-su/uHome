@@ -20,7 +20,7 @@ public class HomeCommand implements CommandExecutor {
     private HomeList homeList;
 
     private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
-    private static final int PAGINATION_SIZE = 7;
+    private static final int PAGINATION_SIZE = 8;
 
     public HomeCommand(uHome uH, HomeList hL) {
         this.plugin = uH;
@@ -61,7 +61,7 @@ public class HomeCommand implements CommandExecutor {
                         this.showHomeLimit(player);
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home invites
-                        this.showInviteList(player);
+                        this.showInviteList(player, 1);
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home requests
                         this.showRequestList(player);
@@ -97,7 +97,7 @@ public class HomeCommand implements CommandExecutor {
                         this.uninviteFromHome(player, args[1], uHome.DEFAULT_HOME);
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites (player)
-                        this.showInviteList(sender, args[1]);
+                        this.showInviteList(sender, args[1], 1);
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home requests (player)
                         this.showRequestList(sender, args[1]);
@@ -115,7 +115,7 @@ public class HomeCommand implements CommandExecutor {
                         this.uninviteFromHome(player, args[1], args[2]);
                     } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && "from".equalsIgnoreCase(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites from (player)
-                        this.showInviteList(sender, args[1]);
+                        this.showInviteList(sender, args[1], 1);
                     } else if ("set".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminSet)) {
                         // /home set (player) (name)
                         this.setOtherHome(player, args[2], args[1]);
@@ -152,7 +152,7 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite) {
                         // /home invites|requests (player)
                         if ("invites".equalsIgnoreCase(args[0])) {
-                            this.showInviteList(sender, args[1]);
+                            this.showInviteList(sender, args[1], 1);
                         } else if ("requests".equalsIgnoreCase(args[0])) {
                             this.showRequestList(sender, args[1]);
                         }
@@ -427,7 +427,7 @@ public class HomeCommand implements CommandExecutor {
         }
     }
     
-    public void showInviteList(Player player) {
+    public void showInviteList(Player player, int page) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("INVITED", player.getName());
 
@@ -437,9 +437,13 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(LocaleManager.getString("own.invites.none", params));
         } else {
             player.sendMessage(LocaleManager.getString("own.invites.ok", params));
+
+            ArrayList<String> messages = new ArrayList<String>(iList.length);
             for (Home home : iList) {
-                player.sendMessage(LocaleManager.getString("own.invites.output", params, home));
+                messages.add(LocaleManager.getString("own.invites.output", params, home));
             }
+
+            sendPaginated(null, messages, page, player);
         }
     }
 
@@ -458,7 +462,7 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void showInviteList(CommandSender sender, String player) {
+    public void showInviteList(CommandSender sender, String player, int page) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("INVITED", HomeList.getOnlinePlayerCapitalisation(player));
 
@@ -468,9 +472,13 @@ public class HomeCommand implements CommandExecutor {
             sender.sendMessage(LocaleManager.getString("admin.invites.none", params));
         } else {
             sender.sendMessage(LocaleManager.getString("admin.invites.ok", params));
+
+            ArrayList<String> messages = new ArrayList<String>(iList.length);
             for (Home home : iList) {
-                sender.sendMessage(LocaleManager.getString("admin.invites.output", params, home));
+                messages.add(LocaleManager.getString("admin.invites.output", params, home));
             }
+
+            sendPaginated(null, messages, page, sender);
         }
     }
 
@@ -612,20 +620,27 @@ public class HomeCommand implements CommandExecutor {
     }
 
     private static void sendPaginated(String header, ArrayList<String> messages, int printPage, CommandSender receiver) {
-        int atPageRemains = messages.size() - ((printPage - 1) * PAGINATION_SIZE);
-        int startIndex = (printPage - 1) * PAGINATION_SIZE;
-        int endIndex;
-        
-        if (atPageRemains < PAGINATION_SIZE) {
-            endIndex = startIndex + atPageRemains;
+        int pageLen;
+
+        if (header == null || header.isEmpty()) {
+            pageLen = PAGINATION_SIZE;
         } else {
-            endIndex = startIndex + PAGINATION_SIZE;
+            pageLen = PAGINATION_SIZE - 1;
+            receiver.sendMessage(header);
         }
 
-        receiver.sendMessage(header);
+        int atPageRemains = messages.size() - ((printPage - 1) * pageLen);
+        int startIndex = (printPage - 1) * pageLen;
+        int endIndex;
+        
+        if (atPageRemains < pageLen) {
+            endIndex = startIndex + atPageRemains;
+        } else {
+            endIndex = startIndex + pageLen;
+        }
+
         for (int i = startIndex; i < endIndex; i++) {
             receiver.sendMessage(messages.get(i));
         }
-
     }
 }
