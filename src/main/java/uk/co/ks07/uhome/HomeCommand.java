@@ -98,7 +98,10 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                         // /home uninvite (player)
                         this.uninviteFromHome(player, args[1], uHome.DEFAULT_HOME);
-                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && isPageNo(args[1]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
+                        // /home invites (page)
+                        this.showInviteList(sender, args[1], 1);
+                    }  else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home invites (player)
                         this.showInviteList(sender, args[1], 1);
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
@@ -634,8 +637,8 @@ public class HomeCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
     }
 
-    private static boolean isInt(String input) {
-        return integerPattern.matcher(input).matches();
+    private static boolean isPageNo(String input) {
+        return (input.length() < 3) && integerPattern.matcher(input).matches();
     }
 
     private static void sendPaginated(String header, ArrayList<String> messages, int printPage, CommandSender receiver) {
