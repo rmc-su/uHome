@@ -86,7 +86,7 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("list".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
                         // /home list (player)
                         this.showHomeList(player, args[1]);
-                    } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
+                    } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminList)) {
                         // /home limit (player)
                         this.showOtherLimit(player, args[1]);
                     } else if ("warp".equalsIgnoreCase(args[0]) && (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp))) {
