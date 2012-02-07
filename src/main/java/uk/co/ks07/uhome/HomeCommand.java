@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
@@ -142,6 +143,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("help".equalsIgnoreCase(args[0])) {
                         // /home help
                         this.showAllHelp(sender);
+                    } else if ("debug".equalsIgnoreCase(args[0])) {
+                        // /home debug
+                        this.toggleDebug();
                     }
                     break;
                 case 2:
@@ -540,6 +544,15 @@ public class HomeCommand implements CommandExecutor {
     public void reloadSettings(CommandSender user) {
         user.sendMessage(LocaleManager.getString("admin.reload.ok"));
         HomeConfig.initialize(plugin.config, plugin.getDataFolder(), plugin.getLogger());
+    }
+
+    public void toggleDebug() {
+        // Console command only - only console users can see the effects!
+        if (plugin.getLogger().getLevel() == Level.INFO) {
+            plugin.getLogger().setLevel(Level.FINE);
+        } else {
+            plugin.getLogger().setLevel(Level.INFO);
+        }
     }
 
     public void showHelp(Player player) {
