@@ -38,6 +38,8 @@ public class uHome extends JavaPlugin {
 
         this.getLogger().setLevel(Level.INFO);
 
+        SuperPermsManager.initialize(this);
+
         try {
             this.config.options().copyDefaults(true);
             this.saveConfig();
