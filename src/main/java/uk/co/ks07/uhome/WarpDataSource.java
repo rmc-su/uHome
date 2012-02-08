@@ -66,6 +66,10 @@ public class WarpDataSource {
             }
             // SQLite only, copy data into renamed new table. Not needed for MySQL.
             importOldTable(log);
+        } else if (status == TableStatus.NO_ITABLE) {
+            // Need to update the schema.
+            log.info("Updating database to new format.");
+            createInviteTable(log);
         } else {
             // Tables are fine.
             log.info("Database is up-to-date.");
@@ -220,9 +224,14 @@ public class WarpDataSource {
                 } else {
                     return TableStatus.OLD_ONLY;
                 }
+            } else {
+                rs = dbm.getTables(null, null, INV_TABLE_NAME, null);
+                if (!rs.next()) {
+                    return TableStatus.NO_ITABLE;
+                } else {
+                    return TableStatus.UP_TO_DATE;
+                }
             }
-
-            return TableStatus.UP_TO_DATE;
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Table Check Exception", ex);
             return TableStatus.NONE_EXIST;
@@ -326,7 +335,7 @@ public class WarpDataSource {
                 // Check for old uhomes.db and import to mysql
                 File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
                 if (!sqlitefile.exists()) {
-                    log.info("Could not find old " + sqlitedb);
+                    log.info("Could not find old " + sqlitedb + ", will not import invites.");
                     return;
                 } else {
                     log.info("Trying to import invites from uhomes.db");
@@ -664,6 +673,7 @@ public class WarpDataSource {
     private static enum TableStatus {
         NONE_EXIST,
         OLD_ONLY,
-        UP_TO_DATE;
+        UP_TO_DATE,
+        NO_ITABLE;
     }
 }
