@@ -145,7 +145,7 @@ public class WarpDataSource {
             Connection conn = ConnectionManager.getConnection(log);
 
             statement = conn.createStatement();
-            set = statement.executeQuery("SELECT * FROM " + TABLE_NAME + ", " + INV_TABLE_NAME + " WHERE " + TABLE_NAME + ".id = " + INV_TABLE_NAME + ".homeid");
+            set = statement.executeQuery("SELECT * FROM " + TABLE_NAME);
             int size = 0;
             while (set.next()) {
                 size++;
