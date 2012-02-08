@@ -213,7 +213,12 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.set.moved"));
                 break;
             case AT_LIMIT:
-                player.sendMessage(LocaleManager.getString("own.set.atlimit"));
+                Integer mustDelete = this.homeList.getPlayerHomeCount(player.getName()) - homeList.playerGetLimit(player);
+                HashMap<String, String> vars = new HashMap<String, String>();
+                vars.put("DELETE", mustDelete.toString());
+                vars.put("LIMIT", Integer.toString(this.homeList.playerGetLimit(player)));
+
+                player.sendMessage(LocaleManager.getString("own.set.atlimit", vars));
                 break;
             case NEED_COOLDOWN:
                 HashMap<String, String> params = new HashMap<String, String>();
