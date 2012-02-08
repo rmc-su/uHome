@@ -70,10 +70,12 @@ public class LocaleManager {
             }
             
             if (home != null) {
-                    output = output.replaceAll("(?i)\\Q{{HOME}}\\E", home.name);
-                    output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", home.owner);
-                    output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", home.world);
+                output = output.replaceAll("(?i)\\Q{{HOME}}\\E", home.name);
+                output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", home.owner);
+                output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", home.world);
+                if (home.hasInvitees()) {
                     output = output.replaceAll("(?i)\\Q{{INVITED}}\\E", home.inviteesToString());
+                }
             }
 
             if (HomeConfig.useColors) {
