@@ -190,7 +190,7 @@ public class WarpDataSource {
             }
             log.info(Integer.toString(size) + " homes loaded");
         } catch (SQLException ex) {
-            log.severe("Home Load Exception");
+            log.log(Level.SEVERE, "Home Load Exception", ex);
         } finally {
             try {
                 if (statement != null) {
@@ -200,7 +200,7 @@ public class WarpDataSource {
                     set.close();
                 }
             } catch (SQLException ex) {
-                log.severe("Home Load Exception (on close)");
+                log.log(Level.SEVERE, "Home Load Exception (On Close)", ex);
             }
         }
 
@@ -232,7 +232,7 @@ public class WarpDataSource {
                     rs.close();
                 }
             } catch (SQLException ex) {
-                log.severe("Table Check SQL Exception (on closing)");
+                log.log(Level.SEVERE, "Table Check Exception (on close)", ex);
             }
         }
     }
@@ -306,7 +306,7 @@ public class WarpDataSource {
                     st.close();
                 }
             } catch (SQLException e) {
-                log.severe("Could not create the table (on close)");
+                log.log(Level.SEVERE, "Could not create the table (on close)", e);
             }
         }
 
@@ -349,7 +349,7 @@ public class WarpDataSource {
                                 rs.close();
                             }
                         } catch (SQLException ex) {
-                            log.severe("Invite Table Check SQL Exception (on closing)");
+                            log.log(Level.SEVERE, "Invite Table Check Exception (on close)", ex);
                         }
                     }
 
@@ -395,7 +395,7 @@ public class WarpDataSource {
                     st.close();
                 }
             } catch (SQLException e) {
-                log.severe("Could not create the invite table (on close)");
+                log.log(Level.SEVERE, "Could not create the invite table (on close)", e);
             }
         }
     }
@@ -624,7 +624,6 @@ public class WarpDataSource {
                 return true;
             } catch (SQLException exc) {
                 log.log(Level.SEVERE, "Failed to update the database to the new version - ", exc);
-                ex.printStackTrace();
                 return false;
             }
         }
@@ -659,7 +658,6 @@ public class WarpDataSource {
             colRS.close();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Failed to update the database to the new version - ", ex);
-            ex.printStackTrace();
         }
     }
 
