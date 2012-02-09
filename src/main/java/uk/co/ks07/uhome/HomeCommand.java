@@ -115,7 +115,7 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("help".equalsIgnoreCase(args[0]) && isPageNo(args[1])) {
                         // /home help (page)
                         this.showHelp(player, getPageNo(args[1]));
-                    } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
+                    } else if (HomeConfig.enableInvite || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
                     }
