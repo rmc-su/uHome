@@ -147,6 +147,7 @@ public class WarpDataSource {
             statement = conn.createStatement();
             set = statement.executeQuery("SELECT * FROM " + TABLE_NAME);
             int size = 0;
+            int invSize = 0;
             while (set.next()) {
                 size++;
                 int index = set.getInt("id");
@@ -167,6 +168,7 @@ public class WarpDataSource {
                 invStatement = conn.createStatement();
                 invSet = invStatement.executeQuery("SELECT player FROM " + INV_TABLE_NAME + " WHERE homeid=" + index);
                 while (invSet.next()) {
+                    invSize++;
                     invitees.add(invSet.getString(1));
                     
                     String lowerInvitee = invSet.getString(1).toLowerCase();
@@ -193,6 +195,7 @@ public class WarpDataSource {
                 }
             }
             log.info(Integer.toString(size) + " homes loaded");
+            log.info(Integer.toString(invSize) + " invites loaded");
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Home Load Exception", ex);
         } finally {
