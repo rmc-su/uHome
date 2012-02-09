@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import uk.co.ks07.uhome.HomeList.ExitStatus;
 import uk.co.ks07.uhome.locale.LocaleManager;
+import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class HomeCommand implements CommandExecutor {
@@ -22,6 +23,7 @@ public class HomeCommand implements CommandExecutor {
     private HomeList homeList;
 
     private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
+    private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
     private static final int PAGINATION_SIZE = 8;
     private static final Pattern integerPattern = Pattern.compile("^\\d+$");
 
@@ -285,8 +287,8 @@ public class HomeCommand implements CommandExecutor {
         switch (es) {
             case NEED_COOLDOWN:
                 params = new HashMap<String, String>();
-                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+                params.put("CD_REMAINING", Integer.toString(this.homeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.homeCoolDown.getTimer(player)));
 
                 player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                 break;
@@ -299,8 +301,8 @@ public class HomeCommand implements CommandExecutor {
                     switch (es) {
                         case NEED_COOLDOWN:
                             params = new HashMap<String, String>();
-                            params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                            params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+                            params.put("CD_REMAINING", Integer.toString(this.homeCoolDown.estimateTimeLeft(player)));
+                            params.put("CD_TOTAL", Integer.toString(this.homeCoolDown.getTimer(player)));
 
                             player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                             break;
@@ -337,8 +339,8 @@ public class HomeCommand implements CommandExecutor {
         switch (es) {
             case NEED_COOLDOWN:
                 params = new HashMap<String, String>();
-                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+                params.put("CD_REMAINING", Integer.toString(this.homeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.homeCoolDown.getTimer(player)));
 
                 player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                 break;
@@ -367,8 +369,8 @@ public class HomeCommand implements CommandExecutor {
         // If SUCCESS, the task has been passed on to the warmup handler.
         switch (es) {
             case NEED_COOLDOWN:
-                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
+                params.put("CD_REMAINING", Integer.toString(this.homeCoolDown.estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(this.homeCoolDown.getTimer(player)));
 
                 player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                 break;
