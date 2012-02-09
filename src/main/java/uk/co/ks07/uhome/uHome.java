@@ -58,7 +58,7 @@ public class uHome extends JavaPlugin {
             return;
         }
 
-        homeList = new HomeList(getServer(), needImport, this.getLogger());
+        homeList = new HomeList(this, needImport, this.getLogger());
 
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
 

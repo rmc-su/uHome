@@ -467,9 +467,31 @@ public class WarpDataSource {
         }
     }
 
+    public static void deleteInvite(int homeID, String player, Logger log) {
+        PreparedStatement ps = null;
+        try {
+            Connection conn = ConnectionManager.getConnection(log);
+
+            ps = conn.prepareStatement("DELETE FROM " + INV_TABLE_NAME + " WHERE homeid = ? AND player = ?");
+            ps.setInt(1, homeID);
+            ps.setString(2, player);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            log.log(Level.SEVERE, "Home Invite Delete Exception", ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "Home Invite Delete Exception (on close)", ex);
+            }
+        }
+    }
+
     public static void deleteWarp(Home warp, Logger log) {
         PreparedStatement ps = null;
-        ResultSet set = null;
         try {
             Connection conn = ConnectionManager.getConnection(log);
 
@@ -483,9 +505,6 @@ public class WarpDataSource {
             try {
                 if (ps != null) {
                     ps.close();
-                }
-                if (set != null) {
-                    set.close();
                 }
             } catch (SQLException ex) {
                 log.log(Level.SEVERE, "Home Delete Exception (on close)", ex);
