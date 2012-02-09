@@ -60,7 +60,7 @@ public class HomeCommand implements CommandExecutor {
                         this.deleteHome(player, uHome.DEFAULT_HOME);
                     } else if ("help".equalsIgnoreCase(args[0])) {
                         // /home help
-                        this.showHelp(player);
+                        this.showHelp(player, 1);
                     } else if ("limit".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                         // /home limit
                         this.showHomeLimit(player);
@@ -112,6 +112,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home requests (player)
                         this.showRequestList(sender, args[1], 1);
+                    } else if ("help".equalsIgnoreCase(args[0]) && isPageNo(args[1])) {
+                        // /home help (page)
+                        this.showHelp(player, getPageNo(args[1]));
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
@@ -585,9 +588,9 @@ public class HomeCommand implements CommandExecutor {
         }
     }
 
-    public void showHelp(Player player) {
-        ArrayList<String> messages = new ArrayList<String>(19);
-        messages.add(ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP" + ChatColor.RED + " -----");
+    public void showHelp(Player player, int page) {
+        ArrayList<String> messages = new ArrayList<String>(18);
+        String header = ChatColor.RED + "----- " + ChatColor.WHITE + "/HOME HELP [page]" + ChatColor.RED + " -----";
 
         if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
             messages.add(ChatColor.RED + "/home" + ChatColor.WHITE + " -  Warp to your default home.");
@@ -633,9 +636,7 @@ public class HomeCommand implements CommandExecutor {
             messages.add(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
         }
 
-        for (String message : messages) {
-            player.sendMessage(message);
-        }
+        sendPaginated(header, messages, page, player);
     }
 
     public void showAllHelp(CommandSender sender) {
