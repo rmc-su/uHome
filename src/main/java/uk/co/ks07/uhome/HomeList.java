@@ -37,7 +37,7 @@ public class HomeList {
         if (!(setHomeCoolDown.playerHasCooled(player))) {
             return ExitStatus.NEED_COOLDOWN;
         } else {
-            if (!homeList.containsKey(player.getName())) {
+            if (!homeList.containsKey(player.getName().toLowerCase())) {
                 // Player has no warps.
                 HashMap<String, Home> warps = new HashMap<String, Home>();
                 Home warp = new Home(player, name);
@@ -46,7 +46,7 @@ public class HomeList {
                 WarpDataSource.addWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
                 return ExitStatus.SUCCESS_FIRST;
-            } else if (!this.homeExists(player.getName(), name)) {
+            } else if (!this.homeExists(player.getName().toLowerCase(), name)) {
                 if (this.playerCanSet(player)) {
                     // Player has warps, but not with the given name.
                     Home warp = new Home(player, name);
@@ -156,7 +156,7 @@ public class HomeList {
     }
 
     public boolean playerHasDefaultHome(String player) {
-        return this.homeExists(player, uHome.DEFAULT_HOME);
+        return this.homeExists(player.toLowerCase(), uHome.DEFAULT_HOME);
     }
 
     public boolean playerHasHomes(String player) {
