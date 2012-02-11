@@ -297,8 +297,10 @@ public class HomeCommand implements CommandExecutor {
                 break;
             case NOT_PERMITTED: case NOT_EXISTS:
                 // If no matches are found (or not permitted!?), check player default home.
-                if (homeList.playerHasDefaultHome(target) && homeList.playerCanWarp(player, target, uHome.DEFAULT_HOME)) {
-                    es = homeList.warpTo(target, uHome.DEFAULT_HOME, player, plugin);
+                String playerName = this.completePlayerName(target);
+
+                if (homeList.playerHasDefaultHome(playerName) && homeList.playerCanWarp(player, playerName, uHome.DEFAULT_HOME)) {
+                    es = homeList.warpTo(playerName, uHome.DEFAULT_HOME, player, plugin);
 
                     // If SUCCESS, the task has been passed on to the warmup handler.
                     switch (es) {
@@ -312,7 +314,7 @@ public class HomeCommand implements CommandExecutor {
                         case NOT_PERMITTED:
                             params = new HashMap<String, String>();
                             params.put("HOME", uHome.DEFAULT_HOME);
-                            params.put("OWNER", HomeList.getOnlinePlayerCapitalisation(target));
+                            params.put("OWNER", playerName);
 
                             player.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
                             break;
@@ -663,6 +665,16 @@ public class HomeCommand implements CommandExecutor {
         }
         sender.sendMessage(ChatColor.RED + "/home limit" + ChatColor.WHITE + " -  Show your max homes.");
         sender.sendMessage(ChatColor.RED + "/home limit [player]" + ChatColor.WHITE + " -  Show a player's max homes.");
+    }
+
+    private String completePlayerName(String partial) {
+        Player player = this.plugin.getServer().getPlayer(partial);
+
+        if (player != null) {
+            return player.getName();
+        } else {
+            return partial;
+        }
     }
 
     private static boolean isPageNo(String input) {

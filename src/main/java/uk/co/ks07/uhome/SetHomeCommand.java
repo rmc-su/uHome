@@ -35,15 +35,15 @@ public class SetHomeCommand implements CommandExecutor {
 
                     if (args.length == 1) {
                         homeList.addHome(player, plugin, args[0], plugin.getLogger());
-                        return true;
+                    } else if (args.length == 0) {
+                        homeList.addHome(player, plugin, uHome.DEFAULT_HOME, plugin.getLogger());
+                    } else {
+                        return false;
                     }
-
-                    homeList.addHome(player, plugin, uHome.DEFAULT_HOME, plugin.getLogger());
                 }
 
             }
         }
-        
         return true;
     }
 }
