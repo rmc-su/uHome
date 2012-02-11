@@ -102,7 +102,7 @@ public class HomeList {
     public ExitStatus warpTo(String targetOwner, String target, Player player, Plugin plugin) {
         MatchList matches = this.getMatches(target, player, targetOwner);
         target = matches.getMatch(target);
-        if (homeList.get(targetOwner.toLowerCase()).containsKey(target)) {
+        if (this.homeExists(targetOwner, target)) {
             Home warp = homeList.get(targetOwner.toLowerCase()).get(target);
             if (warp.playerCanWarp(player)) {
                 if (homeCoolDown.playerHasCooled(player)) {
