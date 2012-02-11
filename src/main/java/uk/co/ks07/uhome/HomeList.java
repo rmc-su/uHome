@@ -171,8 +171,9 @@ public class HomeList {
 
     public boolean invitePlayer(String owner, String player, String name) {
         Home inviteTo = homeList.get(owner.toLowerCase()).get(name);
-        inviteTo.addInvitees(player);
-        WarpDataSource.addInvite(inviteTo.index, player, this.plugin.getLogger());
+        if (inviteTo.addInvitee(player)) {
+            WarpDataSource.addInvite(inviteTo.index, player, this.plugin.getLogger());
+        }
 
         if (!inviteList.containsKey(player.toLowerCase())) {
             inviteList.put(player.toLowerCase(), new HashSet<Home>());
@@ -192,9 +193,11 @@ public class HomeList {
 
     public boolean uninvitePlayer(String owner, String player, String name) {
         Home inviteHome = homeList.get(owner.toLowerCase()).get(name);
-        inviteHome.removeInvitee(player);
-        WarpDataSource.deleteInvite(inviteHome.index, player, this.plugin.getLogger());
-        if (inviteList.get(player.toLowerCase()).remove(inviteHome)) {
+        if (inviteHome.removeInvitee(player)) {
+            WarpDataSource.deleteInvite(inviteHome.index, player, this.plugin.getLogger());
+        }
+
+        if (inviteList.containsKey(player.toLowerCase()) && inviteList.get(player.toLowerCase()).remove(inviteHome)) {
             Player invitee = server.getPlayerExact(player);
             if (invitee != null) {
                 invitee.sendMessage(LocaleManager.getString("own.uninvite.notify", null, inviteHome));

@@ -145,19 +145,12 @@ public class Home {
         }
     }
 
-    public void addInvitees(String player) {
+    public boolean addInvitee(String player) {
         if (this.invitees == null) {
             this.invitees = new HashSet<String>();
         }
-        this.invitees.add(player);
-    }
-
-    public void addInvitees(Set<String> players) {
-        if (this.invitees == null) {
-            this.invitees = players;
-        } else {
-            this.invitees.addAll(players);
-        }
+        // True if added, false if already invited.
+        return this.invitees.add(player);
     }
 
     public void addInvitees(Collection<String> players) {
@@ -168,9 +161,12 @@ public class Home {
         }
     }
 
-    public void removeInvitee(String player) {
-        if (this.invitees != null || this.invitees.contains(player)) {
-            this.invitees.remove(player);
+    public boolean removeInvitee(String player) {
+        if (this.invitees != null) {
+            // True if invited before, else false.
+            return this.invitees.remove(player);
+        } else {
+            return false;
         }
     }
 
