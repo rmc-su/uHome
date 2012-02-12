@@ -1,7 +1,10 @@
 package uk.co.ks07.uhome;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -13,6 +16,7 @@ import uk.co.ks07.uhome.locale.LocaleManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.Location;
 
 public class uHome extends JavaPlugin {
 
@@ -59,13 +63,18 @@ public class uHome extends JavaPlugin {
         }
 
         homeList = new HomeList(this, needImport, this.getLogger());
+        File cbHomes = new File(this.getDataFolder(), "homes.csv");
+        if (cbHomes.isFile()) {
+            this.getLogger().info("Trying to import CommandBook homes from homes.csv.");
+            this.importCommandBook(cbHomes);
+        }
 
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
 
         if (!customLocale.exists()) {
             writeResource(this.getResource("customlocale.properties"), customLocale);
         }
-        
+
         LocaleManager.init(customLocale, this.getLogger());
 
         this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
@@ -154,6 +163,66 @@ public class uHome extends JavaPlugin {
                 } catch (IOException e) {
                 }
             }
+        }
+    }
+
+    private void importCommandBook(File csv) {
+        FileReader fr = null;
+        BufferedReader file = null;
+        int notImported = 0;
+        int lineCount = 0;
+        String line;
+        String[] split;
+        String owner;
+        String homeName;
+        Location loc;
+
+        try {
+            fr = new FileReader(csv);
+            file = new BufferedReader(fr);
+
+            while ((line = file.readLine()) != null) {
+                lineCount++;
+                split = line.replaceAll("\"", "").split(",");
+
+                if (split.length != 8) {
+                    notImported++;
+                    this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                    continue;
+                } else {
+                    // name, world, owner, X, Y, Z, pitch, yaw
+                    owner = split[0];
+                    homeName = uHome.DEFAULT_HOME;
+                    try {
+                        loc = new Location(getServer().getWorld(split[1]), Double.parseDouble(split[3]), Double.parseDouble(split[4]), Double.parseDouble(split[5]), Float.parseFloat(split[7]), Float.parseFloat(split[6]));
+                    } catch (NumberFormatException nfe) {
+                        notImported++;
+                        this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                        continue;
+                    }
+
+                    this.homeList.adminAddHome(loc, owner, name, this.getLogger());
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+        } catch (IOException ex) {
+            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+        } finally {
+            try {
+                csv.renameTo(new File(this.getDataFolder(), "homes.csv.old"));
+
+                if (file != null) {
+                    file.close();
+                }
+                if (fr != null) {
+                    fr.close();
+                }
+            } catch (IOException ex) {
+                this.getLogger().log(Level.WARNING, "CommandBook Import Exception (on close)", ex);
+            }
+
+            this.getLogger().info("Imported " + (lineCount - notImported) + " homes.");
         }
     }
 }
