@@ -1,13 +1,13 @@
 name: uHome
-version: 1.4b.1
+version: 1.4
 author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
-website: http://ks07.co.uk/
+website: http://www.ultimateminecraft.net/
 commands:
   home:
     description: Access to the home commands.
-    usage: /<command> help - Displays the uHome commands
+    usage: /<command> help [page] - Displays the uHome commands
     permission: uhome.own
   sethome:
     description: Alias for /home set
@@ -15,7 +15,7 @@ commands:
     permission: uhome.own.set
 permissions:
   uhome.all:
-    description: Givess access to all uHome commands.
+    description: Gives access to all uHome commands.
     children:
       uhome.admin: true
       uhome.own: true
