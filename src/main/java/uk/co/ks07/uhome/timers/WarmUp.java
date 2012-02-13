@@ -36,7 +36,7 @@ public class WarmUp {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("WU_TIME", Integer.toString(timer));
 
-                player.sendMessage(LocaleManager.getString("warmup.wait"));
+                player.sendMessage(LocaleManager.getString("warmup.wait", params));
             }
 
             int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer * 20);

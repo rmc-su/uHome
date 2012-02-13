@@ -1,5 +1,5 @@
 name: uHome
-version: 1.4
+version: 1.4.1
 author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
@@ -8,7 +8,6 @@ commands:
   home:
     description: Access to the home commands.
     usage: /<command> help [page] - Displays the uHome commands
-    permission: uhome.own
   sethome:
     description: Alias for /home set
     usage: /<command> - Sets the home position.

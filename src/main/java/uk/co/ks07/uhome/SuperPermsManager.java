@@ -56,11 +56,13 @@ public class SuperPermsManager {
 
     public static boolean hasPermission(Player player, String permission) {
         boolean ret = player.hasPermission(permission);
-        
-        if (ret) {
-            plugin.getLogger().fine(player.getName() + " returned true for the node " + permission);
-        } else {
-            plugin.getLogger().fine(player.getName() + " returned false for the node " + permission);
+
+        if (HomeConfig.debugLog) {
+            if (ret) {
+                plugin.getLogger().info(player.getName() + " returned true for the node " + permission);
+            } else {
+                plugin.getLogger().info(player.getName() + " returned false for the node " + permission);
+            }
         }
         
         return ret;

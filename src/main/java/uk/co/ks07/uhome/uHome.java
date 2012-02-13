@@ -48,10 +48,6 @@ public class uHome extends JavaPlugin {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }
 
-        if (HomeConfig.debugLog) {
-            this.getLogger().setLevel(Level.FINE);
-        }
-
         libCheck();
         boolean needImport = convertOldDB(getDataFolder());
         if (!sqlCheck()) {

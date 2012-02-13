@@ -581,10 +581,12 @@ public class HomeCommand implements CommandExecutor {
 
     public void toggleDebug() {
         // Console command only - only console users can see the effects!
-        if (plugin.getLogger().getLevel() == Level.INFO) {
-            plugin.getLogger().setLevel(Level.FINE);
+        if (HomeConfig.debugLog) {
+            this.plugin.getLogger().info("Debug logging disabled.");
+            HomeConfig.debugLog = false;
         } else {
-            plugin.getLogger().setLevel(Level.INFO);
+            this.plugin.getLogger().info("Debug logging enabled.");
+            HomeConfig.debugLog = true;
         }
     }
 
