@@ -3,13 +3,15 @@ package me.taylorkelly.myhome.listeners;
 import me.taylorkelly.myhome.HomeSettings;
 import me.taylorkelly.myhome.data.HomeEconomy;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import com.nijikokun.register.payment.Methods;
 
-public class MHPluginListener extends ServerListener {
+public class MHPluginListener implements Listener {
 	private Methods Methods = null;
 	private Plugin plugin;
 	
@@ -20,7 +22,7 @@ public class MHPluginListener extends ServerListener {
 		}
 	}
 	
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPluginEnable(PluginEnableEvent event) {
 		if(HomeSettings.eConomyEnabled) {
 			if(!HomeEconomy.hookedEconomy()) {
@@ -35,7 +37,7 @@ public class MHPluginListener extends ServerListener {
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPluginDisable(PluginDisableEvent event) {
 		if(HomeSettings.eConomyEnabled) {
 			if(HomeEconomy.hookedEconomy()) {

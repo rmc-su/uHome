@@ -10,8 +10,10 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -20,7 +22,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.Material;
 
-public class MHPlayerListener extends PlayerListener {
+public class MHPlayerListener implements Listener {
 
 	private HomeList homeList;
 	private Plugin plugin;
@@ -30,21 +32,23 @@ public class MHPlayerListener extends PlayerListener {
 		this.plugin = plugin;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (homeList.homeExists(event.getPlayer().getName())) {
 			homeList.orientPlayer(event.getPlayer());
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
-		if(HomeSettings.bedsCanSethome != 0) {
-			homeList.addHome(event.getPlayer(), plugin);
+		if(!HomeSettings.bedsDuringDay && HomeSettings.bedsCanSethome != 0) {
+			if(HomeSettings.bedsCanSethome != 0) {
+				homeList.addHome(event.getPlayer(), plugin);
+			}
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if(event.isCancelled()) return;
 		if(!HomePermissions.set(event.getPlayer())) return;
@@ -56,7 +60,7 @@ public class MHPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if(HomeSettings.loadChunks) {
 			World world = event.getPlayer().getWorld();
@@ -67,7 +71,7 @@ public class MHPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST) 
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		if (HomeSettings.respawnToHome && homeList.homeExists(event.getPlayer().getName())) {
 			Location location = homeList.getHomeFor(event.getPlayer()).getLocation(plugin.getServer());
@@ -78,6 +82,7 @@ public class MHPlayerListener extends PlayerListener {
 		}
 	}
 	
+	@EventHandler(priority = EventPriority.MONITOR) 
 	public void onPlayerMove(PlayerMoveEvent event) {
 		if(event.isCancelled()) return;
 		

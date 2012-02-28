@@ -18,7 +18,7 @@ public class LocaleManager {
 	public static void init() {
 		String locale = HomeSettings.locale.toLowerCase();
 		try {
-			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
+			locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale, locale.toUpperCase()));
 			HomeLogger.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
 		} catch (MissingResourceException e) {
 			// Failed to load requested locale file so fallback to en_us
