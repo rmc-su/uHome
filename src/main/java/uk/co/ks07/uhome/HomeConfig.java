@@ -39,6 +39,7 @@ public class HomeConfig {
     public static int[] limits;
     public static int defaultLimit;
     public static boolean debugLog;
+    public static int homeCost;
 
     public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
         try {
@@ -69,6 +70,7 @@ public class HomeConfig {
             enableDenyPerm = settings.getBoolean("enableDenyPerm", false);
             enableSethome = settings.getBoolean("enableSethome", false);
             debugLog = settings.getBoolean("debugLog", false);
+            homeCost = settings.getInt("homeCost", 0);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
