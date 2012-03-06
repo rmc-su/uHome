@@ -26,7 +26,7 @@ timers:
   timerByPerms: false
   additionalTime: false
   abortOnDamage: 0
-  abortonMove: false
+  abortOnMove: false
 distances:
   applyDistanceLimits: false
   enableDistanceBypassPerm: true
