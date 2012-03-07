@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.util.logging.Level;
 
 import uk.co.ks07.uhome.griefcraft.Updater;
+import uk.co.ks07.uhome.griefcraft.Metrics;
+import uk.co.ks07.uhome.griefcraft.UHomePlotter;
 import uk.co.ks07.uhome.locale.LocaleManager;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -72,6 +74,8 @@ public class uHome extends JavaPlugin {
         }
 
         LocaleManager.init(customLocale, this.getLogger());
+
+        this.beginMetrics();
 
         this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
         this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
@@ -162,6 +166,27 @@ public class uHome extends JavaPlugin {
         }
     }
 
+    private void beginMetrics() {
+        try {
+            Metrics metrics = new Metrics(this);
+
+            // Plot the total amount of protections
+            metrics.addCustomData(new UHomePlotter("Total Homes", this.homeList) {
+
+                @Override
+                public int getValue() {
+                    return this.homeList.getTotalWarps();
+                }
+
+            });
+
+            metrics.start();
+            this.getLogger().info("Sending anonymous usage statistics to metrics.griefcraft.com.");
+        } catch (IOException e ) {
+            this.getLogger().log(Level.WARNING, "Failed to connect to plugin metrics.", e);
+        }
+    }
+
     private void importCommandBook(File csv) {
         FileReader fr = null;
         BufferedReader file = null;
@@ -197,7 +222,7 @@ public class uHome extends JavaPlugin {
                         continue;
                     }
 
-                    this.homeList.adminAddHome(loc, owner, name, this.getLogger());
+                    this.homeList.adminAddHome(loc, owner, homeName, this.getLogger());
                 }
             }
         } catch (FileNotFoundException ex) {
