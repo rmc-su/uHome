@@ -145,12 +145,21 @@ public class Home {
         }
     }
 
-    public boolean addInvitee(String player) {
+    public InviteStatus addInvitee(String player) {
         if (this.invitees == null) {
             this.invitees = new HashSet<String>();
         }
-        // True if added, false if already invited.
-        return this.invitees.add(player);
+
+        if (this.invitees.size() < HomeConfig.inviteeLimit) {
+            // True if added, false if already invited.
+            if (this.invitees.add(player)) {
+                return InviteStatus.SUCCESS;
+            } else {
+                return InviteStatus.ALREADY_INVITED;
+            }
+        } else {
+            return InviteStatus.AT_LIMIT;
+        }
     }
 
     public void addInvitees(Collection<String> players) {
@@ -188,5 +197,11 @@ public class Home {
 
     public String inviteesToString() {
         return this.invitees.toString().replace("[", "").replace("]", "");
+    }
+
+    public static enum InviteStatus {
+        SUCCESS,
+        ALREADY_INVITED,
+        AT_LIMIT
     }
 }

@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import uk.co.ks07.uhome.Home.InviteStatus;
 
 import uk.co.ks07.uhome.locale.LocaleManager;
 import uk.co.ks07.uhome.timers.HomeCoolDown;
@@ -169,25 +170,30 @@ public class HomeList {
         return homeList.get(owner.toLowerCase()).get(name).playerCanWarp(player);
     }
 
-    public boolean invitePlayer(String owner, String player, String name) {
+    public ExitStatus invitePlayer(String owner, String player, String name) {
         Home inviteTo = homeList.get(owner.toLowerCase()).get(name);
-        if (inviteTo.addInvitee(player)) {
-            WarpDataSource.addInvite(inviteTo.index, player, this.plugin.getLogger());
-        }
+        InviteStatus result = inviteTo.addInvitee(player);
+        
+        switch (result) {
+            case SUCCESS:
+                WarpDataSource.addInvite(inviteTo.index, player, this.plugin.getLogger());
 
-        if (!inviteList.containsKey(player.toLowerCase())) {
-            inviteList.put(player.toLowerCase(), new HashSet<Home>());
-        }
+                if (!inviteList.containsKey(player.toLowerCase())) {
+                    inviteList.put(player.toLowerCase(), new HashSet<Home>());
+                }
 
-        if (inviteList.get(player.toLowerCase()).add(inviteTo)) {
-            Player invitee = server.getPlayerExact(player);
-            if (invitee != null) {
-                invitee.sendMessage(LocaleManager.getString("own.invite.notify", null, inviteTo));
-            }
+                inviteList.get(player.toLowerCase()).add(inviteTo);
 
-            return true;
-        } else {
-            return false;
+                Player invitee = server.getPlayerExact(player);
+                if (invitee != null) {
+                    invitee.sendMessage(LocaleManager.getString("own.invite.notify", null, inviteTo));
+                }
+
+                return ExitStatus.SUCCESS;
+            case AT_LIMIT:
+                return ExitStatus.AT_LIMIT;
+            default:
+                return ExitStatus.DUPLICATE;
         }
     }
 
@@ -390,6 +396,7 @@ public class HomeList {
         NOT_PERMITTED,
         AT_LIMIT,
         NEED_COOLDOWN,
+        DUPLICATE,
         UNKNOWN;
     }
 }

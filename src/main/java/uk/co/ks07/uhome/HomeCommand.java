@@ -400,10 +400,17 @@ public class HomeCommand implements CommandExecutor {
         params.put("INVITED", targetPlayer);
         
         if (homeList.homeExists(player.getName(), targetHome)) {
-            if (homeList.invitePlayer(player.getName(), targetPlayer, targetHome)) {
-                player.sendMessage(LocaleManager.getString("own.invite.ok", params));
-            } else {
-                player.sendMessage(LocaleManager.getString("own.invite.already", params));
+            ExitStatus result = homeList.invitePlayer(player.getName(), targetPlayer, targetHome);
+            switch (result) {
+                case SUCCESS:
+                    player.sendMessage(LocaleManager.getString("own.invite.ok", params));
+                    break;
+                case AT_LIMIT:
+                    player.sendMessage(LocaleManager.getString("own.invite.atlimit", params));
+                    break;
+                case DUPLICATE:
+                    player.sendMessage(LocaleManager.getString("own.invite.already", params));
+                    break;
             }
         } else {
             player.sendMessage(LocaleManager.getString("own.invite.notexists", params));
