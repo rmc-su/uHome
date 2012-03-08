@@ -217,10 +217,10 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.set.moved"));
                 break;
             case AT_LIMIT:
-                Integer mustDelete = this.homeList.getPlayerHomeCount(player.getName()) - homeList.playerGetLimit(player);
+                Integer mustDelete = this.homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player);
                 HashMap<String, String> vars = new HashMap<String, String>();
                 vars.put("DELETE", mustDelete.toString());
-                vars.put("LIMIT", Integer.toString(this.homeList.playerGetLimit(player)));
+                vars.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
 
                 player.sendMessage(LocaleManager.getString("own.set.atlimit", vars));
                 break;
@@ -405,7 +405,7 @@ public class HomeCommand implements CommandExecutor {
                     player.sendMessage(LocaleManager.getString("own.invite.ok", params));
                     break;
                 case AT_LIMIT:
-                    params.put("LIMIT", Integer.toString(Home.playerGetInviteLimit(player)));
+                    params.put("LIMIT", Integer.toString(SuperPermsManager.getInviteLimit(player)));
                     player.sendMessage(LocaleManager.getString("own.invite.atlimit", params));
                     break;
                 case DUPLICATE:
@@ -564,7 +564,7 @@ public class HomeCommand implements CommandExecutor {
 
     public void showHomeLimit(Player player) {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("LIMIT", Integer.toString(homeList.playerGetLimit(player)));
+        params.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
         
         player.sendMessage(LocaleManager.getString("own.limit.ok", params));
     }
@@ -574,7 +574,7 @@ public class HomeCommand implements CommandExecutor {
 
         if (target != null) {
             HashMap<String, String> params = new HashMap<String, String>();
-            params.put("LIMIT", Integer.toString(homeList.playerGetLimit(target)));
+            params.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(target)));
             params.put("OWNER", targetPlayer);
 
             sender.sendMessage(LocaleManager.getString("admin.limit.ok", params));

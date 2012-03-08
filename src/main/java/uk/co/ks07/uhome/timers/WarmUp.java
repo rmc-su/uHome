@@ -90,7 +90,7 @@ public class WarmUp {
     public static int getTimer(Player player) {
         int timer = 0;
         if (HomeConfig.timerByPerms) {
-            timer = playerGetWarmup(player);
+            timer = SuperPermsManager.getWarmup(player);
             if (HomeConfig.additionalTime) {
                 timer += HomeConfig.defaultWarmUp;
             }
@@ -98,26 +98,6 @@ public class WarmUp {
             timer = HomeConfig.defaultWarmUp;
         }
         return timer;
-    }
-
-    private static int playerGetWarmup(Player player) {
-        int ret;
-
-        if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
-            ret = HomeConfig.warmUps[0];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
-            ret = HomeConfig.warmUps[1];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
-            ret = HomeConfig.warmUps[2];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupD)) {
-            ret = HomeConfig.warmUps[3];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupE)) {
-            ret = HomeConfig.warmUps[4];
-        } else {
-            ret = HomeConfig.defaultWarmUp;
-        }
-
-        return ret;
     }
 
     private static class WarmTask implements Runnable {

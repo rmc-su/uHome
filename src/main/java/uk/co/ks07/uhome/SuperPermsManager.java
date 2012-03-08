@@ -74,4 +74,96 @@ public class SuperPermsManager {
         
         return ret;
     }
+
+    public static int getHomeLimit(Player player) {
+        if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassLimit)) {
+            return -1;
+        } else {
+            int playerMaxWarps;
+
+            if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitA)) {
+                playerMaxWarps = HomeConfig.limits[0];
+            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitB)) {
+                playerMaxWarps = HomeConfig.limits[1];
+            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitC)) {
+                playerMaxWarps = HomeConfig.limits[2];
+            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitD)) {
+                playerMaxWarps = HomeConfig.limits[3];
+            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitE)) {
+                playerMaxWarps = HomeConfig.limits[4];
+            } else {
+                playerMaxWarps = HomeConfig.defaultLimit;
+            }
+
+            return playerMaxWarps;
+        }
+    }
+
+    public static int getHomeCooldown(Player player) {
+        int ret;
+
+        if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
+            ret = HomeConfig.coolDowns[0];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
+            ret = HomeConfig.coolDowns[1];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
+            ret = HomeConfig.coolDowns[2];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownD)) {
+            ret = HomeConfig.coolDowns[3];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownE)) {
+            ret = HomeConfig.coolDowns[4];
+        } else {
+            ret = HomeConfig.defaultCoolDown;
+        }
+
+        return ret;
+    }
+
+    public static int getWarmup(Player player) {
+        int ret;
+
+        if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
+            ret = HomeConfig.warmUps[0];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
+            ret = HomeConfig.warmUps[1];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
+            ret = HomeConfig.warmUps[2];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupD)) {
+            ret = HomeConfig.warmUps[3];
+        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupE)) {
+            ret = HomeConfig.warmUps[4];
+        } else {
+            ret = HomeConfig.defaultWarmUp;
+        }
+
+        return ret;
+    }
+
+    public static int getInviteLimit(Player player) {
+        if (player != null) {
+            if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassInvLimit)) {
+                return -1;
+            } else {
+                int playerMaxWarps;
+
+                if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitA)) {
+                    playerMaxWarps = HomeConfig.invlimits[0];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitB)) {
+                    playerMaxWarps = HomeConfig.invlimits[1];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitC)) {
+                    playerMaxWarps = HomeConfig.invlimits[2];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitD)) {
+                    playerMaxWarps = HomeConfig.invlimits[3];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitE)) {
+                    playerMaxWarps = HomeConfig.invlimits[4];
+                } else {
+                    playerMaxWarps = HomeConfig.defaultInvLimit;
+                }
+
+                return playerMaxWarps;
+            }
+        } else {
+            return -1;
+        }
+    }
 }
