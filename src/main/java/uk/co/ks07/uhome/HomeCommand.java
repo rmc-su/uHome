@@ -3,7 +3,6 @@ package uk.co.ks07.uhome;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
@@ -406,6 +405,7 @@ public class HomeCommand implements CommandExecutor {
                     player.sendMessage(LocaleManager.getString("own.invite.ok", params));
                     break;
                 case AT_LIMIT:
+                    params.put("LIMIT", Integer.toString(HomeConfig.inviteeLimit));
                     player.sendMessage(LocaleManager.getString("own.invite.atlimit", params));
                     break;
                 case DUPLICATE:

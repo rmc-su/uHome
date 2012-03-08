@@ -150,7 +150,7 @@ public class Home {
             this.invitees = new HashSet<String>();
         }
 
-        if (this.invitees.size() < HomeConfig.inviteeLimit) {
+        if ((HomeConfig.inviteeLimit < 0) || (this.invitees.size() < HomeConfig.inviteeLimit)) {
             // True if added, false if already invited.
             if (this.invitees.add(player)) {
                 return InviteStatus.SUCCESS;
