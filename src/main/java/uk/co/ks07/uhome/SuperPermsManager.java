@@ -1,5 +1,6 @@
 package uk.co.ks07.uhome;
 
+import java.util.Map;
 import org.bukkit.entity.Player;
 
 public class SuperPermsManager {
@@ -76,94 +77,73 @@ public class SuperPermsManager {
     }
 
     public static int getHomeLimit(Player player) {
-        if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassLimit)) {
+        if (hasPermission(player, bypassLimit)) {
             return -1;
         } else {
-            int playerMaxWarps;
-
-            if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitA)) {
-                playerMaxWarps = HomeConfig.limits[0];
-            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitB)) {
-                playerMaxWarps = HomeConfig.limits[1];
-            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitC)) {
-                playerMaxWarps = HomeConfig.limits[2];
-            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitD)) {
-                playerMaxWarps = HomeConfig.limits[3];
-            } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.limitE)) {
-                playerMaxWarps = HomeConfig.limits[4];
-            } else {
-                playerMaxWarps = HomeConfig.defaultLimit;
-            }
-
-            return playerMaxWarps;
+            return getPermissionLimit(player, LimitType.HOME);
         }
     }
 
     public static int getHomeCooldown(Player player) {
-        int ret;
-
-        if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownA)) {
-            ret = HomeConfig.coolDowns[0];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownB)) {
-            ret = HomeConfig.coolDowns[1];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownC)) {
-            ret = HomeConfig.coolDowns[2];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownD)) {
-            ret = HomeConfig.coolDowns[3];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.cooldownE)) {
-            ret = HomeConfig.coolDowns[4];
-        } else {
-            ret = HomeConfig.defaultCoolDown;
-        }
-
-        return ret;
+        return getPermissionLimit(player, LimitType.COOLDOWN);
     }
 
     public static int getWarmup(Player player) {
-        int ret;
-
-        if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupA)) {
-            ret = HomeConfig.warmUps[0];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupB)) {
-            ret = HomeConfig.warmUps[1];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupC)) {
-            ret = HomeConfig.warmUps[2];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupD)) {
-            ret = HomeConfig.warmUps[3];
-        } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.warmupE)) {
-            ret = HomeConfig.warmUps[4];
-        } else {
-            ret = HomeConfig.defaultWarmUp;
-        }
-
-        return ret;
+        return getPermissionLimit(player, LimitType.WARMUP);
     }
 
     public static int getInviteLimit(Player player) {
-        if (player != null) {
-            if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassInvLimit)) {
-                return -1;
-            } else {
-                int playerMaxWarps;
+        if (hasPermission(player, bypassInvLimit)) {
+            return -1;
+        } else {
+            return getPermissionLimit(player, LimitType.INVITE);
+        }
+    }
 
-                if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitA)) {
-                    playerMaxWarps = HomeConfig.invlimits[0];
-                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitB)) {
-                    playerMaxWarps = HomeConfig.invlimits[1];
-                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitC)) {
-                    playerMaxWarps = HomeConfig.invlimits[2];
-                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitD)) {
-                    playerMaxWarps = HomeConfig.invlimits[3];
-                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitE)) {
-                    playerMaxWarps = HomeConfig.invlimits[4];
-                } else {
-                    playerMaxWarps = HomeConfig.defaultInvLimit;
+    private static int getPermissionLimit(Player player, LimitType type) {
+        switch (type) {
+            case HOME:
+                for (Map.Entry<String, Integer> permEntry : HomeConfig.permLimits.entrySet()) {
+                    if (hasPermission(player, permEntry.getKey())) {
+                        return permEntry.getValue();
+                    }
                 }
 
-                return playerMaxWarps;
-            }
-        } else {
-            return -1;
+                return HomeConfig.defaultLimit;
+            case INVITE:
+                for (Map.Entry<String, Integer> permEntry : HomeConfig.permInvLimits.entrySet()) {
+                    if (hasPermission(player, permEntry.getKey())) {
+                        return permEntry.getValue();
+                    }
+                }
+
+                return HomeConfig.defaultInvLimit;
+            case WARMUP:
+                for (Map.Entry<String, Integer> permEntry : HomeConfig.permWarmUps.entrySet()) {
+                    if (hasPermission(player, permEntry.getKey())) {
+                        return permEntry.getValue();
+                    }
+                }
+
+                return HomeConfig.defaultWarmUp;
+            case COOLDOWN:
+                for (Map.Entry<String, Integer> permEntry : HomeConfig.permCoolDowns.entrySet()) {
+                    if (hasPermission(player, permEntry.getKey())) {
+                        return permEntry.getValue();
+                    }
+                }
+
+                return HomeConfig.defaultCoolDown;
+            default: 
+                plugin.getLogger().severe("Looking for an unsupported dynamic limit! Please report this.");
+                return -1;
         }
+    }
+
+    private enum LimitType {
+        HOME,
+        INVITE,
+        WARMUP,
+        COOLDOWN
     }
 }

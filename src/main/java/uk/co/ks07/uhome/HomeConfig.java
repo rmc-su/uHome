@@ -1,6 +1,8 @@
 package uk.co.ks07.uhome;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,8 +24,6 @@ public class HomeConfig {
     public static int defaultCoolDown;
     public static boolean coolDownNotify;
     public static int defaultWarmUp;
-    public static int[] warmUps;
-    public static int[] coolDowns;
     public static boolean warmUpNotify;
     public static int abortOnDamage;
     public static boolean abortOnMove;
@@ -36,11 +36,15 @@ public class HomeConfig {
     public static String mySQLuname;
     public static String mySQLpass;
     public static String mySQLconn;
-    public static int[] limits;
     public static int defaultLimit;
     public static boolean debugLog;
-    public static int[] invlimits;
     public static int defaultInvLimit;
+    
+    // Dynamic limit permissions
+    public static Map<String, Integer> permLimits;
+    public static Map<String, Integer> permInvLimits;
+    public static Map<String, Integer> permWarmUps;
+    public static Map<String, Integer> permCoolDowns;
 
     public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
         try {
@@ -57,11 +61,7 @@ public class HomeConfig {
             ConfigurationSection warmups = timers.getConfigurationSection("warmups");
             ConfigurationSection mysql = settings.getConfigurationSection("mysql");
             ConfigurationSection dlLibs = settings.getConfigurationSection("downloadLibs");
-
-            limits = new int[5];
-            coolDowns = new int[5];
-            warmUps = new int[5];
-            invlimits = new int[5];
+            ConfigurationSection defaults = config.getConfigurationSection("defaults");
 
             locale = settings.getString("locale", "en");
             useColors = settings.getBoolean("useColors", true);
@@ -78,47 +78,100 @@ public class HomeConfig {
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
             sqliteLib = dlLibs.getBoolean("sqliteLib", true);
 
-
             usemySQL = mysql.getBoolean("enable", false);
             mySQLconn = mysql.getString("connection", "jdbc:mysql://localhost:3306/minecraft");
             mySQLuname = mysql.getString("username", "minecraft");
             mySQLpass = mysql.getString("password", "password");
 
-            limits[0] = homeLimits.getInt("limitA", 0);
-            limits[1] = homeLimits.getInt("limitB", 20);
-            limits[2] = homeLimits.getInt("limitC", 15);
-            limits[3] = homeLimits.getInt("limitD", 10);
-            limits[4] = homeLimits.getInt("limitE", 5);
-            defaultLimit = homeLimits.getInt("default", 3);
-
-            invlimits[0] = homeInvLimits.getInt("invlimitA", 10);
-            invlimits[1] = homeInvLimits.getInt("invlimitB", 8);
-            invlimits[2] = homeInvLimits.getInt("invlimitC", 6);
-            invlimits[3] = homeInvLimits.getInt("invlimitD", 4);
-            invlimits[4] = homeInvLimits.getInt("invlimitE", 2);
-            defaultInvLimit = homeInvLimits.getInt("default", 1);
+            defaultLimit = defaults.getInt("homeLimit", 3);
+            defaultInvLimit = defaults.getInt("homeInvLimit", 1);
+            defaultWarmUp = defaults.getInt("warmup", 0);
+            defaultCoolDown = defaults.getInt("cooldown", 0);
 
             coolDownNotify = timers.getBoolean("cooldownNotify", false);
             warmUpNotify = timers.getBoolean("warmupNotify", true);
-            timerByPerms = timers.getBoolean("timerByPerms", false);
             additionalTime = timers.getBoolean("additionalTime", false);
             abortOnDamage = timers.getInt("abortOnDamage", 0);
             abortOnMove = timers.getBoolean("abortOnMovement", false);
+            timerByPerms = timers.getBoolean("timerByPerms", false);
 
+            // Begin filling maps for custom variable nodes.
+            int count = 0;
+            permLimits = new LinkedHashMap<String, Integer>();
 
-            coolDowns[0] = cooldowns.getInt("cooldownA", 0);
-            coolDowns[1] = cooldowns.getInt("cooldownB", 5);
-            coolDowns[2] = cooldowns.getInt("cooldownC", 10);
-            coolDowns[3] = cooldowns.getInt("cooldownD", 15);
-            coolDowns[4] = cooldowns.getInt("cooldownE", 20);
-            defaultCoolDown = cooldowns.getInt("default", 0);
+            for (Map.Entry<String, Object> obj : homeLimits.getValues(false).entrySet()) {
+                if (obj.getValue() instanceof Integer) {
+                    count++;
+                    String permNode = "uhome.limit." + obj.getKey().substring(obj.getKey().lastIndexOf(".") + 1);
+                    Integer limitValue = (Integer) obj.getValue();
 
-            warmUps[0] = warmups.getInt("warmupA", 0);
-            warmUps[1] = warmups.getInt("warmupB", 5);
-            warmUps[2] = warmups.getInt("warmupC", 10);
-            warmUps[3] = warmups.getInt("warmupD", 15);
-            warmUps[4] = warmups.getInt("warmupE", 20);
-            defaultWarmUp = warmups.getInt("default", 0);
+                    log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
+                    permLimits.put(permNode, limitValue);
+                } else {
+                    log.warning("Ignoring an invalid limit value in homeLimits for key: " + obj.getKey());
+                }
+            }
+            log.info("Loaded " + Integer.toString(count) + " permission based home limits.");
+            
+            // If we're not using invites, don't bother creating the limit map.
+            if (enableInvite) {
+                count = 0;
+                permInvLimits = new LinkedHashMap<String, Integer>();
+
+                for (Map.Entry<String, Object> obj : homeInvLimits.getValues(false).entrySet()) {
+                    if (obj.getValue() instanceof Integer) {
+                        count++;
+                        String permNode = "uhome.invlimit." + obj.getKey().substring(obj.getKey().lastIndexOf(".") + 1);
+                        Integer limitValue = (Integer) obj.getValue();
+
+                        log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
+                        permInvLimits.put(permNode, limitValue);
+                    } else {
+                        log.warning("Ignoring an invalid limit value in homeInvLimits for key: " + obj.getKey());
+                    }
+                }
+
+                log.info("Loaded " + Integer.toString(count) + " permission based invite limits.");
+            }
+
+            // If we're not using timer perms, don't bother populating the maps.
+            if (timerByPerms) {
+                count = 0;
+                permWarmUps = new LinkedHashMap<String, Integer>();
+
+                for (Map.Entry<String, Object> obj : warmups.getValues(false).entrySet()) {
+                    if (obj.getValue() instanceof Integer) {
+                        count++;
+                        String permNode = "uhome.warmup." + obj.getKey().substring(obj.getKey().lastIndexOf(".") + 1);
+                        Integer limitValue = (Integer) obj.getValue();
+
+                        log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
+                        permWarmUps.put(permNode, limitValue);
+                    } else {
+                        log.warning("Ignoring an invalid time value in warmups for key: " + obj.getKey());
+                    }
+                }
+
+                log.info("Loaded " + Integer.toString(count) + " permission based warmup times.");
+
+                count = 0;
+                permCoolDowns = new LinkedHashMap<String, Integer>();
+
+                for (Map.Entry<String, Object> obj : cooldowns.getValues(false).entrySet()) {
+                    if (obj.getValue() instanceof Integer) {
+                        count++;
+                        String permNode = "uhome.cooldown." + obj.getKey().substring(obj.getKey().lastIndexOf(".") + 1);
+                        Integer limitValue = (Integer) obj.getValue();
+
+                        log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
+                        permCoolDowns.put(permNode, limitValue);
+                    } else {
+                        log.warning("Ignoring an invalid time value in cooldowns for key: " + obj.getKey());
+                    }
+                }
+
+                log.info("Loaded " + Integer.toString(count) + " permission based cooldown times.");
+            }
         } catch (Exception ex) {
             log.log(Level.SEVERE, "Unable to load config", ex);
         }

@@ -18,20 +18,23 @@ settings:
     connection: 'jdbc:mysql://localhost:3306/minecraft'
     username: 'minecraft'
     password: 'password'
+defaults:
+  homeLimit: 3
+  homeInvLimit: 1
+  warmup: 0
+  cooldown: 0
 homeLimits:
-  limitA: 0
+  limitA: 30
   limitB: 20
   limitC: 15
   limitD: 10
   limitE: 5
-  default: 3
 homeInvLimits:
   invlimitA: 10
   invlimitB: 8
   invlimitC: 6
   invlimitD: 4
   invlimitE: 2
-  default: 1
 timers:
   timerByPerms: false
   additionalTime: false
@@ -45,11 +48,9 @@ timers:
     cooldownC: 10
     cooldownD: 15
     cooldownE: 20
-    default: 0
   warmups:
     warmupA: 0
     warmupB: 5
     warmupC: 10
     warmupD: 15
     warmupE: 20
-    default: 0

@@ -96,46 +96,6 @@ permissions:
     description: Allows you to bypass all warp limits.
   uhome.bypass.invlimit:
     description: Allows you to bypass all invite limits.
-  uhome.limit.a:
-    description: Gives the player the warp limit a set in the config.
-  uhome.limit.b:
-    description: Gives the player the warp limit b set in the config.
-  uhome.limit.c:
-    description: Gives the player the warp limit c set in the config.
-  uhome.limit.d:
-    description: Gives the player the warp limit d set in the config.
-  uhome.limit.e:
-    description: Gives the player the warp limit e set in the config.
-  uhome.invlimit.a:
-    description: Gives the player the invite limit a set in the config.
-  uhome.invlimit.b:
-    description: Gives the player the invite limit b set in the config.
-  uhome.invlimit.c:
-    description: Gives the player the invite limit c set in the config.
-  uhome.invlimit.d:
-    description: Gives the player the invite limit d set in the config.
-  uhome.invlimit.e:
-    description: Gives the player the invite limit e set in the config.
-  uhome.warmup.a:
-    description: Gives the player the warmup time a set in the config.
-  uhome.warmup.b:
-    description: Gives the player the warmup time b set in the config.
-  uhome.warmup.c:
-    description: Gives the player the warmup time c set in the config.
-  uhome.warmup.d:
-    description: Gives the player the warmup time d set in the config.
-  uhome.warmup.e:
-    description: Gives the player the warmup time e set in the config.
-  uhome.cooldown.a:
-    description: Gives the player the cooldown time a set in the config.
-  uhome.cooldown.b:
-    description: Gives the player the cooldown time b set in the config.
-  uhome.cooldown.c:
-    description: Gives the player the cooldown time c set in the config.
-  uhome.cooldown.d:
-    description: Gives the player the cooldown time d set in the config.
-  uhome.cooldown.e:
-    description: Gives the player the cooldown time e set in the config.
   uhome.deny:
     description: Removes access to uHome - fix for ticket 8 on DBO.
   uhome.crossworld:
