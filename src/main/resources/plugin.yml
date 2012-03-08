@@ -78,6 +78,7 @@ permissions:
       uhome.bypass.cooldown: true
       uhome.bypass.warmup: true
       uhome.bypass.limit: true
+      uhome.bypass.invlimit: true
   uhome.bypass.bed:
     description: Allows you to bypass the bed restriction in the config.
   uhome.bypass.cooldown:
@@ -93,6 +94,8 @@ permissions:
     description: Prevents movement from cancelling your warm-up.
   uhome.bypass.limit:
     description: Allows you to bypass all warp limits.
+  uhome.bypass.invlimit:
+    description: Allows you to bypass all invite limits.
   uhome.limit.a:
     description: Gives the player the warp limit a set in the config.
   uhome.limit.b:
@@ -103,6 +106,16 @@ permissions:
     description: Gives the player the warp limit d set in the config.
   uhome.limit.e:
     description: Gives the player the warp limit e set in the config.
+  uhome.invlimit.a:
+    description: Gives the player the invite limit a set in the config.
+  uhome.invlimit.b:
+    description: Gives the player the invite limit b set in the config.
+  uhome.invlimit.c:
+    description: Gives the player the invite limit c set in the config.
+  uhome.invlimit.d:
+    description: Gives the player the invite limit d set in the config.
+  uhome.invlimit.e:
+    description: Gives the player the invite limit e set in the config.
   uhome.warmup.a:
     description: Gives the player the warmup time a set in the config.
   uhome.warmup.b:
