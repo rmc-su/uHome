@@ -405,7 +405,7 @@ public class HomeCommand implements CommandExecutor {
                     player.sendMessage(LocaleManager.getString("own.invite.ok", params));
                     break;
                 case AT_LIMIT:
-                    params.put("LIMIT", Integer.toString(HomeConfig.inviteeLimit));
+                    params.put("LIMIT", Integer.toString(Home.playerGetInviteLimit(player)));
                     player.sendMessage(LocaleManager.getString("own.invite.atlimit", params));
                     break;
                 case DUPLICATE:

@@ -25,6 +25,13 @@ homeLimits:
   limitD: 10
   limitE: 5
   default: 3
+homeInvLimits:
+  invlimitA: 10
+  invlimitB: 8
+  invlimitC: 6
+  invlimitD: 4
+  invlimitE: 2
+  default: 1
 timers:
   timerByPerms: false
   additionalTime: false

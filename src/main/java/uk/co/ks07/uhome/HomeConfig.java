@@ -39,7 +39,8 @@ public class HomeConfig {
     public static int[] limits;
     public static int defaultLimit;
     public static boolean debugLog;
-    public static int inviteeLimit;
+    public static int[] invlimits;
+    public static int defaultInvLimit;
 
     public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
         try {
@@ -50,6 +51,7 @@ public class HomeConfig {
 
             ConfigurationSection settings = config.getConfigurationSection("settings");
             ConfigurationSection homeLimits = config.getConfigurationSection("homeLimits");
+            ConfigurationSection homeInvLimits = config.getConfigurationSection("homeInvLimits");
             ConfigurationSection timers = config.getConfigurationSection("timers");
             ConfigurationSection cooldowns = timers.getConfigurationSection("cooldowns");
             ConfigurationSection warmups = timers.getConfigurationSection("warmups");
@@ -59,6 +61,7 @@ public class HomeConfig {
             limits = new int[5];
             coolDowns = new int[5];
             warmUps = new int[5];
+            invlimits = new int[5];
 
             locale = settings.getString("locale", "en");
             useColors = settings.getBoolean("useColors", true);
@@ -70,7 +73,6 @@ public class HomeConfig {
             enableDenyPerm = settings.getBoolean("enableDenyPerm", false);
             enableSethome = settings.getBoolean("enableSethome", false);
             debugLog = settings.getBoolean("debugLog", false);
-            inviteeLimit = settings.getInt("inviteeLimit", 10);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
@@ -88,6 +90,13 @@ public class HomeConfig {
             limits[3] = homeLimits.getInt("limitD", 10);
             limits[4] = homeLimits.getInt("limitE", 5);
             defaultLimit = homeLimits.getInt("default", 3);
+
+            invlimits[0] = homeInvLimits.getInt("invlimitA", 10);
+            invlimits[1] = homeInvLimits.getInt("invlimitB", 8);
+            invlimits[2] = homeInvLimits.getInt("invlimitC", 6);
+            invlimits[3] = homeInvLimits.getInt("invlimitD", 4);
+            invlimits[4] = homeInvLimits.getInt("invlimitE", 2);
+            defaultInvLimit = homeInvLimits.getInt("default", 1);
 
             coolDownNotify = timers.getBoolean("cooldownNotify", false);
             warmUpNotify = timers.getBoolean("warmupNotify", true);

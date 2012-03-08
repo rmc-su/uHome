@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -150,7 +151,7 @@ public class Home {
             this.invitees = new HashSet<String>();
         }
 
-        if ((HomeConfig.inviteeLimit < 0) || (this.invitees.size() < HomeConfig.inviteeLimit)) {
+        if ((this.playerGetInviteLimit(Bukkit.getPlayerExact(owner)) < 0) || (this.invitees.size() < this.playerGetInviteLimit(Bukkit.getPlayerExact(owner)))) {
             // True if added, false if already invited.
             if (this.invitees.add(player)) {
                 return InviteStatus.SUCCESS;
@@ -197,6 +198,34 @@ public class Home {
 
     public String inviteesToString() {
         return this.invitees.toString().replace("[", "").replace("]", "");
+    }
+
+    public static int playerGetInviteLimit(Player player) {
+        if (player != null) {
+            if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassInvLimit)) {
+                return -1;
+            } else {
+                int playerMaxWarps;
+
+                if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitA)) {
+                    playerMaxWarps = HomeConfig.invlimits[0];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitB)) {
+                    playerMaxWarps = HomeConfig.invlimits[1];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitC)) {
+                    playerMaxWarps = HomeConfig.invlimits[2];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitD)) {
+                    playerMaxWarps = HomeConfig.invlimits[3];
+                } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.invlimitE)) {
+                    playerMaxWarps = HomeConfig.invlimits[4];
+                } else {
+                    playerMaxWarps = HomeConfig.defaultInvLimit;
+                }
+
+                return playerMaxWarps;
+            }
+        } else {
+            return -1;
+        }
     }
 
     public static enum InviteStatus {
