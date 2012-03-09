@@ -116,9 +116,8 @@ public class SuperPermsManager {
                 }
 
                 return HomeConfig.defaultCoolDown;
-            default: 
-                plugin.getLogger().severe("Looking for an unsupported dynamic limit! Please report this.");
-                return -1;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
