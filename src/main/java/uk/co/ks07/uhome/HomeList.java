@@ -103,7 +103,7 @@ public class HomeList {
     }
     
     public boolean checkTeleportCosts(Player player) {
-    	if ((this.plugin.economy != null) && (! player.hasPermission("uhome.bypass.economy"))) {
+    	if ((this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
             EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.homeCost);
             if (resp.transactionSuccess()) {
                 return true;

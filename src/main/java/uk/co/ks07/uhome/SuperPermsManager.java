@@ -45,6 +45,7 @@ public class SuperPermsManager {
     public static final String bypassCooldown = "uhome.bypass.cooldown";
     public static final String allowCrossWorld = "uhome.crossworld";
     public static final String bypassInvLimit = "uhome.bypass.invlimit";
+    public static final String bypassEcon = "uhome.bypass.economy";
 
     public static boolean hasPermission(Player player, String permission) {
         boolean ret = player.hasPermission(permission);

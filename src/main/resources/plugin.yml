@@ -77,6 +77,7 @@ permissions:
       uhome.bypass.warmup: true
       uhome.bypass.limit: true
       uhome.bypass.invlimit: true
+      uhome.bypass.economy: true
   uhome.bypass.bed:
     description: Allows you to bypass the bed restriction in the config.
   uhome.bypass.cooldown:
@@ -94,5 +95,7 @@ permissions:
     description: Allows you to bypass all warp limits.
   uhome.bypass.invlimit:
     description: Allows you to bypass all invite limits.
+  uhome.bypass.economy:
+    description: Allows you to use all commands for free.
   uhome.crossworld:
     description: Allows the player to warp across worlds.
