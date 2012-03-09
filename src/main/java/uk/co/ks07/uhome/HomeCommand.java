@@ -227,6 +227,12 @@ public class HomeCommand implements CommandExecutor {
                 
                 player.sendMessage(LocaleManager.getString("own.set.cooldown", params));
                 break;
+            case NOT_ENOUGH_MONEY:
+                HashMap<String, String> costs = new HashMap<String, String>();
+                costs.put("COST", Integer.toString(HomeConfig.setCost));
+                costs.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                player.sendMessage(LocaleManager.getString("econ.insufficient.set", costs));
         }
     }
 
@@ -293,7 +299,10 @@ public class HomeCommand implements CommandExecutor {
             case NOT_ENOUGH_MONEY:
                 params = new HashMap<String, String>();
                 params.put("HOME", target);
-                player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
+                params.put("COST", Integer.toString(HomeConfig.warpCost));
+                params.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                player.sendMessage(LocaleManager.getString("econ.insufficient.warp", params));
                 break;
             case NOT_PERMITTED: case NOT_EXISTS:
                 // If no matches are found (or not permitted!?), check player default home.
@@ -314,7 +323,10 @@ public class HomeCommand implements CommandExecutor {
                         case NOT_ENOUGH_MONEY:
                             params = new HashMap<String, String>();
                             params.put("HOME", target);
-                            player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
+                            params.put("COST", Integer.toString(HomeConfig.warpCost));
+                            params.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                            player.sendMessage(LocaleManager.getString("econ.insufficient.warp", params));
                             break;
                         case NOT_PERMITTED:
                             params = new HashMap<String, String>();
@@ -366,6 +378,14 @@ public class HomeCommand implements CommandExecutor {
                     player.sendMessage(LocaleManager.getString("usage.set"));
                 }
                 break;
+            case NOT_ENOUGH_MONEY:
+                params = new HashMap<String, String>();
+                params.put("HOME", uHome.DEFAULT_HOME);
+                params.put("COST", Integer.toString(HomeConfig.warpCost));
+                params.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                player.sendMessage(LocaleManager.getString("econ.insufficient.warp", params));
+                break;
         }
     }
 
@@ -388,7 +408,10 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
                 break;
             case NOT_ENOUGH_MONEY:
-                player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
+                params.put("COST", Integer.toString(HomeConfig.warpCost));
+                params.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                player.sendMessage(LocaleManager.getString("econ.insufficient.warp", params));
                 break;
             case NOT_EXISTS:
                 player.sendMessage(LocaleManager.getString("other.warp.notexists", params));

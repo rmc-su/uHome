@@ -50,7 +50,12 @@ public class HomeList {
                 homeList.put(player.getName().toLowerCase(), warps);
                 WarpDataSource.addWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
-                return ExitStatus.SUCCESS_FIRST;
+                
+                if (this.checkSetCosts(player)) {
+                    return ExitStatus.SUCCESS_FIRST;
+                } else {
+                    return ExitStatus.NOT_ENOUGH_MONEY;
+                }
             } else if (!this.homeExists(player.getName().toLowerCase(), name)) {
                 if (this.playerCanSet(player)) {
                     // Player has warps, but not with the given name.
@@ -58,7 +63,12 @@ public class HomeList {
                     homeList.get(player.getName().toLowerCase()).put(name, warp);
                     WarpDataSource.addWarp(warp, log);
                     setHomeCoolDown.addPlayer(player, plugin);
-                    return ExitStatus.SUCCESS;
+                    
+                    if (this.checkSetCosts(player)) {
+                        return ExitStatus.SUCCESS;
+                    } else {
+                        return ExitStatus.NOT_ENOUGH_MONEY;
+                    }
                 } else {
                     return ExitStatus.AT_LIMIT;
                 }
@@ -68,7 +78,12 @@ public class HomeList {
                 warp.setLocation(player.getLocation());
                 WarpDataSource.moveWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
-                return ExitStatus.SUCCESS_MOVED;
+
+                if (this.checkSetCosts(player)) {
+                    return ExitStatus.SUCCESS_MOVED;
+                } else {
+                    return ExitStatus.NOT_ENOUGH_MONEY;
+                }
             }
         }
     }
@@ -102,9 +117,21 @@ public class HomeList {
         return this.warpTo(player.getName(), target, player, plugin);
     }
     
-    public boolean checkTeleportCosts(Player player) {
+    public boolean checkWarpCosts(Player player) {
     	if ((this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
-            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.homeCost);
+            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.warpCost);
+            if (resp.transactionSuccess()) {
+                return true;
+            } else {
+                return false;
+            }
+    	}
+    	return true;
+    }
+
+    public boolean checkSetCosts(Player player) {
+    	if ((this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
+            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.setCost);
             if (resp.transactionSuccess()) {
                 return true;
             } else {
@@ -121,7 +148,7 @@ public class HomeList {
             Home warp = homeList.get(targetOwner.toLowerCase()).get(target);
             if (warp.playerCanWarp(player)) {
                 if (homeCoolDown.playerHasCooled(player)) {
-                	if (checkTeleportCosts(player)) {
+                	if (checkWarpCosts(player)) {
                             WarmUp.addPlayer(player, warp, plugin);
                             homeCoolDown.addPlayer(player, plugin);
                             return ExitStatus.SUCCESS;

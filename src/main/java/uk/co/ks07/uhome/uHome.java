@@ -60,17 +60,17 @@ public class uHome extends JavaPlugin {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }
         
-        if (HomeConfig.homeCost > 0) {
+        if (HomeConfig.enableEcon) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {
                 RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
                 if (rsp != null) {
                     economy = rsp.getProvider();
                     this.getLogger().info("Connected to " + economy.getName() + " for economy support.");
                 } else {
-                    this.getLogger().warning("Vault could not find any economy plugin to connect to. Please install one or set homeCost to 0.");
+                    this.getLogger().warning("Vault could not find any economy plugin to connect to. Please install one or disable economy.");
                 }
             } else {
-                this.getLogger().warning("Coult not find Vault plugin, but homeCost was set. Please install Vault or set homeCost to 0.");
+                this.getLogger().warning("Coult not find Vault plugin, but economy is enabled. Please install Vault or disable economy.");
             }
         }
 
@@ -110,7 +110,7 @@ public class uHome extends JavaPlugin {
                 updater.check();
                 updater.update();
             } catch (Exception e) {
-                this.getLogger().log(Level.WARNING, "Failed to update libs.");
+                this.getLogger().warning("Failed to update libs.");
             }
         }
     }
@@ -137,7 +137,7 @@ public class uHome extends JavaPlugin {
     private boolean sqlCheck() {
         Connection conn = ConnectionManager.initialize(this.getLogger());
         if (conn == null) {
-            this.getLogger().log(Level.SEVERE, "Could not establish SQL connection.");
+            this.getLogger().severe("Could not establish SQL connection.");
             pm.disablePlugin(this);
             return false;
         }

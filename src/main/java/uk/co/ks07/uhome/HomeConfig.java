@@ -39,7 +39,9 @@ public class HomeConfig {
     public static int defaultLimit;
     public static boolean debugLog;
     public static int defaultInvLimit;
-    public static int homeCost;
+    public static boolean enableEcon;
+    public static int warpCost;
+    public static int setCost;
     
     // Dynamic limit permissions
     public static Map<String, Integer> permLimits;
@@ -63,6 +65,7 @@ public class HomeConfig {
             ConfigurationSection mysql = settings.getConfigurationSection("mysql");
             ConfigurationSection dlLibs = settings.getConfigurationSection("downloadLibs");
             ConfigurationSection defaults = config.getConfigurationSection("defaults");
+            ConfigurationSection economy = config.getConfigurationSection("economy");
 
             locale = settings.getString("locale", "en");
             useColors = settings.getBoolean("useColors", true);
@@ -74,7 +77,6 @@ public class HomeConfig {
             enableDefaultPerms = settings.getBoolean("enableDefaultPerms", true);
             enableSethome = settings.getBoolean("enableSethome", false);
             debugLog = settings.getBoolean("debugLog", false);
-            homeCost = settings.getInt("homeCost", 0);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
@@ -96,6 +98,10 @@ public class HomeConfig {
             abortOnDamage = timers.getInt("abortOnDamage", 0);
             abortOnMove = timers.getBoolean("abortOnMovement", false);
             timerByPerms = timers.getBoolean("timerByPerms", false);
+
+            enableEcon = economy.getBoolean("enable", false);
+            warpCost = economy.getInt("warpCost", 0);
+            setCost = economy.getInt("setCost", 0);
 
             // Begin filling maps for custom variable nodes.
             int count = 0;

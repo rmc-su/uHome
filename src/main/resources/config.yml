@@ -55,3 +55,7 @@ timers:
     c: 10
     d: 15
     e: 20
+economy:
+  enable: false
+  warpCost: 0
+  setCost: 0
