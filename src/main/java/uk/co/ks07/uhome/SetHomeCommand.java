@@ -22,11 +22,6 @@ public class SetHomeCommand implements CommandExecutor {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
 
-                // Workaround for ticket 8.
-                if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
-                    return true;
-                }
-
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
                     if (HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
                         player.sendMessage(LocaleManager.getString("usage.sleep"));

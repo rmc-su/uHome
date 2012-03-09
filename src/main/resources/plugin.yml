@@ -21,7 +21,6 @@ permissions:
       uhome.bypass: true
   uhome.own:
     description: Gives access to all uHome commands
-    default: true
     children:
       uhome.own.set: true
       uhome.own.warp: true
@@ -46,7 +45,6 @@ permissions:
     description: Allows you to uninvite others from your homes.
   uhome.admin:
     description: Gives access to all uHome admin commands
-    default: op
     children:
       uhome.admin.warp: true
       uhome.admin.set: true
@@ -71,7 +69,6 @@ permissions:
     description: Allows you to lookup a home's location.
   uhome.bypass:
     description: Allows you to bypass all restrictions.
-    default: op
     children:
       uhome.crossworld: true
       uhome.bypass.bed: true
@@ -96,7 +93,5 @@ permissions:
     description: Allows you to bypass all warp limits.
   uhome.bypass.invlimit:
     description: Allows you to bypass all invite limits.
-  uhome.deny:
-    description: Removes access to uHome - fix for ticket 8 on DBO.
   uhome.crossworld:
     description: Allows the player to warp across worlds.

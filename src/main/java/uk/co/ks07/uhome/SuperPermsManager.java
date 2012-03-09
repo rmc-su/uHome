@@ -2,16 +2,22 @@ package uk.co.ks07.uhome;
 
 import java.util.Map;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 public class SuperPermsManager {
     public static uHome plugin;
 
     public static void initialize(uHome plugin) {
         SuperPermsManager.plugin = plugin;
+
+        // Enable defaults if necessary.
+        if (HomeConfig.enableDefaultPerms) {
+            plugin.pm.getPermission("uhome.own").setDefault(PermissionDefault.TRUE);
+            plugin.pm.getPermission("uhome.admin").setDefault(PermissionDefault.OP);
+            plugin.pm.getPermission("uhome.bypass").setDefault(PermissionDefault.OP);
+        }
     }
 
-    // Deny permission (default override)
-    public static final String denyPerm = "uhome.deny";
     // Home owners
     public static final String ownWarp = "uhome.own.warp";
     public static final String ownSet = "uhome.own.set";
@@ -37,30 +43,6 @@ public class SuperPermsManager {
     public static final String bypassCooldown = "uhome.bypass.cooldown";
     public static final String allowCrossWorld = "uhome.crossworld";
     public static final String bypassInvLimit = "uhome.bypass.invlimit";
-    // Home limit variables
-    public static final String limitA = "uhome.limit.a";
-    public static final String limitB = "uhome.limit.b";
-    public static final String limitC = "uhome.limit.c";
-    public static final String limitD = "uhome.limit.d";
-    public static final String limitE = "uhome.limit.e";
-    // Home invite limit variables
-    public static final String invlimitA = "uhome.invlimit.a";
-    public static final String invlimitB = "uhome.invlimit.b";
-    public static final String invlimitC = "uhome.invlimit.c";
-    public static final String invlimitD = "uhome.invlimit.d";
-    public static final String invlimitE = "uhome.invlimit.e";
-    // Warmup timer variables
-    public static final String warmupA = "uhome.warmup.a";
-    public static final String warmupB = "uhome.warmup.b";
-    public static final String warmupC = "uhome.warmup.c";
-    public static final String warmupD = "uhome.warmup.d";
-    public static final String warmupE = "uhome.warmup.e";
-    // Cooldown timer variables
-    public static final String cooldownA = "uhome.cooldown.a";
-    public static final String cooldownB = "uhome.cooldown.b";
-    public static final String cooldownC = "uhome.cooldown.c";
-    public static final String cooldownD = "uhome.cooldown.d";
-    public static final String cooldownE = "uhome.cooldown.e";
 
     public static boolean hasPermission(Player player, String permission) {
         boolean ret = player.hasPermission(permission);

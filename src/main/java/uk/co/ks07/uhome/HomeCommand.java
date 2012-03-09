@@ -35,11 +35,6 @@ public class HomeCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            // Workaround for DBO ticket 8.
-            if (HomeConfig.enableDenyPerm && SuperPermsManager.hasPermission(player, SuperPermsManager.denyPerm)) {
-                return true;
-            }
-
             switch (args.length) {
                 case 0:
                     if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownWarp)) {
