@@ -107,6 +107,7 @@ public class HomeConfig {
 
                     log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
                     permLimits.put(permNode, limitValue);
+                    SuperPermsManager.registerPermission(permNode);
                 } else {
                     log.warning("Ignoring an invalid limit value in homeLimits for key: " + obj.getKey());
                 }
@@ -126,6 +127,7 @@ public class HomeConfig {
 
                         log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
                         permInvLimits.put(permNode, limitValue);
+                        SuperPermsManager.registerPermission(permNode);
                     } else {
                         log.warning("Ignoring an invalid limit value in homeInvLimits for key: " + obj.getKey());
                     }
@@ -147,6 +149,7 @@ public class HomeConfig {
 
                         log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
                         permWarmUps.put(permNode, limitValue);
+                        SuperPermsManager.registerPermission(permNode);
                     } else {
                         log.warning("Ignoring an invalid time value in warmups for key: " + obj.getKey());
                     }
@@ -165,6 +168,7 @@ public class HomeConfig {
 
                         log.info("Loaded permission node: " + permNode + " with order " + Integer.toString(count));
                         permCoolDowns.put(permNode, limitValue);
+                        SuperPermsManager.registerPermission(permNode);
                     } else {
                         log.warning("Ignoring an invalid time value in cooldowns for key: " + obj.getKey());
                     }

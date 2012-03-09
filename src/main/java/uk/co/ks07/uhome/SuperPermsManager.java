@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 public class SuperPermsManager {
@@ -81,6 +82,10 @@ public class SuperPermsManager {
         } else {
             return getPermissionLimit(player, LimitType.INVITE);
         }
+    }
+
+    public static void registerPermission(String permNode) {
+        plugin.pm.addPermission(new Permission(permNode));
     }
 
     private static int getPermissionLimit(Player player, LimitType type) {
