@@ -155,7 +155,7 @@ public class HomeList {
     }
 
     public Location getHomeLocation(String owner, String name) {
-        return this.homeList.get(owner.toLowerCase()).get(name).getLocation;
+        return this.homeList.get(owner.toLowerCase()).get(name).getLocation(this.server);
     }
 
     public boolean playerHasDefaultHome(String player) {

@@ -25,7 +25,6 @@ public class Home {
     public int pitch;
     public Set<String> invitees;
     public static int nextIndex = 1;
-    Location getLocation;
 
     public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch) {
         this.index = index;
