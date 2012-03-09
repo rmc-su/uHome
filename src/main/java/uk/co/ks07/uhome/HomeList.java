@@ -11,8 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import uk.co.ks07.uhome.Home.InviteStatus;
 
+import uk.co.ks07.uhome.Home.InviteStatus;
 import uk.co.ks07.uhome.locale.LocaleManager;
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 import uk.co.ks07.uhome.timers.WarmUp;
