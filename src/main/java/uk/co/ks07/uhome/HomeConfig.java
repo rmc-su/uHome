@@ -39,6 +39,7 @@ public class HomeConfig {
     public static int defaultLimit;
     public static boolean debugLog;
     public static int defaultInvLimit;
+    public static int homeCost;
     
     // Dynamic limit permissions
     public static Map<String, Integer> permLimits;
@@ -73,6 +74,7 @@ public class HomeConfig {
             enableDefaultPerms = settings.getBoolean("enableDefaultPerms", true);
             enableSethome = settings.getBoolean("enableSethome", false);
             debugLog = settings.getBoolean("debugLog", false);
+            homeCost = settings.getInt("homeCost", 0);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);

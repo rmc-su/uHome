@@ -290,6 +290,11 @@ public class HomeCommand implements CommandExecutor {
 
                 player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
                 break;
+            case NOT_ENOUGH_MONEY:
+                params = new HashMap<String, String>();
+                params.put("HOME", target);
+                player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
+                break;
             case NOT_PERMITTED: case NOT_EXISTS:
                 // If no matches are found (or not permitted!?), check player default home.
                 String playerName = this.completePlayerName(target);
@@ -305,6 +310,11 @@ public class HomeCommand implements CommandExecutor {
                             params.put("CD_TOTAL", Integer.toString(this.homeCoolDown.getTimer(player)));
 
                             player.sendMessage(LocaleManager.getString("own.warp.cooldown", params));
+                            break;
+                        case NOT_ENOUGH_MONEY:
+                            params = new HashMap<String, String>();
+                            params.put("HOME", target);
+                            player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
                             break;
                         case NOT_PERMITTED:
                             params = new HashMap<String, String>();
@@ -376,6 +386,9 @@ public class HomeCommand implements CommandExecutor {
                 break;
             case NOT_PERMITTED:
                 player.sendMessage(LocaleManager.getString("other.warp.notinvited", params));
+                break;
+            case NOT_ENOUGH_MONEY:
+                player.sendMessage(LocaleManager.getString("warp.notenoughmoney", params));
                 break;
             case NOT_EXISTS:
                 player.sendMessage(LocaleManager.getString("other.warp.notexists", params));

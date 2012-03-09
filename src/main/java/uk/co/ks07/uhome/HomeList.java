@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -99,6 +101,18 @@ public class HomeList {
     public ExitStatus warpTo(String target, Player player, Plugin plugin) {
         return this.warpTo(player.getName(), target, player, plugin);
     }
+    
+    public boolean checkTeleportCosts(Player player) {
+    	if (this.plugin.economy != null && !player.hasPermission("uhome.costOverride")) {
+    		EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.homeCost);
+    		if (resp.transactionSuccess()) {
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
 
     public ExitStatus warpTo(String targetOwner, String target, Player player, Plugin plugin) {
         MatchList matches = this.getMatches(target, player, targetOwner);
@@ -107,9 +121,13 @@ public class HomeList {
             Home warp = homeList.get(targetOwner.toLowerCase()).get(target);
             if (warp.playerCanWarp(player)) {
                 if (homeCoolDown.playerHasCooled(player)) {
-                    WarmUp.addPlayer(player, warp, plugin);
-                    homeCoolDown.addPlayer(player, plugin);
-                    return ExitStatus.SUCCESS;
+                	if (checkTeleportCosts(player)) {
+                            WarmUp.addPlayer(player, warp, plugin);
+                            homeCoolDown.addPlayer(player, plugin);
+                            return ExitStatus.SUCCESS;
+                	} else {
+                            return ExitStatus.NOT_ENOUGH_MONEY;
+                	}
                 } else {
                     return ExitStatus.NEED_COOLDOWN;
                 }
@@ -373,7 +391,8 @@ public class HomeList {
         AT_LIMIT,
         NEED_COOLDOWN,
         DUPLICATE,
-        UNKNOWN;
+        UNKNOWN,
+        NOT_ENOUGH_MONEY;
     }
 }
 
