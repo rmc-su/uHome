@@ -180,6 +180,16 @@ public class uHome extends JavaPlugin {
 
             });
 
+            // Plot the number of dynamic home limits registered
+            metrics.addCustomData(new UHomePlotter("Registered Home Limits", this.homeList) {
+
+                @Override
+                public int getValue() {
+                    return HomeConfig.permLimits.size();
+                }
+
+            });
+
             metrics.start();
             this.getLogger().info("Sending anonymous usage statistics to metrics.griefcraft.com.");
         } catch (IOException e ) {
