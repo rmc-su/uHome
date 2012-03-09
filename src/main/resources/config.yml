@@ -24,17 +24,17 @@ defaults:
   warmup: 0
   cooldown: 0
 homeLimits:
-  limitA: 30
-  limitB: 20
-  limitC: 15
-  limitD: 10
-  limitE: 5
+  a: 30
+  b: 20
+  c: 15
+  d: 10
+  e: 5
 homeInvLimits:
-  invlimitA: 10
-  invlimitB: 8
-  invlimitC: 6
-  invlimitD: 4
-  invlimitE: 2
+  a: 10
+  b: 8
+  c: 6
+  d: 4
+  e: 2
 timers:
   timerByPerms: false
   additionalTime: false
@@ -43,14 +43,14 @@ timers:
   abortOnDamage: 0
   abortOnMovement: false
   cooldowns:
-    cooldownA: 0
-    cooldownB: 5
-    cooldownC: 10
-    cooldownD: 15
-    cooldownE: 20
+    a: 0
+    b: 5
+    c: 10
+    d: 15
+    e: 20
   warmups:
-    warmupA: 0
-    warmupB: 5
-    warmupC: 10
-    warmupD: 15
-    warmupE: 20
+    a: 0
+    b: 5
+    c: 10
+    d: 15
+    e: 20
