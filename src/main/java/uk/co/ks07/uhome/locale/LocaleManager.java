@@ -24,7 +24,7 @@ public class LocaleManager {
     public static void init(File customLocale, Logger log) {
         String locale = HomeConfig.locale.toLowerCase();
 
-        if ("file".equals(locale)) {
+        if ("file".equals(locale) || "custom".equals(locale)) {
             try {
                 locResBundle = new PropertyResourceBundle(new FileInputStream(customLocale));
                 log.info("Using custom localization from customlocale.properties.");
