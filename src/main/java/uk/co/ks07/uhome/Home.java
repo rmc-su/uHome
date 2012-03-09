@@ -3,8 +3,8 @@ package uk.co.ks07.uhome;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;

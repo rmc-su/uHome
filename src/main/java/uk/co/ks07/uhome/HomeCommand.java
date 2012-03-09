@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -434,8 +435,14 @@ public class HomeCommand implements CommandExecutor {
         params.put("OWNER", targetOwner);
 
         if (homeList.homeExists(targetOwner, targetHome)) {
-            params.put("LOCATION", homeList.getHomeLocation(targetOwner, targetHome).toString());
-            user.sendMessage(LocaleManager.getString("admin.info.ok", params));
+            Location loc = homeList.getHomeLocation(targetOwner, targetHome);
+            
+            if (loc != null) {
+                params.put("LOCATION", loc.toString());
+                user.sendMessage(LocaleManager.getString("admin.info.ok", params));
+            } else {
+                user.sendMessage(LocaleManager.getString("error.warp.noworld", params));
+            }
         } else {
             user.sendMessage(LocaleManager.getString("admin.info.notexists", params));
         }
