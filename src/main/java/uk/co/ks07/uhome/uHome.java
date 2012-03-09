@@ -223,12 +223,13 @@ public class uHome extends JavaPlugin {
                     continue;
                 } else {
                     // name, world, owner, X, Y, Z, pitch, yaw
-                    owner = split[0];
-                    homeName = uHome.DEFAULT_HOME;
+                    owner = split[2];
+                    homeName = split[0];
                     try {
                         World homeWorld = getServer().getWorld(split[1]);
 
                         if (homeWorld == null) {
+                            notImported++;
                             this.getLogger().warning("Could not find world named " + split[1] + " on line number " + lineCount + ", skipping.");
                             continue;
                         }
