@@ -68,9 +68,11 @@ public class uHome extends JavaPlugin {
                     this.getLogger().info("Connected to " + economy.getName() + " for economy support.");
                 } else {
                     this.getLogger().warning("Vault could not find any economy plugin to connect to. Please install one or disable economy.");
+                    HomeConfig.enableEcon = false;
                 }
             } else {
                 this.getLogger().warning("Coult not find Vault plugin, but economy is enabled. Please install Vault or disable economy.");
+                HomeConfig.enableEcon = false;
             }
         }
 

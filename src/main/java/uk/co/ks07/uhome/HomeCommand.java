@@ -233,6 +233,7 @@ public class HomeCommand implements CommandExecutor {
                 costs.put("CURRENCY", this.plugin.economy.currencyNamePlural());
 
                 player.sendMessage(LocaleManager.getString("econ.insufficient.set", costs));
+                break;
         }
     }
 
