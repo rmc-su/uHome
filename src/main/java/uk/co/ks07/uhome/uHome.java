@@ -19,6 +19,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 public class uHome extends JavaPlugin {
 
@@ -225,7 +226,14 @@ public class uHome extends JavaPlugin {
                     owner = split[0];
                     homeName = uHome.DEFAULT_HOME;
                     try {
-                        loc = new Location(getServer().getWorld(split[1]), Double.parseDouble(split[3]), Double.parseDouble(split[4]), Double.parseDouble(split[5]), Float.parseFloat(split[7]), Float.parseFloat(split[6]));
+                        World homeWorld = getServer().getWorld(split[1]);
+
+                        if (homeWorld == null) {
+                            this.getLogger().warning("Could not find world named " + split[1] + " on line number " + lineCount + ", skipping.");
+                            continue;
+                        }
+
+                        loc = new Location(homeWorld, Double.parseDouble(split[3]), Double.parseDouble(split[4]), Double.parseDouble(split[5]), Float.parseFloat(split[7]), Float.parseFloat(split[6]));
                     } catch (NumberFormatException nfe) {
                         notImported++;
                         this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
