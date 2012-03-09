@@ -103,13 +103,13 @@ public class HomeList {
     }
     
     public boolean checkTeleportCosts(Player player) {
-    	if (this.plugin.economy != null && !player.hasPermission("uhome.costOverride")) {
-    		EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.homeCost);
-    		if (resp.transactionSuccess()) {
-    			return true;
-    		} else {
-    			return false;
-    		}
+    	if ((this.plugin.economy != null) && (! player.hasPermission("uhome.bypass.economy"))) {
+            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.homeCost);
+            if (resp.transactionSuccess()) {
+                return true;
+            } else {
+                return false;
+            }
     	}
     	return true;
     }

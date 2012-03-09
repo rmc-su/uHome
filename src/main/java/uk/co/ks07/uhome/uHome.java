@@ -61,23 +61,18 @@ public class uHome extends JavaPlugin {
         }
         
         if (HomeConfig.homeCost > 0) {
-        	if (getServer().getPluginManager().getPlugin("Vault") != null) {
-        		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        		if (rsp != null) {
-        			economy = rsp.getProvider();
-        			this.getLogger().log(Level.INFO, "Connected to " + economy.getName() + " for economy support.");
-        		} else {
-        			this.getLogger().log(Level.SEVERE, "Vault could not find any economy plugin to connect to. Please install one or set homeCost to 0. Disabling...");
-        			this.setEnabled(false);
-        			return;
-        		}
-        	} else {
-    			this.getLogger().log(Level.SEVERE, "Coult not find Vault plugin, but homeCost was set. Please install Vault or set homeCost to 0. Disabling...");
-    			this.setEnabled(false);
-    			return;
-        	}
+            if (getServer().getPluginManager().getPlugin("Vault") != null) {
+                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+                if (rsp != null) {
+                    economy = rsp.getProvider();
+                    this.getLogger().info("Connected to " + economy.getName() + " for economy support.");
+                } else {
+                    this.getLogger().warning("Vault could not find any economy plugin to connect to. Please install one or set homeCost to 0.");
+                }
+            } else {
+                this.getLogger().warning("Coult not find Vault plugin, but homeCost was set. Please install Vault or set homeCost to 0.");
+            }
         }
-
 
         libCheck();
         boolean needImport = convertOldDB(getDataFolder());

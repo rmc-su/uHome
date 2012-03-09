@@ -4,6 +4,7 @@ author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
 website: http://www.ultimateminecraft.net/
+softdepend: [Vault]
 commands:
   home:
     description: Access to the home commands.
