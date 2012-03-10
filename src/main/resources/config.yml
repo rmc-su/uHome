@@ -9,7 +9,6 @@ settings:
   enableDefaultPerms: true
   enableSethome: true
   debugLog: false
-  homeCost: 0
   downloadLibs:
     enable: true
     mysqlLib: true
