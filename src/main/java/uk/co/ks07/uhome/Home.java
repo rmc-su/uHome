@@ -9,8 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import uk.co.ks07.uhome.locale.LocaleManager;
+import uk.co.ks07.uhome.timers.HomeCoolDown;
 
 public class Home {
 
@@ -93,7 +95,7 @@ public class Home {
         return (this.playerIsCreator(player.getName()) || this.playerIsInvited(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
     }
 
-    public void warp(Player player, Server server) {
+    public void warp(Player player, Plugin plugin, Server server) {
         World currWorld = null;
         if (world.equals("0")) {
             currWorld = server.getWorlds().get(0);
@@ -106,6 +108,7 @@ public class Home {
             if (player.getLocation().getWorld() == currWorld || SuperPermsManager.hasPermission(player, SuperPermsManager.allowCrossWorld)) {
                 Location location = new Location(currWorld, x, y, z, yaw, pitch);
                 player.teleport(location);
+                HomeCoolDown.getInstance().addPlayer(player, plugin);
                 
                 if (playerIsCreator(player.getName())) {
                     player.sendMessage(LocaleManager.getString("own.warp.ok", null, this));

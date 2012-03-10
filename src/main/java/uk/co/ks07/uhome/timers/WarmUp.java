@@ -21,7 +21,7 @@ public class WarmUp {
 
     public static void addPlayer(Player player, Home home, Plugin plugin) {
         if (SuperPermsManager.hasPermission(player, SuperPermsManager.bypassWarmup)) {
-            home.warp(player, plugin.getServer());
+            home.warp(player, plugin, plugin.getServer());
             return;
         }
 
@@ -39,10 +39,10 @@ public class WarmUp {
                 player.sendMessage(LocaleManager.getString("warmup.wait", params));
             }
 
-            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin.getServer()), timer * 20);
+            int taskIndex = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WarmTask(player, home, plugin), timer * 20);
             players.put(player.getName(), taskIndex);
         } else {
-            home.warp(player, plugin.getServer());
+            home.warp(player, plugin, plugin.getServer());
         }
     }
 
@@ -50,12 +50,12 @@ public class WarmUp {
         return players.containsKey(player.getName());
     }
 
-    private static void sendPlayer(Player player, Home home, Server server) {
+    private static void sendPlayer(Player player, Home home, Plugin plugin, Server server) {
         int timer = getTimer(player);
         if (HomeConfig.warmUpNotify && timer > 0) {
             player.sendMessage(LocaleManager.getString("warmup.finished"));
         }
-        home.warp(player, server);
+        home.warp(player, plugin, server);
     }
 
     public static boolean isWarming(Player player) {
@@ -104,16 +104,16 @@ public class WarmUp {
 
         private Player player;
         private Home home;
-        private Server server;
+        private Plugin plugin;
 
-        public WarmTask(Player player, Home home, Server server) {
+        public WarmTask(Player player, Home home, Plugin plugin) {
             this.player = player;
             this.home = home;
-            this.server = server;
+            this.plugin = plugin;
         }
 
         public void run() {
-            sendPlayer(player, home, server);
+            sendPlayer(player, home, plugin, plugin.getServer());
             players.remove(player.getName());
         }
     }

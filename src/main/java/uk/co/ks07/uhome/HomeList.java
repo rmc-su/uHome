@@ -160,7 +160,6 @@ public class HomeList {
                 if (homeCoolDown.playerHasCooled(player)) {
                 	if (checkWarpCosts(player)) {
                             WarmUp.addPlayer(player, warp, plugin);
-                            homeCoolDown.addPlayer(player, plugin);
                             return ExitStatus.SUCCESS;
                 	} else {
                             return ExitStatus.NOT_ENOUGH_MONEY;
@@ -182,7 +181,6 @@ public class HomeList {
             if (warp.playerCanWarp(player)) {
                 if (homeCoolDown.playerHasCooled(player)) {
                     WarmUp.addPlayer(player, warp, plugin);
-                    homeCoolDown.addPlayer(player, plugin);
                     return ExitStatus.SUCCESS;
                 } else {
                     return ExitStatus.NEED_COOLDOWN;
@@ -199,7 +197,6 @@ public class HomeList {
         if (playerHasDefaultHome(player.getName())) {
             if (homeCoolDown.playerHasCooled(player)) {
                 WarmUp.addPlayer(player, homeList.get(player.getName().toLowerCase()).get(uHome.DEFAULT_HOME), plugin);
-                homeCoolDown.addPlayer(player, plugin);
                 return ExitStatus.SUCCESS;
             } else {
                 return ExitStatus.NEED_COOLDOWN;
