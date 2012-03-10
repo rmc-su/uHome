@@ -119,11 +119,15 @@ public class HomeList {
     
     public boolean checkWarpCosts(Player player) {
     	if ((HomeConfig.enableEcon) && (this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
-            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.warpCost);
-            if (resp.transactionSuccess()) {
-                return true;
+            if (HomeConfig.warpCost > 0) {
+                EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.warpCost);
+                if (resp.transactionSuccess()) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                return true;
             }
     	} else {
             return true;
@@ -132,11 +136,15 @@ public class HomeList {
 
     public boolean checkSetCosts(Player player) {
     	if ((HomeConfig.enableEcon) && (this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
-            EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.setCost);
-            if (resp.transactionSuccess()) {
-                return true;
+            if (HomeConfig.setCost > 0) {
+                EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.setCost);
+                if (resp.transactionSuccess()) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                return true;
             }
     	} else {
             return true;
