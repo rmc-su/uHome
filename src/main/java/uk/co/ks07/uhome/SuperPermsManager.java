@@ -110,6 +110,8 @@ public class SuperPermsManager {
     }
 
     public static void registerPermission(String permNode) {
-        plugin.pm.addPermission(new Permission(permNode));
+        if (plugin.pm.getPermission(permNode) == null) {
+            plugin.pm.addPermission(new Permission(permNode));
+        }
     }
 }
