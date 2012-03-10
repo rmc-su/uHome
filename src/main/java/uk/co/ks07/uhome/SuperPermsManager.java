@@ -65,73 +65,51 @@ public class SuperPermsManager {
         if (hasPermission(player, bypassLimit)) {
             return -1;
         } else {
-            return getPermissionLimit(player, LimitType.HOME);
+            for (Map.Entry<String, Integer> permEntry : HomeConfig.permLimits.entrySet()) {
+                if (hasPermission(player, permEntry.getKey())) {
+                    return permEntry.getValue();
+                }
+            }
+
+            return HomeConfig.defaultLimit;
         }
     }
 
     public static int getHomeCooldown(Player player) {
-        return getPermissionLimit(player, LimitType.COOLDOWN);
+        for (Map.Entry<String, Integer> permEntry : HomeConfig.permCoolDowns.entrySet()) {
+            if (hasPermission(player, permEntry.getKey())) {
+                return permEntry.getValue();
+            }
+        }
+
+        return HomeConfig.defaultCoolDown;
     }
 
     public static int getWarmup(Player player) {
-        return getPermissionLimit(player, LimitType.WARMUP);
+        for (Map.Entry<String, Integer> permEntry : HomeConfig.permWarmUps.entrySet()) {
+            if (hasPermission(player, permEntry.getKey())) {
+                return permEntry.getValue();
+            }
+        }
+
+        return HomeConfig.defaultWarmUp;
     }
 
     public static int getInviteLimit(Player player) {
         if (hasPermission(player, bypassInvLimit)) {
             return -1;
         } else {
-            return getPermissionLimit(player, LimitType.INVITE);
+            for (Map.Entry<String, Integer> permEntry : HomeConfig.permInvLimits.entrySet()) {
+                if (hasPermission(player, permEntry.getKey())) {
+                    return permEntry.getValue();
+                }
+            }
+
+            return HomeConfig.defaultInvLimit;
         }
     }
 
     public static void registerPermission(String permNode) {
         plugin.pm.addPermission(new Permission(permNode));
-    }
-
-    private static int getPermissionLimit(Player player, LimitType type) {
-        switch (type) {
-            case HOME:
-                for (Map.Entry<String, Integer> permEntry : HomeConfig.permLimits.entrySet()) {
-                    if (hasPermission(player, permEntry.getKey())) {
-                        return permEntry.getValue();
-                    }
-                }
-
-                return HomeConfig.defaultLimit;
-            case INVITE:
-                for (Map.Entry<String, Integer> permEntry : HomeConfig.permInvLimits.entrySet()) {
-                    if (hasPermission(player, permEntry.getKey())) {
-                        return permEntry.getValue();
-                    }
-                }
-
-                return HomeConfig.defaultInvLimit;
-            case WARMUP:
-                for (Map.Entry<String, Integer> permEntry : HomeConfig.permWarmUps.entrySet()) {
-                    if (hasPermission(player, permEntry.getKey())) {
-                        return permEntry.getValue();
-                    }
-                }
-
-                return HomeConfig.defaultWarmUp;
-            case COOLDOWN:
-                for (Map.Entry<String, Integer> permEntry : HomeConfig.permCoolDowns.entrySet()) {
-                    if (hasPermission(player, permEntry.getKey())) {
-                        return permEntry.getValue();
-                    }
-                }
-
-                return HomeConfig.defaultCoolDown;
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-
-    private enum LimitType {
-        HOME,
-        INVITE,
-        WARMUP,
-        COOLDOWN
     }
 }
