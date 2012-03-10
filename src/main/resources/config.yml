@@ -23,18 +23,6 @@ defaults:
   homeInvLimit: 1
   warmup: 0
   cooldown: 0
-homeLimits:
-  a: 30
-  b: 20
-  c: 15
-  d: 10
-  e: 5
-homeInvLimits:
-  a: 10
-  b: 8
-  c: 6
-  d: 4
-  e: 2
 timers:
   timerByPerms: false
   additionalTime: false
@@ -42,18 +30,6 @@ timers:
   warmupNotify: true
   abortOnDamage: 0
   abortOnMovement: false
-  cooldowns:
-    a: 0
-    b: 5
-    c: 10
-    d: 15
-    e: 20
-  warmups:
-    a: 0
-    b: 5
-    c: 10
-    d: 15
-    e: 20
 economy:
   enable: false
   warpCost: 0

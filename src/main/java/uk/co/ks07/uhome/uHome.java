@@ -54,8 +54,8 @@ public class uHome extends JavaPlugin {
 
         try {
             this.config.options().copyDefaults(true);
-            this.saveConfig();
             HomeConfig.initialize(config, getDataFolder(), this.getLogger());
+            this.saveConfig();
         } catch (Exception ex) {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }

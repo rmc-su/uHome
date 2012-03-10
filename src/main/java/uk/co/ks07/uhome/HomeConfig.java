@@ -10,6 +10,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class HomeConfig {
+    private static final String HOMELIMITSECTION = "homeLimits";
+    private static final String INVLIMITSECTION = "homeInvLimits";
+    private static final String WARMUPSECTION = "warmups";
+    private static final String COOLDOWNSECTION = "cooldowns";
 
     public static File dataDir;
     public static String locale;
@@ -57,15 +61,16 @@ public class HomeConfig {
             }
 
             ConfigurationSection settings = config.getConfigurationSection("settings");
-            ConfigurationSection homeLimits = config.getConfigurationSection("homeLimits");
-            ConfigurationSection homeInvLimits = config.getConfigurationSection("homeInvLimits");
             ConfigurationSection timers = config.getConfigurationSection("timers");
-            ConfigurationSection cooldowns = timers.getConfigurationSection("cooldowns");
-            ConfigurationSection warmups = timers.getConfigurationSection("warmups");
             ConfigurationSection mysql = settings.getConfigurationSection("mysql");
             ConfigurationSection dlLibs = settings.getConfigurationSection("downloadLibs");
             ConfigurationSection defaults = config.getConfigurationSection("defaults");
             ConfigurationSection economy = config.getConfigurationSection("economy");
+
+            ConfigurationSection homeLimits = fillLimitDefaults(config);
+            ConfigurationSection homeInvLimits = fillLimitDefaults(config);
+            ConfigurationSection warmups = fillWarmupDefaults(timers);
+            ConfigurationSection cooldowns = fillCooldownDefaults(timers);
 
             locale = settings.getString("locale", "en");
             useColors = settings.getBoolean("useColors", true);
@@ -187,5 +192,81 @@ public class HomeConfig {
         } catch (Exception ex) {
             log.log(Level.SEVERE, "Unable to load config", ex);
         }
+    }
+
+    private static ConfigurationSection fillLimitDefaults(ConfigurationSection parent) {
+        ConfigurationSection ret;
+        
+        if (! parent.isConfigurationSection(HOMELIMITSECTION)) {
+            parent.set(HOMELIMITSECTION, null);
+            ret = parent.createSection(HOMELIMITSECTION);
+
+            ret.addDefault("a", 30);
+            ret.addDefault("b", 20);
+            ret.addDefault("c", 15);
+            ret.addDefault("d", 10);
+            ret.addDefault("e", 5);
+        } else {
+            ret = parent.getConfigurationSection(HOMELIMITSECTION);
+        }
+
+        return ret;
+    }
+
+    private static ConfigurationSection fillInvLimitDefaults(ConfigurationSection parent) {
+        ConfigurationSection ret;
+
+        if (! parent.isConfigurationSection(INVLIMITSECTION)) {
+            parent.set(INVLIMITSECTION, null);
+            ret = parent.createSection(INVLIMITSECTION);
+
+            ret.addDefault("a", 10);
+            ret.addDefault("b", 8);
+            ret.addDefault("c", 6);
+            ret.addDefault("d", 4);
+            ret.addDefault("e", 2);
+        } else {
+            ret = parent.getConfigurationSection(INVLIMITSECTION);
+        }
+
+        return ret;
+    }
+
+    private static ConfigurationSection fillCooldownDefaults(ConfigurationSection parent) {
+        ConfigurationSection ret;
+
+        if (! parent.isConfigurationSection(COOLDOWNSECTION)) {
+            parent.set(COOLDOWNSECTION, null);
+            ret = parent.createSection(COOLDOWNSECTION);
+
+            ret.addDefault("a", 0);
+            ret.addDefault("b", 5);
+            ret.addDefault("c", 10);
+            ret.addDefault("d", 15);
+            ret.addDefault("e", 20);
+        } else {
+            ret = parent.getConfigurationSection(COOLDOWNSECTION);
+        }
+
+        return ret;
+    }
+
+    private static ConfigurationSection fillWarmupDefaults(ConfigurationSection parent) {
+        ConfigurationSection ret;
+
+        if (! parent.isConfigurationSection(WARMUPSECTION)) {
+            parent.set(WARMUPSECTION, null);
+            ret = parent.createSection(WARMUPSECTION);
+
+            ret.addDefault("a", 0);
+            ret.addDefault("b", 5);
+            ret.addDefault("c", 10);
+            ret.addDefault("d", 15);
+            ret.addDefault("e", 20);
+        } else {
+            ret = parent.getConfigurationSection(WARMUPSECTION);
+        }
+
+        return ret;
     }
 }
