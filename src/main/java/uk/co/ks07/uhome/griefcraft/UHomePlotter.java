@@ -6,6 +6,7 @@ public abstract class UHomePlotter extends Metrics.Plotter {
     protected HomeList homeList;
 
     public UHomePlotter(String name, HomeList hl) {
+        super(name);
         this.homeList = hl;
     }
 

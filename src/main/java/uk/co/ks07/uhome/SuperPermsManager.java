@@ -7,7 +7,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 public class SuperPermsManager {
-    public static uHome plugin;
+    private static uHome plugin;
 
     public static void initialize(uHome plugin) {
         SuperPermsManager.plugin = plugin;

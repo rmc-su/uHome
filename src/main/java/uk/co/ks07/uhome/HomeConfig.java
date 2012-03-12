@@ -10,10 +10,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class HomeConfig {
-    private static final String HOMELIMITSECTION = "homeLimits";
-    private static final String INVLIMITSECTION = "homeInvLimits";
-    private static final String WARMUPSECTION = "warmups";
-    private static final String COOLDOWNSECTION = "cooldowns";
+    private static final String HOME_LIMIT_SECTION = "homeLimits";
+    private static final String INV_LIMIT_SECTION = "homeInvLimits";
+    private static final String WARMUP_SECTION = "warmups";
+    private static final String COOLDOWN_SECTION = "cooldowns";
 
     public static File dataDir;
     public static String locale;
@@ -197,9 +197,9 @@ public class HomeConfig {
     private static ConfigurationSection fillLimitDefaults(ConfigurationSection parent) {
         ConfigurationSection ret;
         
-        if (! parent.isConfigurationSection(HOMELIMITSECTION)) {
-            parent.set(HOMELIMITSECTION, null);
-            ret = parent.createSection(HOMELIMITSECTION);
+        if (! parent.isConfigurationSection(HOME_LIMIT_SECTION)) {
+            parent.set(HOME_LIMIT_SECTION, null);
+            ret = parent.createSection(HOME_LIMIT_SECTION);
 
             ret.addDefault("a", 30);
             ret.addDefault("b", 20);
@@ -207,7 +207,7 @@ public class HomeConfig {
             ret.addDefault("d", 10);
             ret.addDefault("e", 5);
         } else {
-            ret = parent.getConfigurationSection(HOMELIMITSECTION);
+            ret = parent.getConfigurationSection(HOME_LIMIT_SECTION);
         }
 
         return ret;
@@ -216,9 +216,9 @@ public class HomeConfig {
     private static ConfigurationSection fillInvLimitDefaults(ConfigurationSection parent) {
         ConfigurationSection ret;
 
-        if (! parent.isConfigurationSection(INVLIMITSECTION)) {
-            parent.set(INVLIMITSECTION, null);
-            ret = parent.createSection(INVLIMITSECTION);
+        if (! parent.isConfigurationSection(INV_LIMIT_SECTION)) {
+            parent.set(INV_LIMIT_SECTION, null);
+            ret = parent.createSection(INV_LIMIT_SECTION);
 
             ret.addDefault("a", 10);
             ret.addDefault("b", 8);
@@ -226,7 +226,7 @@ public class HomeConfig {
             ret.addDefault("d", 4);
             ret.addDefault("e", 2);
         } else {
-            ret = parent.getConfigurationSection(INVLIMITSECTION);
+            ret = parent.getConfigurationSection(INV_LIMIT_SECTION);
         }
 
         return ret;
@@ -235,9 +235,9 @@ public class HomeConfig {
     private static ConfigurationSection fillCooldownDefaults(ConfigurationSection parent) {
         ConfigurationSection ret;
 
-        if (! parent.isConfigurationSection(COOLDOWNSECTION)) {
-            parent.set(COOLDOWNSECTION, null);
-            ret = parent.createSection(COOLDOWNSECTION);
+        if (! parent.isConfigurationSection(COOLDOWN_SECTION)) {
+            parent.set(COOLDOWN_SECTION, null);
+            ret = parent.createSection(COOLDOWN_SECTION);
 
             ret.addDefault("a", 0);
             ret.addDefault("b", 5);
@@ -245,7 +245,7 @@ public class HomeConfig {
             ret.addDefault("d", 15);
             ret.addDefault("e", 20);
         } else {
-            ret = parent.getConfigurationSection(COOLDOWNSECTION);
+            ret = parent.getConfigurationSection(COOLDOWN_SECTION);
         }
 
         return ret;
@@ -254,9 +254,9 @@ public class HomeConfig {
     private static ConfigurationSection fillWarmupDefaults(ConfigurationSection parent) {
         ConfigurationSection ret;
 
-        if (! parent.isConfigurationSection(WARMUPSECTION)) {
-            parent.set(WARMUPSECTION, null);
-            ret = parent.createSection(WARMUPSECTION);
+        if (! parent.isConfigurationSection(WARMUP_SECTION)) {
+            parent.set(WARMUP_SECTION, null);
+            ret = parent.createSection(WARMUP_SECTION);
 
             ret.addDefault("a", 0);
             ret.addDefault("b", 5);
@@ -264,7 +264,7 @@ public class HomeConfig {
             ret.addDefault("d", 15);
             ret.addDefault("e", 20);
         } else {
-            ret = parent.getConfigurationSection(WARMUPSECTION);
+            ret = parent.getConfigurationSection(WARMUP_SECTION);
         }
 
         return ret;

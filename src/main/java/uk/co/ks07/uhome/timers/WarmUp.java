@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 public class WarmUp {
 
-    private static HashMap<String, Integer> players = new HashMap<String, Integer>();
+    private static final HashMap<String, Integer> players = new HashMap<String, Integer>();
 
     public enum Reason {
         DAMAGE, MOVEMENT, EVENTCANCEL, NONE
