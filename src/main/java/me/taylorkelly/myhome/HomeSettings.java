@@ -1,11 +1,12 @@
 package me.taylorkelly.myhome;
 
 import java.io.File;
+import java.util.List;
+
+import me.taylorkelly.myhome.utils.HomeLogger;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import me.taylorkelly.myhome.utils.HomeLogger;
 
 public class HomeSettings {
 	public static File dataDir;
@@ -38,7 +39,8 @@ public class HomeSettings {
 	public static boolean bedsDuringDay;
 	public static boolean opPermissions;
 	//public static boolean oneHomeAllWorlds;
-
+	public static List<String> noHomeRespawnWorlds;
+	
 	public static boolean loadChunks; 
 
 	public static boolean eConomyEnabled;
@@ -98,6 +100,7 @@ public class HomeSettings {
 			enableBypassPerms = confsettings.getBoolean("enableBypassPerms", true);
 			loadChunks = confsettings.getBoolean("loadChunks", false);
 			opPermissions = confsettings.getBoolean("opPermissions", true);
+			noHomeRespawnWorlds = confsettings.getStringList("noHomeRespawnWorlds");
 
 			// Economy
 			eConomyEnabled = confeconomy.getBoolean("enabled", false);
