@@ -200,8 +200,12 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void setHome(Player player, String name) {
-        ExitStatus es = this.homeList.addHome(player, plugin, name, plugin.getLogger());
-        
+        HomeCommand.setHome(player, name, this.plugin, this.homeList);
+    }
+
+    public static void setHome(Player player, String name, uHome plugin, HomeList homeList) {
+        ExitStatus es = homeList.addHome(player, plugin, name, plugin.getLogger());
+
         switch (es) {
             case SUCCESS:
                 player.sendMessage(LocaleManager.getString("own.set.new"));
@@ -213,7 +217,7 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.set.moved"));
                 break;
             case AT_LIMIT:
-                Integer mustDelete = this.homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player);
+                Integer mustDelete = homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player);
                 HashMap<String, String> vars = new HashMap<String, String>();
                 vars.put("DELETE", mustDelete.toString());
                 vars.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
@@ -222,15 +226,15 @@ public class HomeCommand implements CommandExecutor {
                 break;
             case NEED_COOLDOWN:
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("CD_REMAINING", Integer.toString(this.setHomeCoolDown.estimateTimeLeft(player)));
-                params.put("CD_TOTAL", Integer.toString(this.setHomeCoolDown.getTimer(player)));
-                
+                params.put("CD_REMAINING", Integer.toString(SetHomeCoolDown.getInstance().estimateTimeLeft(player)));
+                params.put("CD_TOTAL", Integer.toString(SetHomeCoolDown.getInstance().getTimer(player)));
+
                 player.sendMessage(LocaleManager.getString("own.set.cooldown", params));
                 break;
             case NOT_ENOUGH_MONEY:
                 HashMap<String, String> costs = new HashMap<String, String>();
                 costs.put("COST", Integer.toString(HomeConfig.setCost));
-                costs.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+                costs.put("CURRENCY", plugin.economy.currencyNamePlural());
 
                 player.sendMessage(LocaleManager.getString("econ.insufficient.set", costs));
                 break;
