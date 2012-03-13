@@ -1,3 +1,4 @@
+# Please see http://dev.bukkit.org/server-mods/uhome/pages/configuration/1-5-x/ for help.
 settings:
   respawnToHome: true
   bedsCanSetHome: 0

@@ -202,6 +202,46 @@ public class Home {
         return this.invitees.toString().replace("[", "").replace("]", "");
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Home other = (Home) obj;
+        if (this.index != other.index) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if ((this.owner == null) ? (other.owner != null) : !this.owner.equals(other.owner)) {
+            return false;
+        }
+        if ((this.world == null) ? (other.world != null) : !this.world.equals(other.world)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.x) != Double.doubleToLongBits(other.x)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.y) != Double.doubleToLongBits(other.y)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.z) != Double.doubleToLongBits(other.z)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.index;
+        return hash;
+    }
+
     public static enum InviteStatus {
         SUCCESS,
         ALREADY_INVITED,
