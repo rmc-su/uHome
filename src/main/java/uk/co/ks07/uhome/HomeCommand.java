@@ -203,6 +203,11 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public static void setHome(Player player, String name, uHome plugin, HomeList homeList) {
+        if (HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
+            player.sendMessage(LocaleManager.getString("usage.sleep"));
+            return;
+        }
+                    
         ExitStatus es = homeList.addHome(player, plugin, name, plugin.getLogger());
 
         switch (es) {

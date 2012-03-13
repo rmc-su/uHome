@@ -5,8 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import uk.co.ks07.uhome.locale.LocaleManager;
-
 public class SetHomeCommand implements CommandExecutor {
 
     private uHome plugin;
@@ -23,11 +21,6 @@ public class SetHomeCommand implements CommandExecutor {
                 Player player = (Player) sender;
 
                 if (SuperPermsManager.hasPermission(player, SuperPermsManager.ownSet)) {
-                    if (HomeConfig.bedsCanSethome == 2 && !SuperPermsManager.hasPermission(player, SuperPermsManager.bypassBed)) {
-                        player.sendMessage(LocaleManager.getString("usage.sleep"));
-                        return true;
-                    }
-
                     if (args.length == 1) {
                         HomeCommand.setHome(player, args[0], this.plugin, this.homeList);
                     } else if (args.length == 0) {
@@ -36,7 +29,6 @@ public class SetHomeCommand implements CommandExecutor {
                         return false;
                     }
                 }
-
             }
         }
         return true;
