@@ -68,7 +68,7 @@ public class HomeConfig {
             ConfigurationSection economy = config.getConfigurationSection("economy");
 
             ConfigurationSection homeLimits = fillLimitDefaults(config);
-            ConfigurationSection homeInvLimits = fillLimitDefaults(config);
+            ConfigurationSection homeInvLimits = fillInvLimitDefaults(config);
             ConfigurationSection warmups = fillWarmupDefaults(timers);
             ConfigurationSection cooldowns = fillCooldownDefaults(timers);
 
