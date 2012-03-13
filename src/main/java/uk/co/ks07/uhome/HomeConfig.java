@@ -113,6 +113,11 @@ public class HomeConfig {
                 bedsCanSethome = 0;
             }
 
+            if (abortOnDamage > 3 || abortOnDamage < 0) {
+                log.warning("abortOnDamage was set to an invalid value. Valid values are 0, 1, 2 or 3. Presuming 0.");
+                abortOnDamage = 0;
+            }
+
             // Begin filling maps for custom variable nodes.
             int count = 0;
             permLimits = new LinkedHashMap<String, Integer>();
