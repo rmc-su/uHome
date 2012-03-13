@@ -192,8 +192,10 @@ public class uHome extends JavaPlugin {
         try {
             Metrics metrics = new Metrics(this);
 
+            Metrics.Graph homesGraph = metrics.createGraph("Home Count");
+
             // Plot the total amount of protections
-            metrics.addCustomData(new UHomePlotter("Total Homes", this.homeList) {
+            homesGraph.addPlotter(new UHomePlotter("Total Homes", this.homeList) {
 
                 @Override
                 public int getValue() {
@@ -202,12 +204,23 @@ public class uHome extends JavaPlugin {
 
             });
 
+            Metrics.Graph limitGraph = metrics.createGraph("Active Limits");
+
             // Plot the number of dynamic home limits registered
-            metrics.addCustomData(new UHomePlotter("Registered Home Limits", this.homeList) {
+            limitGraph.addPlotter(new UHomePlotter("Registered Home Limits", this.homeList) {
 
                 @Override
                 public int getValue() {
                     return HomeConfig.permLimits.size();
+                }
+
+            });
+            // Plot the number of dynamic home limits registered
+            limitGraph.addPlotter(new UHomePlotter("Registered Invite Limits", this.homeList) {
+
+                @Override
+                public int getValue() {
+                    return HomeConfig.permInvLimits.size();
                 }
 
             });
