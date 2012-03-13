@@ -1,14 +1,11 @@
 package uk.co.ks07.uhome;
 
-import java.util.HashMap;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import uk.co.ks07.uhome.HomeList.ExitStatus;
 
 import uk.co.ks07.uhome.locale.LocaleManager;
-import uk.co.ks07.uhome.timers.SetHomeCoolDown;
 
 public class SetHomeCommand implements CommandExecutor {
 

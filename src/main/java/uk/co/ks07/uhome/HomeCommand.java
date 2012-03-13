@@ -22,7 +22,6 @@ public class HomeCommand implements CommandExecutor {
     private uHome plugin;
     private HomeList homeList;
 
-    private final SetHomeCoolDown setHomeCoolDown = SetHomeCoolDown.getInstance();
     private final HomeCoolDown homeCoolDown = HomeCoolDown.getInstance();
     private static final int PAGINATION_SIZE = 8;
     private static final Pattern integerPattern = Pattern.compile("^\\d+$");
