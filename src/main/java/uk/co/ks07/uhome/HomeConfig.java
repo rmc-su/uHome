@@ -108,6 +108,11 @@ public class HomeConfig {
             warpCost = economy.getInt("warpCost", 0);
             setCost = economy.getInt("setCost", 0);
 
+            if (bedsCanSethome > 2 || bedsCanSethome < 0) {
+                log.warning("bedsCanSetHome was set to an invalid value. Valid values are 0, 1 or 2. Presuming 0.");
+                bedsCanSethome = 0;
+            }
+
             // Begin filling maps for custom variable nodes.
             int count = 0;
             permLimits = new LinkedHashMap<String, Integer>();
