@@ -10,6 +10,7 @@ settings:
   enableDefaultPerms: true
   enableSethome: true
   debugLog: false
+  recordLastAccess: false
   downloadLibs:
     enable: true
     mysqlLib: true

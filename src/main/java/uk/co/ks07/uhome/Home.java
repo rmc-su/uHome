@@ -26,6 +26,7 @@ public class Home {
     public int yaw;
     public int pitch;
     public Set<String> invitees;
+    public long aTime;
     public static int nextIndex = 1;
 
     public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch) {
@@ -44,38 +45,12 @@ public class Home {
         nextIndex++;
     }
 
-    public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch, Collection<String> invitees) {
-        this.index = index;
-        this.name = name;
-        this.owner = owner;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.invitees = new HashSet<String>(invitees);
-        if (index > nextIndex) {
-            nextIndex = index;
-        }
-        nextIndex++;
-    }
-
     public Home(Player creator) {
-        this(creator, "home");
+        this(creator, uHome.DEFAULT_HOME);
     }
 
     public Home(Player creator, String name) {
-        this.index = nextIndex;
-        nextIndex++;
-        this.name = name;
-        this.owner = creator.getName();
-        this.world = creator.getWorld().getName();
-        this.x = creator.getLocation().getX();
-        this.y = creator.getLocation().getY();
-        this.z = creator.getLocation().getZ();
-        this.yaw = Math.round(creator.getLocation().getYaw()) % 360;
-        this.pitch = Math.round(creator.getLocation().getPitch()) % 360;
+        this(creator.getName(), creator.getLocation(), name);
     }
 
     public Home(String owner, Location location, String name) {
