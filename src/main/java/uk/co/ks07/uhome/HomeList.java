@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -413,11 +412,15 @@ public class HomeList {
         Home home;
         Iterator it;
 
-        for (HashMap<String, HashMap<String, Home>> pList : homeList.values()) {
-            it = pList.entrySet()<String.iterator();
+        for (HashMap<String, Home> pList : homeList.values()) {
+            it = pList.values().iterator();
 
             while (it.hasNext()) {
-                home = ((Entry) it.next()).getValue();
+                home = (Home) it.next();
+                if (home.lastAccessedBefore(cutoffUnixTime)) {
+                    it.remove();
+                    removed++;
+                }
             }
         }
 

@@ -186,6 +186,10 @@ public class Home {
         return this.invitees.toString().replace("[", "").replace("]", "");
     }
 
+    public boolean lastAccessedBefore(int time) {
+        return (this.aTime != UNRECORDED_ATIME) && (time < this.aTime);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

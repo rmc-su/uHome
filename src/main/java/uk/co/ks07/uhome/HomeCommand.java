@@ -166,6 +166,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("limit".equalsIgnoreCase(args[0])) {
                         // /home limit (player)
                         this.showOtherLimit(sender, args[1]);
+                    } else if (HomeConfig.enableATime && "purge".equalsIgnoreCase(args[0])) {
+                        // /home purge (days)
+                        this.showOtherLimit(sender, args[1]);
                     } else if (HomeConfig.enableInvite) {
                         // /home invites|requests (player)
                         if ("invites".equalsIgnoreCase(args[0])) {
@@ -644,6 +647,39 @@ public class HomeCommand implements CommandExecutor {
             this.plugin.getLogger().info("Debug logging enabled.");
             HomeConfig.debugLog = true;
         }
+    }
+
+    private static final int PURGE_TIMEOUT_MILLIS = 30000; // 30 seconds.
+    private long purgeCommandTime = 0;
+    private int purgeCommandDays = Integer.MAX_VALUE;
+
+    public void purgeHomes(CommandSender user, String argument) {
+        if (purgeCommandTime > (System.currentTimeMillis() - PURGE_TIMEOUT_MILLIS) && "confirm".equals(argument)) {
+            user.sendMessage("Now purging homes last accessed over " + Integer.toString(purgeCommandDays) + " days ago. This may take a long time, and may lag the server...");
+            
+            int purged = this.homeList.cleanupHomes(daysToSeconds(purgeCommandDays));
+
+            if (purged > 0) {
+                user.sendMessage("Deleted " + Integer.toString(purged) + " homes last accessed over " + Integer.toString(purgeCommandDays) + " days ago.");
+            } else {
+                user.sendMessage("No homes were last accessed more than " + purgeCommandDays + " days ago.");
+            }
+        } else {
+            try {
+                this.purgeCommandDays = Integer.parseInt(argument);
+                this.purgeCommandTime = System.currentTimeMillis();
+                user.sendMessage("Ready to purge all homes last accessed more than " + Integer.toString(this.purgeCommandDays) + " days ago.");
+                user.sendMessage(ChatColor.RED + "This will PERMANENTLY DELETE any homes found that match this criteria. We STRONGLY suggest you backup your database before continuing!");
+                user.sendMessage("To continue, please do `home purge confirm` within the next 30 seconds. This may cause lag depending on the number of homes.");
+            } catch (NumberFormatException ex) {
+                user.sendMessage(ChatColor.RED + "Invalid number of days specified.");
+            }
+        }
+    }
+
+    private static int daysToSeconds(int days) {
+        // 86,400 seconds in one day.
+        return days * 86400;
     }
 
     public void showHelp(Player player, int page) {
