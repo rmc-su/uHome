@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -404,6 +406,22 @@ public class HomeList {
     
     public Home getNamedHome(String owner, String name) {
         return homeList.get(owner.toLowerCase()).get(name);
+    }
+
+    public int cleanupHomes(int cutoffUnixTime) {
+        int removed = 0;
+        Home home;
+        Iterator it;
+
+        for (HashMap<String, HashMap<String, Home>> pList : homeList.values()) {
+            it = pList.entrySet()<String.iterator();
+
+            while (it.hasNext()) {
+                home = ((Entry) it.next()).getValue();
+            }
+        }
+
+        return removed;
     }
 
     public static String getOnlinePlayerCapitalisation(String name) {

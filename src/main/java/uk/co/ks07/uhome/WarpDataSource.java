@@ -34,6 +34,7 @@ public class WarpDataSource {
             + "`z` DOUBLE NOT NULL DEFAULT '0',"
             + "`yaw` smallint NOT NULL DEFAULT '0',"
             + "`pitch` smallint NOT NULL DEFAULT '0',"
+            + "`atime` INTEGER NOT NULL DEFAULT '0',"
             + "UNIQUE (`owner`,`name`)"
             + ");";
     private final static String INV_TABLE_NAME = "uhomeInvites";
@@ -71,7 +72,8 @@ public class WarpDataSource {
             log.info("Updating database to new format.");
             createInviteTable(log);
         } else {
-            // Tables are fine.
+            // Tables are at v1.4 format.
+            updateDB("SELECT `atime` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `atime` INTEGER NOT NULL DEFAULT '0'", log);
             log.info("Database is up-to-date.");
         }
     }
@@ -159,8 +161,9 @@ public class WarpDataSource {
                 double z = set.getDouble("z");
                 int yaw = set.getInt("yaw");
                 int pitch = set.getInt("pitch");
+                long aTime = set.getLong("atime");
 
-                Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
+                Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime);
 
                 HashSet<String> invitees = new HashSet<String>();
                 
@@ -291,7 +294,9 @@ public class WarpDataSource {
                         double z = slset.getDouble("z");
                         int yaw = slset.getInt("yaw");
                         int pitch = slset.getInt("pitch");
-                        Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch);
+                        long aTime = slset.getLong("atime");
+
+                        Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime);
                         addWarp(warp, log);
                     }
                     log.info("Imported " + Integer.toString(size) + " homes from " + sqlitedb);
@@ -585,7 +590,7 @@ public class WarpDataSource {
                         double z = slset.getDouble("z");
                         int yaw = slset.getInt("yaw");
                         int pitch = slset.getInt("pitch");
-                        Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch);
+                        Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch, Home.UNRECORDED_ATIME);
                         addWarp(warp, log);
                     }
                     log.info("Imported " + Integer.toString(size) + " homes from " + mhsqlitedb);

@@ -46,6 +46,7 @@ public class HomeConfig {
     public static boolean enableEcon;
     public static int warpCost;
     public static int setCost;
+    public static boolean enableATime;
     
     // Dynamic limit permissions
     public static Map<String, Integer> permLimits;
@@ -82,6 +83,7 @@ public class HomeConfig {
             enableDefaultPerms = settings.getBoolean("enableDefaultPerms", true);
             enableSethome = settings.getBoolean("enableSethome", false);
             debugLog = settings.getBoolean("debugLog", false);
+            enableATime = settings.getBoolean("recordLastAccess", false);
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);

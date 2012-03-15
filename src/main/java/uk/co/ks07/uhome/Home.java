@@ -15,6 +15,8 @@ import uk.co.ks07.uhome.locale.LocaleManager;
 import uk.co.ks07.uhome.timers.HomeCoolDown;
 
 public class Home {
+    public static final int UNRECORDED_ATIME = -1; // aTime disabled when created and (possibly) accessed.
+    public static final int UNACCESSED_ATIME = 0; // Created but not accessed while aTime enabled.
 
     public int index;
     public String name;
@@ -29,7 +31,7 @@ public class Home {
     public long aTime;
     public static int nextIndex = 1;
 
-    public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch) {
+    public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch, long aTime) {
         this.index = index;
         this.name = name;
         this.owner = owner;
@@ -39,6 +41,7 @@ public class Home {
         this.z = z;
         this.pitch = pitch;
         this.yaw = yaw;
+        this.aTime = aTime;
         if (index > nextIndex) {
             nextIndex = index;
         }
@@ -64,6 +67,12 @@ public class Home {
         this.z = location.getZ();
         this.yaw = Math.round(location.getYaw()) % 360;
         this.pitch = Math.round(location.getPitch()) % 360;
+
+        if (HomeConfig.enableATime) {
+            this.aTime = UNACCESSED_ATIME;
+        } else {
+            this.aTime = UNRECORDED_ATIME;
+        }
     }
 
     public boolean playerCanWarp(Player player) {
