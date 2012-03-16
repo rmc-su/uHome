@@ -74,6 +74,12 @@ public class WarpDataSource {
         } else {
             // Tables are at v1.4 format.
             updateDB("SELECT `atime` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `atime` INTEGER NOT NULL DEFAULT '0'", log);
+            int orphansRemoved = cleanupOrphans(log);
+
+            if (orphansRemoved > 0) {
+                log.info("Cleaned up " + Integer.toString(orphansRemoved) + " orphaned invites from the database.");
+            }
+
             log.info("Database is up-to-date.");
         }
     }
@@ -574,6 +580,31 @@ public class WarpDataSource {
                 log.log(Level.SEVERE, "Home aTime Exception (on close)", ex);
             }
         }
+    }
+
+    public static int cleanupOrphans(Logger log) {
+        Statement sqlStatement = null;
+        int affected = 0;
+
+        try {
+            Connection conn = ConnectionManager.getConnection(log);
+
+            sqlStatement = conn.createStatement();
+            affected = sqlStatement.executeUpdate("DELETE FROM " + INV_TABLE_NAME + " AS it WHERE NOT EXISTS (SELECT NULL FROM " + HOME_TABLE + " AS ht WHERE it.homeid = ht.id)");
+            conn.commit();
+        } catch (SQLException ex) {
+            log.log(Level.SEVERE, "Home Invite Delete Exception", ex);
+        } finally {
+            try {
+                if (sqlStatement != null) {
+                    sqlStatement.close();
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "Home Invite Delete Exception (on close)", ex);
+            }
+        }
+
+        return affected;
     }
 
     public static boolean dbTblCheck(Logger log) {
