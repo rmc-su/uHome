@@ -224,7 +224,7 @@ public class HomeCommand implements CommandExecutor {
                 player.sendMessage(LocaleManager.getString("own.set.moved"));
                 break;
             case AT_LIMIT:
-                Integer mustDelete = homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player);
+                Integer mustDelete = (homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player)) + 1;
                 HashMap<String, String> vars = new HashMap<String, String>();
                 vars.put("DELETE", mustDelete.toString());
                 vars.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
