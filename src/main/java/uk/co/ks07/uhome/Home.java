@@ -3,6 +3,7 @@ package uk.co.ks07.uhome;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -90,6 +91,11 @@ public class Home {
             player.sendMessage(LocaleManager.getString("error.warp.noworld", null, this));
         } else {
             if (player.getLocation().getWorld() == currWorld || SuperPermsManager.hasPermission(player, SuperPermsManager.allowCrossWorld)) {
+                if (HomeConfig.enableATime) {
+                    this.aTime = System.currentTimeMillis() / 1000;
+                    WarpDataSource.updateATime(this, plugin.getLogger());
+                }
+
                 Location location = new Location(currWorld, x, y, z, yaw, pitch);
                 player.teleport(location);
                 HomeCoolDown.getInstance().addPlayer(player, plugin);
