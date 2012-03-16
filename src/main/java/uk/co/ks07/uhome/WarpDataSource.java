@@ -513,6 +513,10 @@ public class WarpDataSource {
             ps = conn.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE id = ?");
             ps.setInt(1, warp.index);
             ps.executeUpdate();
+
+            ps = conn.prepareStatement("DELETE FROM " + INV_TABLE_NAME + " WHERE homeid = ?");
+            ps.setInt(1, warp.index);
+            ps.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Home Delete Exception", ex);
@@ -590,7 +594,7 @@ public class WarpDataSource {
             Connection conn = ConnectionManager.getConnection(log);
 
             sqlStatement = conn.createStatement();
-            affected = sqlStatement.executeUpdate("DELETE FROM " + INV_TABLE_NAME + " AS it WHERE NOT EXISTS (SELECT NULL FROM " + HOME_TABLE + " AS ht WHERE it.homeid = ht.id)");
+            affected = sqlStatement.executeUpdate("DELETE FROM " + INV_TABLE_NAME + " AS it WHERE NOT EXISTS (SELECT NULL FROM " + TABLE_NAME + " AS ht WHERE it.homeid = ht.id)");
             conn.commit();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Home Invite Delete Exception", ex);
