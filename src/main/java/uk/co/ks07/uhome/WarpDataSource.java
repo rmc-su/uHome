@@ -552,6 +552,29 @@ public class WarpDataSource {
         }
     }
 
+    public static void updateATime(Home home, Logger log) {
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = ConnectionManager.getConnection(log);
+            ps = conn.prepareStatement("UPDATE " + TABLE_NAME + " SET atime = ? WHERE id = ?");
+            ps.setLong(1, home.aTime);
+            ps.setInt(2, home.index);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            log.log(Level.SEVERE, "Home aTime Exception", ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "Home aTime Exception (on close)", ex);
+            }
+        }
+    }
+
     public static boolean dbTblCheck(Logger log) {
         // SQLite does not support field renaming or deletion, so we can't alter the table this way.
         if (HomeConfig.usemySQL) {

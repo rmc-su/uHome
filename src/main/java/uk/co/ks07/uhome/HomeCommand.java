@@ -657,7 +657,9 @@ public class HomeCommand implements CommandExecutor {
         if (purgeCommandTime > (System.currentTimeMillis() - PURGE_TIMEOUT_MILLIS) && "confirm".equals(argument)) {
             user.sendMessage("Now purging homes last accessed over " + Integer.toString(purgeCommandDays) + " days ago. This may take a long time, and may lag the server...");
             
-            int purged = this.homeList.cleanupHomes(daysToSeconds(purgeCommandDays));
+            int purgeTime = daysToSeconds(purgeCommandDays);
+            
+            int purged = this.homeList.cleanupHomes(purgeTime);
 
             if (purged > 0) {
                 user.sendMessage("Deleted " + Integer.toString(purged) + " homes last accessed over " + Integer.toString(purgeCommandDays) + " days ago.");
