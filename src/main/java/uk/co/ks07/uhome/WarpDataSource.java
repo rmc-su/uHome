@@ -422,7 +422,7 @@ public class WarpDataSource {
         try {
             Connection conn = ConnectionManager.getConnection(log);
 
-            ps = conn.prepareStatement("INSERT INTO " + TABLE_NAME + " (id, name, owner, world, x, y, z, yaw, pitch) VALUES (?,?,?,?,?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO " + TABLE_NAME + " (id, name, owner, world, x, y, z, yaw, pitch, atime) VALUES (?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, warp.index);
             ps.setString(2, warp.name);
             ps.setString(3, warp.owner);
@@ -432,6 +432,7 @@ public class WarpDataSource {
             ps.setDouble(7, warp.z);
             ps.setInt(8, warp.yaw);
             ps.setInt(9, warp.pitch);
+            ps.setLong(10, warp.aTime);
             ps.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {
