@@ -91,7 +91,7 @@ public class UHomeListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (HomeConfig.loadChunks) {
+        if (HomeConfig.loadChunks && (! event.isCancelled())) {
             World world = event.getPlayer().getWorld();
             Chunk chunk = world.getChunkAt(event.getTo());
             int x = chunk.getX();
