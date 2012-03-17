@@ -83,9 +83,9 @@ public class uHome extends JavaPlugin {
         }
 
         homeList = new HomeList(this, needImport, this.getLogger());
-        File cbHomes = new File(this.getDataFolder(), "homes.csv");
+        File cbHomes = new File(this.getDataFolder(), "commandbook_homes.csv");
         if (cbHomes.isFile()) {
-            this.getLogger().info("Trying to import CommandBook homes from homes.csv.");
+            this.getLogger().info("Trying to import CommandBook homes from commandbook_homes.csv.");
             this.importCommandBook(cbHomes);
         }
 
@@ -288,7 +288,7 @@ public class uHome extends JavaPlugin {
             this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
         } finally {
             try {
-                csv.renameTo(new File(this.getDataFolder(), "homes.csv.old"));
+                csv.renameTo(new File(this.getDataFolder(), "commandbook_homes.csv.old"));
 
                 if (file != null) {
                     file.close();
