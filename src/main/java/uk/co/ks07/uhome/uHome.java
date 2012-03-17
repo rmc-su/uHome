@@ -89,6 +89,12 @@ public class uHome extends JavaPlugin {
             this.importCommandBook(cbHomes);
         }
 
+        File multihomeHomes = new File(this.getDataFolder(), "multihome_homes.txt");
+        if (multihomeHomes.isFile()) {
+            this.getLogger().info("Trying to import MultiHome homes from multihome_homes.txt.");
+            this.importMultiHome(multihomeHomes);
+        }
+
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
 
         if (!customLocale.exists()) {
@@ -285,6 +291,87 @@ public class uHome extends JavaPlugin {
         } finally {
             try {
                 csv.renameTo(new File(this.getDataFolder(), "homes.csv.old"));
+
+                if (file != null) {
+                    file.close();
+                }
+                if (fr != null) {
+                    fr.close();
+                }
+            } catch (IOException ex) {
+                this.getLogger().log(Level.WARNING, "CommandBook Import Exception (on close)", ex);
+            }
+
+            this.getLogger().info("Imported " + (lineCount - notImported) + " homes.");
+        }
+    }
+
+    private void importMultiHome(File csv) {
+        FileReader fr = null;
+        BufferedReader file = null;
+        int notImported = 0;
+        int lineCount = 0;
+        String line;
+        String[] split;
+        String owner;
+        String homeName;
+        Location loc;
+
+        try {
+            fr = new FileReader(csv);
+            file = new BufferedReader(fr);
+
+            while ((line = file.readLine()) != null) {
+                lineCount++;
+
+                if (line.isEmpty() || line.startsWith("#")) {
+                    notImported++;
+                    continue;
+                }
+
+                split = line.split(";");
+
+                if (split.length == 7 || split.length == 8) {
+                    // <username>;<x>;<y>;<z>;<pitch>;<yaw>;<world>;
+                    // <username>;<x>;<y>;<z>;<pitch>;<yaw>;<world>;<name>
+                    owner = split[0];
+                    
+                    try {
+                        World homeWorld = getServer().getWorld(split[6]);
+
+                        if (homeWorld == null) {
+                            notImported++;
+                            this.getLogger().warning("Could not find world named " + split[6] + " on line number " + lineCount + ", skipping.");
+                            continue;
+                        }
+
+                        loc = new Location(homeWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]), Float.parseFloat(split[5]), Float.parseFloat(split[4]));
+                    } catch (NumberFormatException nfe) {
+                        notImported++;
+                        this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                        continue;
+                    }
+                    
+                    if (split.length == 8) {
+                        homeName = split[7];
+                    } else {
+                        homeName = DEFAULT_HOME;
+                    }
+
+                    this.homeList.adminAddHome(loc, owner, homeName, this.getLogger());
+                } else {
+                    notImported++;
+                    this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                    continue;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+        } catch (IOException ex) {
+            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+        } finally {
+            try {
+                csv.renameTo(new File(this.getDataFolder(), "multihome_homes.txt.old"));
 
                 if (file != null) {
                     file.close();
