@@ -760,8 +760,10 @@ public class WarpDataSource {
     }
 
     public static void dumpTableSQL(File file, Logger log) {
+        BufferedWriter bw = null;
+
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            bw = new BufferedWriter(new FileWriter(file));
 
             bw.write(HOME_TABLE);
             bw.newLine();
@@ -884,6 +886,14 @@ public class WarpDataSource {
             }
         } catch (IOException ex) {
             log.log(Level.SEVERE, "SQL Dump Exception", ex);
+        } finally {
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException ex) {
+                    log.log(Level.SEVERE, "SQL Dump Exception", ex);
+                }
+            }
         }
     }
 
