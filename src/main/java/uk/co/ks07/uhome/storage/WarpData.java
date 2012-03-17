@@ -1,7 +1,8 @@
-package uk.co.ks07.uhome;
+package uk.co.ks07.uhome.storage;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import uk.co.ks07.uhome.Home;
 
 public class WarpData {
     public HashMap<String, HashMap<String, Home>> homeMap;

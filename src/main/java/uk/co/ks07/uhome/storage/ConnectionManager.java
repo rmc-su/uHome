@@ -1,10 +1,11 @@
-package uk.co.ks07.uhome;
+package uk.co.ks07.uhome.storage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.co.ks07.uhome.HomeConfig;
 
 public class ConnectionManager {
 

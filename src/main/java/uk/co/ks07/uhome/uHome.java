@@ -1,5 +1,6 @@
 package uk.co.ks07.uhome;
 
+import uk.co.ks07.uhome.storage.ConnectionManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

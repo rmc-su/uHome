@@ -1,5 +1,7 @@
-package uk.co.ks07.uhome;
+package uk.co.ks07.uhome.storage;
 
+import uk.co.ks07.uhome.storage.WarpData;
+import uk.co.ks07.uhome.storage.ConnectionManager;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import uk.co.ks07.uhome.Home;
+import uk.co.ks07.uhome.HomeConfig;
 
 import uk.co.ks07.uhome.locale.LocaleManager;
 
