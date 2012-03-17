@@ -1,5 +1,6 @@
 package uk.co.ks07.uhome;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -157,6 +158,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("debug".equalsIgnoreCase(args[0])) {
                         // /home debug
                         this.toggleDebug();
+                    } else if ("dump".equalsIgnoreCase(args[0])) {
+                        // /home dump
+                        this.dumpSQL(sender);
                     }
                     break;
                 case 2:
@@ -199,6 +203,13 @@ public class HomeCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public void dumpSQL(CommandSender user) {
+        user.sendMessage("Exporting homes to home_export.sql");
+        File file = new File(plugin.getDataFolder(), "home_export.sql");
+        WarpDataSource.dumpTableSQL(file, plugin.getLogger());
+        user.sendMessage("Home export complete.");
     }
 
     public void setHome(Player player, String name) {
