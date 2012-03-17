@@ -1,5 +1,7 @@
 package uk.co.ks07.uhome;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -8,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -753,6 +756,134 @@ public class WarpDataSource {
             colRS.close();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Failed to update the database to the new version - ", ex);
+        }
+    }
+
+    public static void dumpTableSQL(File file, Logger log) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+            bw.write(HOME_TABLE);
+            bw.newLine();
+            bw.write(INV_TABLE);
+            bw.newLine();
+            bw.newLine();
+            bw.write("INSERT INTO " + TABLE_NAME + " VALUES");
+
+            Statement statement = null;
+            ResultSet set = null;
+
+            try {
+                Connection conn = ConnectionManager.getConnection(log);
+                int endRow;
+                int currentRow = 0;
+
+                statement = conn.createStatement();
+                set = statement.executeQuery("SELECT COUNT(*) FROM " + TABLE_NAME);
+                if (set.next()) {
+                    endRow = set.getInt(1) - 1;
+                } else {
+                    log.info("There were no homes to export!");
+                    return;
+                }
+
+                statement = conn.createStatement();
+                set = statement.executeQuery("SELECT * FROM " + TABLE_NAME);
+
+                while (set.next()) {
+                    currentRow++;
+                    
+                    int index = set.getInt("id");
+                    String owner = set.getString("owner");
+                    String name = set.getString("name");
+                    String world = set.getString("world");
+                    double x = set.getDouble("x");
+                    double y = set.getDouble("y");
+                    double z = set.getDouble("z");
+                    int yaw = set.getInt("yaw");
+                    int pitch = set.getInt("pitch");
+                    long aTime = set.getLong("atime");
+
+                    bw.write(" (");
+                    bw.write(Integer.toString(index));
+                    bw.write(", '");
+                    bw.write(owner);
+                    bw.write("', '");
+                    bw.write(name);
+                    bw.write("', '");
+                    bw.write(world);
+                    bw.write("', ");
+                    bw.write(Double.toString(x));
+                    bw.write(", ");
+                    bw.write(Double.toString(y));
+                    bw.write(", ");
+                    bw.write(Double.toString(z));
+                    bw.write(", ");
+                    bw.write(Integer.toString(yaw));
+                    bw.write(", ");
+                    bw.write(Integer.toString(pitch));
+                    bw.write(", ");
+                    bw.write(Integer.toString(yaw));
+                    bw.write(", ");
+                    bw.write(Long.toString(aTime));
+                    bw.write(")");
+
+                    if (currentRow != endRow) {
+                        bw.write(",");
+                    } else {
+                        bw.write(";");
+                        bw.newLine();
+                        bw.newLine();
+                    }
+                }
+
+                currentRow = 0;
+
+                statement = conn.createStatement();
+                set = statement.executeQuery("SELECT COUNT(*) FROM " + INV_TABLE_NAME);
+                if (set.next()) {
+                    endRow = set.getInt(1) - 1;
+
+                    bw.write("INSERT INTO " + INV_TABLE_NAME + " VALUES");
+                } else {
+                    log.info("There were no invites to export!");
+                }
+
+                statement = conn.createStatement();
+                set = statement.executeQuery("SELECT * FROM " + INV_TABLE_NAME);
+
+                while (set.next()) {
+                    currentRow++;
+
+                    int homeid = set.getInt("homeid");
+                    String player = set.getString("player");
+
+                    bw.write(" (");
+                    bw.write(Integer.toString(homeid));
+                    bw.write(", '");
+                    bw.write(player);
+                    bw.write("')");
+
+                    if (currentRow != endRow) {
+                        bw.write(",");
+                    }
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "SQL Dump Exception", ex);
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    if (set != null) {
+                        set.close();
+                    }
+                } catch (SQLException ex) {
+                    log.log(Level.SEVERE, "SQL Dump Exception (On Close)", ex);
+                }
+            }
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "SQL Dump Exception", ex);
         }
     }
 
