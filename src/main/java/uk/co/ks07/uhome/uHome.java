@@ -239,7 +239,6 @@ public class uHome extends JavaPlugin {
     }
 
     private void importCommandBook(File csv) {
-        FileReader fr = null;
         BufferedReader file = null;
         int notImported = 0;
         int lineCount = 0;
@@ -250,8 +249,7 @@ public class uHome extends JavaPlugin {
         Location loc;
 
         try {
-            fr = new FileReader(csv);
-            file = new BufferedReader(fr);
+            file = new BufferedReader(new FileReader(csv));
 
             while ((line = file.readLine()) != null) {
                 lineCount++;
@@ -295,9 +293,6 @@ public class uHome extends JavaPlugin {
                 if (file != null) {
                     file.close();
                 }
-                if (fr != null) {
-                    fr.close();
-                }
             } catch (IOException ex) {
                 this.getLogger().log(Level.WARNING, "CommandBook Import Exception (on close)", ex);
             }
@@ -307,7 +302,6 @@ public class uHome extends JavaPlugin {
     }
 
     private void importMultiHome(File csv) {
-        FileReader fr = null;
         BufferedReader file = null;
         int notImported = 0;
         int lineCount = 0;
@@ -318,8 +312,7 @@ public class uHome extends JavaPlugin {
         Location loc;
 
         try {
-            fr = new FileReader(csv);
-            file = new BufferedReader(fr);
+            file = new BufferedReader(new FileReader(csv));
 
             while ((line = file.readLine()) != null) {
                 lineCount++;
@@ -375,9 +368,6 @@ public class uHome extends JavaPlugin {
 
                 if (file != null) {
                     file.close();
-                }
-                if (fr != null) {
-                    fr.close();
                 }
             } catch (IOException ex) {
                 this.getLogger().log(Level.WARNING, "CommandBook Import Exception (on close)", ex);
