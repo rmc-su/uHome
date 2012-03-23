@@ -31,8 +31,9 @@ public class Home {
     public Set<String> invitees;
     public long aTime;
     public static int nextIndex = 1;
+    public boolean unlocked;
 
-    public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch, long aTime) {
+    public Home(int index, String owner, String name, String world, double x, double y, double z, int yaw, int pitch, long aTime, boolean unlocked) {
         this.index = index;
         this.name = name;
         this.owner = owner;
@@ -43,6 +44,7 @@ public class Home {
         this.pitch = pitch;
         this.yaw = yaw;
         this.aTime = aTime;
+        this.unlocked = unlocked;
         if (index > nextIndex) {
             nextIndex = index;
         }
@@ -68,6 +70,7 @@ public class Home {
         this.z = location.getZ();
         this.yaw = Math.round(location.getYaw()) % 360;
         this.pitch = Math.round(location.getPitch()) % 360;
+        this.unlocked = false;
 
         if (HomeConfig.enableATime) {
             this.aTime = UNACCESSED_ATIME;

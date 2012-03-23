@@ -175,8 +175,9 @@ public class WarpDataSource {
                 int yaw = set.getInt("yaw");
                 int pitch = set.getInt("pitch");
                 long aTime = set.getLong("atime");
+                boolean unlocked = byteToBool(set.getByte("unlocked"));
 
-                Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime);
+                Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime, unlocked);
 
                 HashSet<String> invitees = new HashSet<String>();
                 
@@ -308,8 +309,9 @@ public class WarpDataSource {
                         int yaw = slset.getInt("yaw");
                         int pitch = slset.getInt("pitch");
                         long aTime = slset.getLong("atime");
+                    boolean unlocked = byteToBool(slset.getByte("unlocked"));
 
-                        Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime);
+                        Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime, unlocked);
                         addWarp(warp, log);
                     }
                     log.info("Imported " + Integer.toString(size) + " homes from " + sqlitedb);
@@ -656,7 +658,7 @@ public class WarpDataSource {
                         double z = slset.getDouble("z");
                         int yaw = slset.getInt("yaw");
                         int pitch = slset.getInt("pitch");
-                        Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch, Home.UNRECORDED_ATIME);
+                        Home warp = new Home(index, owner, "home", world, x, y, z, yaw, pitch, Home.UNRECORDED_ATIME, false);
                         addWarp(warp, log);
                     }
                     log.info("Imported " + Integer.toString(size) + " homes from " + mhsqlitedb);
@@ -902,6 +904,10 @@ public class WarpDataSource {
                 }
             }
         }
+    }
+
+    private static boolean byteToBool(byte b) {
+        return (b != 0);
     }
 
     private static enum TableStatus {
