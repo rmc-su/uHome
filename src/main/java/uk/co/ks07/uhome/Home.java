@@ -120,7 +120,11 @@ public class Home {
 
     @Override
     public String toString() {
-        return name;
+        if (this.unlocked) {
+            return "[U]" + name;
+        } else {
+            return name;
+        }
     }
 
     public void setLocation(Location location) {
