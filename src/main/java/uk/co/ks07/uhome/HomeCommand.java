@@ -66,6 +66,12 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownListInvites)) {
                         // /home requests
                         this.showRequestList(player, 1);
+                    } else if (HomeConfig.enableUnlock && "unlock".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home unlock
+                        this.unlockHome(player, uHome.DEFAULT_HOME);
+                    } else if (HomeConfig.enableUnlock && "lock".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home lock
+                        this.lockHome(player, uHome.DEFAULT_HOME);
                     } else if ("reload".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminReload)) {
                         // /home reload
                         this.reloadSettings(player);
@@ -108,6 +114,12 @@ public class HomeCommand implements CommandExecutor {
                     } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminListInvites)) {
                         // /home requests (player)
                         this.showRequestList(sender, args[1], 1);
+                    } else if (HomeConfig.enableUnlock && "unlock".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home unlock (home)
+                        this.unlockHome(player, args[1]);
+                    } else if (HomeConfig.enableUnlock && "lock".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
+                        // /home lock (home)
+                        this.lockHome(player, args[1]);
                     } else if ("help".equalsIgnoreCase(args[0]) && isPageNo(args[1])) {
                         // /home help (page)
                         this.showHelp(player, getPageNo(args[1]));
@@ -204,6 +216,34 @@ public class HomeCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public void unlockHome(Player player, String name) {
+        HashMap<String, String> params = new HashMap<String, String>(1);
+        params.put("HOME", name);
+
+        if (this.homeList.homeExists(player.getName(), name)) {
+            if (this.homeList.toggleHomeLock(player.getName(), name)) {
+                this.homeList.toggleHomeLock(player.getName(), name);
+            }
+            player.sendMessage(LocaleManager.getString("own.lock.unlocked", params));
+        } else {
+            player.sendMessage(LocaleManager.getString("own.lock.notexists", params));
+        }
+    }
+
+    public void lockHome(Player player, String name) {
+        HashMap<String, String> params = new HashMap<String, String>(1);
+        params.put("HOME", name);
+
+        if (this.homeList.homeExists(player.getName(), name)) {
+            if (!this.homeList.toggleHomeLock(player.getName(), name)) {
+                this.homeList.toggleHomeLock(player.getName(), name);
+            }
+            player.sendMessage(LocaleManager.getString("own.lock.locked", params));
+        } else {
+            player.sendMessage(LocaleManager.getString("own.lock.notexists", params));
+        }
     }
 
     public void dumpSQL(CommandSender user) {

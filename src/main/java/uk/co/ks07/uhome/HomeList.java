@@ -116,6 +116,16 @@ public class HomeList {
         }
     }
 
+    public boolean isHomeUnlocked(String owner, String name) {
+        return this.homeList.get(owner.toLowerCase()).get(name).unlocked;
+    }
+
+    public boolean toggleHomeLock(String owner, String name) {
+        Home home = this.homeList.get(owner.toLowerCase()).get(name);
+        home.unlocked = (!home.unlocked);
+        return home.unlocked;
+    }
+
     public ExitStatus warpTo(String target, Player player, Plugin plugin) {
         return this.warpTo(player.getName(), target, player, plugin);
     }
