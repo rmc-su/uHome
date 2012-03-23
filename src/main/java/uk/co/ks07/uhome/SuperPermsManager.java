@@ -28,6 +28,7 @@ public class SuperPermsManager {
     public static final String ownDelete = "uhome.own.delete";
     public static final String ownInvite = "uhome.own.invite";
     public static final String ownUninvite = "uhome.own.uninvite";
+    public static final String ownUnlock = "uhome.own.unlock";
     // Home admins
     public static final String adminWarp = "uhome.admin.warp";
     public static final String adminSet = "uhome.admin.set";
