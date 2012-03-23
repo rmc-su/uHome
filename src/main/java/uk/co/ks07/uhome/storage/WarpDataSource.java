@@ -81,8 +81,7 @@ public class WarpDataSource {
             createInviteTable(log);
         } else {
             // Tables are at v1.4 format.
-            updateDB("SELECT `atime` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `atime` INTEGER NOT NULL DEFAULT '0'", log);
-            updateDB("SELECT `unlocked` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `unlocked` TINYINT NOT NULL DEFAULT '0'", log);
+            updateDB("SELECT `atime`, `unlocked` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `atime` INTEGER NOT NULL DEFAULT '0';" + "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `unlocked` TINYINT NOT NULL DEFAULT '0'", log);
             int orphansRemoved = cleanupOrphans(log);
 
             if (orphansRemoved > 0) {
