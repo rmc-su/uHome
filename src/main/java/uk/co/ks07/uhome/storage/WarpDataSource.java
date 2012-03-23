@@ -175,7 +175,7 @@ public class WarpDataSource {
                 int yaw = set.getInt("yaw");
                 int pitch = set.getInt("pitch");
                 long aTime = set.getLong("atime");
-                boolean unlocked = byteToBool(set.getByte("unlocked"));
+                boolean unlocked = set.getBoolean("unlocked");
 
                 Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime, unlocked);
 
@@ -309,7 +309,7 @@ public class WarpDataSource {
                         int yaw = slset.getInt("yaw");
                         int pitch = slset.getInt("pitch");
                         long aTime = slset.getLong("atime");
-                    boolean unlocked = byteToBool(slset.getByte("unlocked"));
+                        boolean unlocked = slset.getBoolean("unlocked");
 
                         Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime, unlocked);
                         addWarp(warp, log);
@@ -437,7 +437,7 @@ public class WarpDataSource {
         try {
             Connection conn = ConnectionManager.getConnection(log);
 
-            ps = conn.prepareStatement("INSERT INTO " + TABLE_NAME + " (id, name, owner, world, x, y, z, yaw, pitch, atime) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO " + TABLE_NAME + " (id, name, owner, world, x, y, z, yaw, pitch, atime, unlocked) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, warp.index);
             ps.setString(2, warp.name);
             ps.setString(3, warp.owner);
@@ -448,6 +448,7 @@ public class WarpDataSource {
             ps.setInt(8, warp.yaw);
             ps.setInt(9, warp.pitch);
             ps.setLong(10, warp.aTime);
+            ps.setBoolean(11, warp.unlocked);
             ps.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {
@@ -591,6 +592,29 @@ public class WarpDataSource {
                 }
             } catch (SQLException ex) {
                 log.log(Level.SEVERE, "Home aTime Exception (on close)", ex);
+            }
+        }
+    }
+
+    public static void updateUnlock(Home home, Logger log) {
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = ConnectionManager.getConnection(log);
+            ps = conn.prepareStatement("UPDATE " + TABLE_NAME + " SET unlocked = ? WHERE id = ?");
+            ps.setBoolean(1, home.unlocked);
+            ps.setInt(2, home.index);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            log.log(Level.SEVERE, "Home Unlock Exception", ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "Home Unlock Exception (on close)", ex);
             }
         }
     }
@@ -904,10 +928,6 @@ public class WarpDataSource {
                 }
             }
         }
-    }
-
-    private static boolean byteToBool(byte b) {
-        return (b != 0);
     }
 
     private static enum TableStatus {

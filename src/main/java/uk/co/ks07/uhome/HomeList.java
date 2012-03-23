@@ -123,6 +123,7 @@ public class HomeList {
     public boolean toggleHomeLock(String owner, String name) {
         Home home = this.homeList.get(owner.toLowerCase()).get(name);
         home.unlocked = (!home.unlocked);
+        WarpDataSource.updateUnlock(home, this.plugin.getLogger());
         return home.unlocked;
     }
 
