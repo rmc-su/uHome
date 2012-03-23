@@ -1,5 +1,5 @@
 name: uHome
-version: 1.5a.2
+version: 1.5a.3
 author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
@@ -30,6 +30,7 @@ permissions:
       uhome.own.listinvites: true
       uhome.own.invite: true
       uhome.own.uninvite: true
+      uhome.own.unlock: true
   uhome.own.set:
     description: Allows you to set homes.
   uhome.own.warp:
@@ -44,6 +45,8 @@ permissions:
     description: Allows you to invite others to your homes.
   uhome.own.uninvite:
     description: Allows you to uninvite others from your homes.
+  uhome.own.unlock:
+    description: Allows you to toggle your home between locked and unlocked.
   uhome.admin:
     description: Gives access to all uHome admin commands
     children:

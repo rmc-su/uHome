@@ -11,6 +11,7 @@ settings:
   enableSethome: true
   debugLog: false
   recordLastAccess: false
+  enableUnlock: false
   downloadLibs:
     enable: true
     mysqlLib: true
