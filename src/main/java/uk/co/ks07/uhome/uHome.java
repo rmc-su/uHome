@@ -168,7 +168,7 @@ public class uHome extends JavaPlugin {
     }
 
     // Thanks to xZise for original code.
-    private static void writeResource(InputStream fromResource, File toFile) {
+    public static void writeResource(InputStream fromResource, File toFile) {
         FileOutputStream to = null;
         try {
             to = new FileOutputStream(toFile);

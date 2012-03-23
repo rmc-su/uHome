@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import uk.co.ks07.uhome.Home;
 import uk.co.ks07.uhome.HomeConfig;
 
 import uk.co.ks07.uhome.locale.LocaleManager;
+import uk.co.ks07.uhome.uHome;
 
 public class WarpDataSource {
 
@@ -627,7 +629,7 @@ public class WarpDataSource {
             Connection conn = ConnectionManager.getConnection(log);
 
             sqlStatement = conn.createStatement();
-            affected = sqlStatement.executeUpdate("DELETE FROM " + INV_TABLE_NAME + " AS it WHERE NOT EXISTS (SELECT NULL FROM " + TABLE_NAME + " AS ht WHERE it.homeid = ht.id)");
+            affected = sqlStatement.executeUpdate("DELETE FROM " + INV_TABLE_NAME + " WHERE NOT EXISTS (SELECT NULL FROM " + TABLE_NAME + " AS ht WHERE " + INV_TABLE_NAME + ".homeid = ht.id)");
             conn.commit();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "Home Invite Delete Exception", ex);
@@ -706,6 +708,24 @@ public class WarpDataSource {
         }
     }
 
+    private static void backupDB(Logger log) throws SQLException, IOException {
+        log.info("Backing up database for update.");
+        if (HomeConfig.usemySQL) {
+            Connection conn = ConnectionManager.getConnection(log);
+            Statement bkpStatement = conn.createStatement();
+            bkpStatement.executeUpdate("DROP TABLE IF EXISTS " + TABLE_NAME + "Backup");
+            bkpStatement.close();
+            bkpStatement = conn.createStatement();
+            bkpStatement.executeUpdate("CREATE TABLE " + TABLE_NAME + "Backup AS SELECT * FROM " + TABLE_NAME);
+            bkpStatement.close();
+        } else {
+            File sqlitefile = new File(HomeConfig.dataDir.getAbsolutePath() + sqlitedb);
+            FileInputStream is = new FileInputStream(sqlitefile);
+            uHome.writeResource(is, new File(sqlitefile.getAbsolutePath().concat(".BKP")));
+            is.close();
+        }
+    }
+
     public static boolean updateDB(String test, String sql, Logger log) {
         // Use same sql for both mysql/sqlite
         return updateDB(test, sql, sql, log);
@@ -722,17 +742,16 @@ public class WarpDataSource {
             log.info("DB test passed, no changes made.");
             return false;
         } catch (SQLException ex) {
-            log.info("Backing up database for update.");
             // Failed the test so we need to execute the updates
             try {
+                try {
+                    backupDB(log);
+                } catch (IOException iex) {
+                    log.log(Level.SEVERE, "Database backup failed!", iex);
+                }
+                
                 Connection conn = ConnectionManager.getConnection(log);
-                Statement bkpStatement = conn.createStatement();
-                bkpStatement.executeUpdate("DROP TABLE IF EXISTS " + TABLE_NAME + "Backup");
-                bkpStatement.close();
                 log.info("Updating database.");
-                bkpStatement = conn.createStatement();
-                bkpStatement.executeUpdate("CREATE TABLE " + TABLE_NAME + "Backup SELECT * FROM " + TABLE_NAME);
-                bkpStatement.close();
 
                 String[] query;
                 if (HomeConfig.usemySQL) {
