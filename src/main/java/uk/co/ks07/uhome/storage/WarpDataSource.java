@@ -1,7 +1,5 @@
 package uk.co.ks07.uhome.storage;
 
-import uk.co.ks07.uhome.storage.WarpData;
-import uk.co.ks07.uhome.storage.ConnectionManager;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -42,6 +40,7 @@ public class WarpDataSource {
             + "`yaw` smallint NOT NULL DEFAULT '0',"
             + "`pitch` smallint NOT NULL DEFAULT '0',"
             + "`atime` INTEGER NOT NULL DEFAULT '0',"
+            + "`unlocked` TINYINT NOT NULL DEFAULT '0',"
             + "UNIQUE (`owner`,`name`)"
             + ");";
     private final static String INV_TABLE_NAME = "uhomeInvites";
@@ -81,6 +80,7 @@ public class WarpDataSource {
         } else {
             // Tables are at v1.4 format.
             updateDB("SELECT `atime` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `atime` INTEGER NOT NULL DEFAULT '0'", log);
+            updateDB("SELECT `unlocked` FROM `" + TABLE_NAME + "`", "ALTER TABLE `" + TABLE_NAME + "` ADD COLUMN `unlocked` TINYINT NOT NULL DEFAULT '0'", log);
             int orphansRemoved = cleanupOrphans(log);
 
             if (orphansRemoved > 0) {
@@ -809,6 +809,7 @@ public class WarpDataSource {
                     int yaw = set.getInt("yaw");
                     int pitch = set.getInt("pitch");
                     long aTime = set.getLong("atime");
+                    byte unlocked = set.getByte("unlocked");
 
                     bw.write(" (");
                     bw.write(Integer.toString(index));
@@ -832,6 +833,8 @@ public class WarpDataSource {
                     bw.write(Integer.toString(yaw));
                     bw.write(", ");
                     bw.write(Long.toString(aTime));
+                    bw.write(", ");
+                    bw.write(Byte.toString(unlocked));
                     bw.write(")");
 
                     if (currentRow != endRow) {
