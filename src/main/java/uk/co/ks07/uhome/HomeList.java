@@ -117,7 +117,7 @@ public class HomeList {
     }
 
     public boolean isHomeUnlocked(String owner, String name) {
-        return this.homeList.get(owner.toLowerCase()).get(name).unlocked;
+        return this.homeList.get(owner.toLowerCase()).get(name).unlocked && HomeConfig.enableUnlock;
     }
 
     public boolean toggleHomeLock(String owner, String name) {

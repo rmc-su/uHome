@@ -80,7 +80,7 @@ public class Home {
     }
 
     public boolean playerCanWarp(Player player) {
-        return (this.unlocked || this.playerIsCreator(player.getName()) || this.playerIsInvited(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
+        return ((this.unlocked && HomeConfig.enableUnlock) || this.playerIsCreator(player.getName()) || this.playerIsInvited(player.getName()) || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp));
     }
 
     public void warp(Player player, Plugin plugin, Server server) {
@@ -120,7 +120,7 @@ public class Home {
 
     @Override
     public String toString() {
-        if (this.unlocked) {
+        if (this.unlocked && HomeConfig.enableUnlock) {
             return "[U]" + name;
         } else {
             return name;
