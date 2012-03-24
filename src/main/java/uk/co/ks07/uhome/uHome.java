@@ -222,12 +222,16 @@ public class uHome extends JavaPlugin {
                 }
 
             });
-            // Plot the number of dynamic home limits registered
+            // Plot the number of dynamic home invite limits registered
             limitGraph.addPlotter(new UHomePlotter("Registered Invite Limits", this.homeList) {
 
                 @Override
                 public int getValue() {
-                    return HomeConfig.permInvLimits.size();
+                    if (HomeConfig.enableInvite) {
+                        return HomeConfig.permInvLimits.size();
+                    } else {
+                        return 0;
+                    }
                 }
 
             });
