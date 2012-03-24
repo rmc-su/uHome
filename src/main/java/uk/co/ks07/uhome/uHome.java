@@ -236,8 +236,9 @@ public class uHome extends JavaPlugin {
 
             });
 
-            metrics.start();
-            this.getLogger().info("Sending anonymous usage statistics to metrics.griefcraft.com.");
+            if (metrics.start()) {
+                this.getLogger().info("Sending anonymous usage statistics to metrics.griefcraft.com.");
+            }
         } catch (IOException e ) {
             this.getLogger().log(Level.WARNING, "Failed to connect to plugin metrics.", e);
         }
