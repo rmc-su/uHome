@@ -295,6 +295,13 @@ public class HomeList {
     public ExitStatus deleteHome(String owner, String name, Logger log) {
         if (this.homeExists(owner, name)) {
             Home warp = homeList.get(owner.toLowerCase()).get(name);
+
+            if (warp.hasInvitees()) {
+                for (String invitee : warp.getInvitees()) {
+                    this.inviteList.get(owner).remove(warp);
+                }
+            }
+
             homeList.get(owner.toLowerCase()).remove(name);
             WarpDataSource.deleteWarp(warp, log);
             return ExitStatus.SUCCESS;
