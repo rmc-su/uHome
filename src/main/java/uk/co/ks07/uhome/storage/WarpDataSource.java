@@ -650,7 +650,7 @@ public class WarpDataSource {
         if (HomeConfig.usemySQL) {
             String test = "SELECT `owner` FROM `homeTable`";
             String sql = "ALTER TABLE `homeTable` RENAME TO `" + TABLE_NAME + "`, CHANGE COLUMN `name` `owner` VARCHAR(32) NOT NULL DEFAULT 'Player', ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT 'home', DROP COLUMN `publicAll`, DROP COLUMN `permissions`, DROP COLUMN `welcomeMessage`, ADD UNIQUE INDEX `owner` (`owner` ASC, `name` ASC)";
-            return updateDB(test, sql, log);
+            return updateDB(test, sql, sql, false, log);
         }
         // No changes.
         return false;
@@ -727,10 +727,14 @@ public class WarpDataSource {
 
     public static boolean updateDB(String test, String sql, Logger log) {
         // Use same sql for both mysql/sqlite
-        return updateDB(test, sql, sql, log);
+        return updateDB(test, sql, sql, true, log);
     }
 
     public static boolean updateDB(String test, String sqlite, String mysql, Logger log) {
+        return updateDB(test, sqlite, mysql, true, log);
+    }
+
+    public static boolean updateDB(String test, String sqlite, String mysql, boolean backup, Logger log) {
         // Allowing for differences in the SQL statements for mysql/sqlite.
         try {
             Connection conn = ConnectionManager.getConnection(log);
@@ -743,10 +747,13 @@ public class WarpDataSource {
         } catch (SQLException ex) {
             // Failed the test so we need to execute the updates
             try {
-                try {
-                    backupDB(log);
-                } catch (IOException iex) {
-                    log.log(Level.SEVERE, "Database backup failed!", iex);
+                // Allow backup skipping if we're creating a new table from an existing table.
+                if (backup) {
+                    try {
+                        backupDB(log);
+                    } catch (IOException iex) {
+                        log.log(Level.SEVERE, "Database backup failed!", iex);
+                    }
                 }
                 
                 Connection conn = ConnectionManager.getConnection(log);
