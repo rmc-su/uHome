@@ -389,7 +389,7 @@ public class HomeList {
         ArrayList<Home> exactMatches = new ArrayList<Home>();
         ArrayList<Home> matches = new ArrayList<Home>();
 
-        if (!this.hasHomes(owner)) {
+        if (!this.hasHomes(owner) && !this.hasInvitedToHomes(owner)) {
             return new MatchList(exactMatches, matches);
         }
 
@@ -403,6 +403,18 @@ public class HomeList {
                 }
             }
         }
+
+        // Include invited homes in our match searching.
+        for (Home warp : inviteList.get(owner.toLowerCase())) {
+            if (warp.playerCanWarp(player)) {
+                if (warp.name.equalsIgnoreCase(name)) {
+                    exactMatches.add(warp);
+                } else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
+                    matches.add(warp);
+                }
+            }
+        }
+
         if (exactMatches.size() > 1) {
             for (Home warp : exactMatches) {
                 if (!warp.name.equals(name)) {
