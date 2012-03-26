@@ -416,9 +416,12 @@ public class HomeList {
         }
 
         if (exactMatches.size() > 1) {
-            for (Home warp : exactMatches) {
+            Iterator<Home> it = exactMatches.iterator();
+
+            while (it.hasNext()) {
+                Home warp = it.next();
                 if (!warp.name.equals(name)) {
-                    exactMatches.remove(warp);
+                    it.remove();
                     matches.add(0, warp);
                 }
             }
