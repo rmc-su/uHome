@@ -389,28 +389,28 @@ public class HomeList {
         ArrayList<Home> exactMatches = new ArrayList<Home>();
         ArrayList<Home> matches = new ArrayList<Home>();
 
-        if (!this.hasHomes(owner) && !this.hasInvitedToHomes(owner)) {
-            return new MatchList(exactMatches, matches);
-        }
-
-        for (String currName : homeList.get(owner.toLowerCase()).keySet()) {
-            Home warp = homeList.get(owner.toLowerCase()).get(currName);
-            if (warp.playerCanWarp(player)) {
-                if (warp.name.equalsIgnoreCase(name)) {
-                    exactMatches.add(warp);
-                } else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
-                    matches.add(warp);
+        if (this.hasHomes(owner)) {
+            for (String currName : homeList.get(owner.toLowerCase()).keySet()) {
+                Home warp = homeList.get(owner.toLowerCase()).get(currName);
+                if (warp.playerCanWarp(player)) {
+                    if (warp.name.equalsIgnoreCase(name)) {
+                        exactMatches.add(warp);
+                    } else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
+                        matches.add(warp);
+                    }
                 }
             }
         }
 
-        // Include invited homes in our match searching.
-        for (Home warp : inviteList.get(owner.toLowerCase())) {
-            if (warp.playerCanWarp(player)) {
-                if (warp.name.equalsIgnoreCase(name)) {
-                    exactMatches.add(warp);
-                } else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
-                    matches.add(warp);
+        if (this.hasInvitedToHomes(owner)) {
+            // Include invited homes in our match searching.
+            for (Home warp : inviteList.get(owner.toLowerCase())) {
+                if (warp.playerCanWarp(player)) {
+                    if (warp.name.equalsIgnoreCase(name)) {
+                        exactMatches.add(warp);
+                    } else if (warp.name.toLowerCase().contains(name.toLowerCase())) {
+                        matches.add(warp);
+                    }
                 }
             }
         }
