@@ -319,11 +319,11 @@ public class HomeList {
     }
 
     public boolean hasHomes(String player) {
-        return (homeList.containsKey(player.toLowerCase()) && homeList.get(player.toLowerCase()).size() > 0);
+        return (homeList.containsKey(player.toLowerCase()) && (!homeList.get(player.toLowerCase()).isEmpty()));
     }
 
     public boolean hasInvitedToHomes(String player) {
-        return (inviteList.containsKey(player.toLowerCase()) && inviteList.get(player.toLowerCase()).size() > 0);
+        return (inviteList.containsKey(player.toLowerCase()) && (!inviteList.get(player.toLowerCase()).isEmpty()));
     }
 
     public String getPlayerList(String owner) {
