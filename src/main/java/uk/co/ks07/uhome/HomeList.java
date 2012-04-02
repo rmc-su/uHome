@@ -298,7 +298,7 @@ public class HomeList {
 
             if (warp.hasInvitees()) {
                 for (String invitee : warp.getInvitees()) {
-                    this.inviteList.get(owner).remove(warp);
+                    this.inviteList.get(invitee.toLowerCase()).remove(warp);
                 }
             }
 
