@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -121,7 +122,7 @@ public class Home {
     @Override
     public String toString() {
         if (this.unlocked && HomeConfig.enableUnlock) {
-            return "[U]" + name;
+            return ChatColor.AQUA + name + ChatColor.WHITE;
         } else {
             return name;
         }
