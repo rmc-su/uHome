@@ -123,7 +123,7 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("help".equalsIgnoreCase(args[0]) && isPageNo(args[1])) {
                         // /home help (page)
                         this.showHelp(player, getPageNo(args[1]));
-                    } else if (HomeConfig.enableInvite || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
+                    } else if (HomeConfig.enableInvite || HomeConfig.enableUnlock || SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (name)
                         this.goToOtherHome(player, args[1], args[0]);
                     }
@@ -223,7 +223,7 @@ public class HomeCommand implements CommandExecutor {
         params.put("HOME", name);
 
         if (this.homeList.homeExists(player.getName(), name)) {
-            if (this.homeList.toggleHomeLock(player.getName(), name)) {
+            if (!this.homeList.toggleHomeLock(player.getName(), name)) {
                 this.homeList.toggleHomeLock(player.getName(), name);
             }
             player.sendMessage(LocaleManager.getString("own.lock.unlocked", params));
@@ -237,7 +237,7 @@ public class HomeCommand implements CommandExecutor {
         params.put("HOME", name);
 
         if (this.homeList.homeExists(player.getName(), name)) {
-            if (!this.homeList.toggleHomeLock(player.getName(), name)) {
+            if (this.homeList.toggleHomeLock(player.getName(), name)) {
                 this.homeList.toggleHomeLock(player.getName(), name);
             }
             player.sendMessage(LocaleManager.getString("own.lock.locked", params));
