@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import uk.co.ks07.uhome.griefcraft.Updater;
 import uk.co.ks07.uhome.griefcraft.Metrics;
@@ -18,7 +20,6 @@ import uk.co.ks07.uhome.locale.LocaleManager;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.Location;
@@ -32,10 +33,12 @@ public class uHome extends JavaPlugin {
     public String version;
     private Updater updater;
     public PluginManager pm;
-    public FileConfiguration config;
     public static final String DEFAULT_HOME = "home";
     
     public Economy economy;
+    
+    // MultipleHomes import regex.
+    private static final Pattern filenamePattern = Pattern.compile("^home_(\\d+)\\.txt$");
 
     @Override
     public void onDisable() {
@@ -47,15 +50,14 @@ public class uHome extends JavaPlugin {
         this.pm = getServer().getPluginManager();
         this.name = this.getDescription().getName();
         this.version = this.getDescription().getVersion();
-        this.config = this.getConfig();
 
         this.getLogger().setLevel(Level.INFO);
 
         SuperPermsManager.initialize(this);
 
         try {
-            this.config.options().copyDefaults(true);
-            HomeConfig.initialize(config, getDataFolder(), this.getLogger());
+            this.getConfig().options().copyDefaults(true);
+            HomeConfig.initialize(this.getConfig(), getDataFolder(), this.getLogger());
             this.saveConfig();
         } catch (Exception ex) {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
@@ -94,6 +96,16 @@ public class uHome extends JavaPlugin {
         if (multihomeHomes.isFile()) {
             this.getLogger().info("Trying to import MultiHome homes from multihome_homes.txt.");
             this.importMultiHome(multihomeHomes);
+        }
+
+        File multiplehomesHomes = new File(this.getDataFolder(), "multiplehomes_homes");
+        if (multiplehomesHomes.isDirectory()) {
+            File[] importFrom = multiplehomesHomes.listFiles();
+        
+            if (importFrom.length > 0) {
+                this.getLogger().info("Trying to import MultipleHomes homes from multiplehomes_homes directory.");
+                this.importMultipleHomes(importFrom);
+            }
         }
 
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
@@ -365,9 +377,9 @@ public class uHome extends JavaPlugin {
                 }
             }
         } catch (FileNotFoundException ex) {
-            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+            this.getLogger().log(Level.WARNING, "MultiHome Import Exception", ex);
         } catch (IOException ex) {
-            this.getLogger().log(Level.WARNING, "CommandBook Import Exception", ex);
+            this.getLogger().log(Level.WARNING, "MultiHome Import Exception", ex);
         } finally {
             try {
                 csv.renameTo(new File(this.getDataFolder(), "multihome_homes.txt.old"));
@@ -376,10 +388,99 @@ public class uHome extends JavaPlugin {
                     file.close();
                 }
             } catch (IOException ex) {
-                this.getLogger().log(Level.WARNING, "CommandBook Import Exception (on close)", ex);
+                this.getLogger().log(Level.WARNING, "MultiHome Import Exception (on close)", ex);
             }
 
             this.getLogger().info("Imported " + (lineCount - notImported) + " homes.");
         }
     }
+
+    private void importMultipleHomes(File[] importFrom) {
+        BufferedReader file = null;
+        int notImported = 0;
+        int lineCount = 0;
+        String line;
+        String[] split;
+        String owner;
+        String homeName;
+        Location loc;
+
+        for (File homeFile : importFrom) {
+            Matcher match = filenamePattern.matcher(homeFile.getName());
+            
+            // Ignore files that don't appear to be from MultipleHomes.
+            if (match.matches()) {
+                // homeName is a number, and will be the same for all homes in each file
+                homeName = match.group(0);
+
+                try {
+                    file = new BufferedReader(new FileReader(homeFile));
+
+                    while ((line = file.readLine()) != null) {
+                        lineCount++;
+
+                        if (line.isEmpty() || line.startsWith("#")) {
+                            notImported++;
+                            continue;
+                        }
+                        // ~<username>:<x>_<y>_<z>_<pitch>_<yaw>_<world>
+
+                        split = line.split(":");
+
+                        if (split.length == 2) {
+                            // Remove the leading "~"
+                            owner = split[0].substring(1);
+
+                            split = split[1].split("_");
+
+                            if (split.length == 6) {
+                                try {
+                                    World homeWorld = getServer().getWorld(split[5]);
+
+                                    if (homeWorld == null) {
+                                        notImported++;
+                                        this.getLogger().warning("Could not find world named " + split[6] + " on line number " + lineCount + ", skipping.");
+                                        continue;
+                                    }
+
+                                    loc = new Location(homeWorld, Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Float.parseFloat(split[4]), Float.parseFloat(split[3]));
+                                } catch (NumberFormatException nfe) {
+                                    notImported++;
+                                    this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                                    continue;
+                                }
+
+                                this.homeList.adminAddHome(loc, owner, homeName, this.getLogger());
+                            } else {
+                                notImported++;
+                                this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                                continue;
+                            }
+                        } else {
+                            notImported++;
+                            this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
+                            continue;
+                        }
+                    }
+                } catch (FileNotFoundException ex) {
+                    this.getLogger().log(Level.WARNING, "MultipleHomes Import Exception", ex);
+                } catch (IOException ex) {
+                    this.getLogger().log(Level.WARNING, "MultipleHomes Import Exception", ex);
+                } finally {
+                    try {
+                        homeFile.renameTo(new File(this.getDataFolder(), homeFile.getName() + ".old"));
+
+                        if (file != null) {
+                            file.close();
+                        }
+                    } catch (IOException ex) {
+                        this.getLogger().log(Level.WARNING, "MultipleHomes Import Exception (on close)", ex);
+                    }
+
+                    this.getLogger().info("Imported " + (lineCount - notImported) + " homes.");
+                }
+            }
+        }
+    }
+
 }
