@@ -2,6 +2,7 @@ package uk.co.ks07.uhome;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +49,9 @@ public class HomeConfig {
     public static int setCost;
     public static boolean enableATime;
     public static boolean enableUnlock;
+
+    // Other classes should check the list via isHomeRespawnWorld()
+    private static List<String> respawnToHomeWorlds;
     
     // Dynamic limit permissions
     public static Map<String, Integer> permLimits;
@@ -86,6 +90,8 @@ public class HomeConfig {
             debugLog = settings.getBoolean("debugLog", false);
             enableATime = settings.getBoolean("recordLastAccess", false);
             enableUnlock = settings.getBoolean("enableUnlock", false);
+
+            respawnToHomeWorlds = settings.getStringList("respawnToHomeWorlds");
 
             downloadLibs = dlLibs.getBoolean("enable", true);
             mysqlLib = dlLibs.getBoolean("mysqlLib", true);
@@ -205,6 +211,16 @@ public class HomeConfig {
             }
         } catch (Exception ex) {
             log.log(Level.SEVERE, "Unable to load config", ex);
+        }
+    }
+
+    public static boolean isHomeRespawnWorld(String world) {
+        if (respawnToHomeWorlds != null) {
+            // If the list is empty, no world restriction. If not empty, true if listed.
+            return respawnToHomeWorlds.isEmpty() || respawnToHomeWorlds.contains(world);
+        } else {
+            // If no list present, no world restriction.
+            return true;
         }
     }
 

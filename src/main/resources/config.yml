@@ -21,6 +21,7 @@ settings:
     connection: 'jdbc:mysql://localhost:3306/minecraft'
     username: 'minecraft'
     password: 'password'
+  respawnToHomeWorlds: []
 defaults:
   homeLimit: 3
   homeInvLimit: 1
