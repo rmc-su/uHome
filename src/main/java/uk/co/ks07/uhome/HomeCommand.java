@@ -549,13 +549,27 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showHomeList(Player player) {
-        String hList = this.homeList.getPlayerList(player.getName());
+        Home[] hList = this.homeList.getPlayerHomes(player.getName());
 
         if (hList == null) {
             player.sendMessage(LocaleManager.getString("own.list.nohomes"));
         } else {
             player.sendMessage(LocaleManager.getString("own.list.ok"));
-            player.sendMessage(hList);
+
+            int count = 0;
+            for (Home h : hList) {
+                count++;
+                player.sendMessage(LocaleManager.getString("own.list.item", null, h));
+                
+                if (count < hList.length) {
+                    if (LocaleManager.getString("own.list.separator").contains("{{NEWLINE}}")) {
+                        String[] lines = LocaleManager.getString("own.list.separator").split("\\{\\{NEWLINE\\}\\}");
+                        player.sendMessage(lines);
+                    } else {
+                        player.sendMessage(LocaleManager.getString("own.list.separator"));
+                    }
+                }
+            }
         }
     }
 

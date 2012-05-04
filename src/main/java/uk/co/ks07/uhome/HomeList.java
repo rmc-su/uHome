@@ -326,11 +326,24 @@ public class HomeList {
         return (inviteList.containsKey(player.toLowerCase()) && (!inviteList.get(player.toLowerCase()).isEmpty()));
     }
 
+    @Deprecated
     public String getPlayerList(String owner) {
         if (this.hasHomes(owner)) {
             ArrayList<Home> results = new ArrayList(homeList.get(owner.toLowerCase()).values());
 
             String ret = results.toString().replace("[", "").replace("]", "");
+            return ret;
+        } else {
+            return null;
+        }
+    }
+
+    public Home[] getPlayerHomes(String owner) {
+        if (this.hasHomes(owner)) {
+            Home[] ret = new Home[0];
+
+            ret = homeList.get(owner.toLowerCase()).values().toArray(ret);
+
             return ret;
         } else {
             return null;
