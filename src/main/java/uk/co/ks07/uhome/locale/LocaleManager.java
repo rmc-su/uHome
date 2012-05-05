@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
@@ -20,6 +21,7 @@ public class LocaleManager {
 
     private static final String LOCALE_BUNDLE = "uk.co.ks07.uhome.locale.uhome.uhome";
     private static ResourceBundle locResBundle = null;
+    private static final DecimalFormat decLocFormatter = new DecimalFormat("#0.#");
 
     public static void init(File customLocale, Logger log) {
         String locale = HomeConfig.locale.toLowerCase();
@@ -73,6 +75,9 @@ public class LocaleManager {
                 output = output.replaceAll("(?i)\\Q{{HOME}}\\E", home.name);
                 output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", home.owner);
                 output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", home.world);
+                output = output.replaceAll("(?i)\\Q{{X}}\\E", decLocFormatter.format(home.x));
+                output = output.replaceAll("(?i)\\Q{{Y}}\\E", decLocFormatter.format(home.y));
+                output = output.replaceAll("(?i)\\Q{{Z}}\\E", decLocFormatter.format(home.z));
                 if (home.hasInvitees()) {
                     output = output.replaceAll("(?i)\\Q{{INVITED}}\\E", home.inviteesToString());
                 }
