@@ -530,20 +530,15 @@ public class HomeCommand implements CommandExecutor {
     }
 
     public void showHomeInfo(CommandSender user, String targetHome, String targetOwner) {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("HOME", targetHome);
-        params.put("OWNER", targetOwner);
-
         if (homeList.homeExists(targetOwner, targetHome)) {
-            Location loc = homeList.getHomeLocation(targetOwner, targetHome);
+            Home home = homeList.getNamedHome(targetOwner, targetHome);
             
-            if (loc != null) {
-                params.put("LOCATION", loc.toString());
-                user.sendMessage(LocaleManager.getString("admin.info.ok", params));
-            } else {
-                user.sendMessage(LocaleManager.getString("error.warp.noworld", params));
-            }
+            user.sendMessage(LocaleManager.getString("admin.info.output", null, home));
         } else {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("HOME", targetHome);
+            params.put("OWNER", targetOwner);
+
             user.sendMessage(LocaleManager.getString("admin.info.notexists", params));
         }
     }
