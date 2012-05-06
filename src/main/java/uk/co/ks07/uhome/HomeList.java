@@ -136,6 +136,11 @@ public class HomeList {
             if (HomeConfig.warpCost > 0) {
                 EconomyResponse resp = this.plugin.economy.withdrawPlayer(player.getName(), HomeConfig.warpCost);
                 if (resp.transactionSuccess()) {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("COST", Integer.toString(HomeConfig.warpCost));
+                    params.put("CURRENCY", this.plugin.economy.currencyNamePlural());
+
+                    player.sendMessage(LocaleManager.getString("econ.charged", params));
                     return true;
                 } else {
                     return false;
