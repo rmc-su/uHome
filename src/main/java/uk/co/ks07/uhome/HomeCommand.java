@@ -593,6 +593,7 @@ public class HomeCommand implements CommandExecutor {
                     count++;
                 }
 
+
                 player.sendMessage(playerMessage.toString());
             }
         }
@@ -609,19 +610,51 @@ public class HomeCommand implements CommandExecutor {
         } else {
             sender.sendMessage(LocaleManager.getString("admin.list.ok", params));
 
-            int count = 0;
-            for (Home h : hList) {
-                count++;
-                sender.sendMessage(LocaleManager.getString("admin.list.item", null, h));
+            boolean hasNewlines = LocaleManager.getString("admin.list.separator").contains("{{NEWLINE}}");
 
-                if (count < hList.length) {
-                    if (LocaleManager.getString("admin.list.separator").contains("{{NEWLINE}}")) {
-                        String[] lines = LocaleManager.getString("admin.list.separator").split("\\{\\{NEWLINE\\}\\}");
-                        sender.sendMessage(lines);
-                    } else {
-                        sender.sendMessage(LocaleManager.getString("admin.list.separator"));
-                    }
+            if (hasNewlines) {
+                String[] playerMessages = new String[hList.length];
+                String[] tmpSplit = LocaleManager.getString("admin.list.separator").split("\\{\\{NEWLINE\\}\\}", 2);
+                String[] separators = new String[2];
+
+                separators[0] = tmpSplit[0];
+                if (tmpSplit.length == 2) {
+                    separators[1] = tmpSplit[1];
+                } else {
+                    separators[1] = "";
                 }
+
+                int count = 0;
+                // Initialise the first line.
+                playerMessages[count] = "";
+                for (Home h : hList) {
+                    playerMessages[count].concat(LocaleManager.getString("admin.list.item", null, h));
+
+                    if (count < (hList.length - 1)) {
+                        playerMessages[count].concat(separators[0]);
+                        playerMessages[count + 1] = separators[1];
+                    }
+
+                    count++;
+                }
+
+                sender.sendMessage(playerMessages);
+            } else {
+                StringBuilder playerMessage = new StringBuilder();
+
+                int count = 0;
+                for (Home h : hList) {
+                    playerMessage.append(LocaleManager.getString("admin.list.item", null, h));
+
+                    if (count < (hList.length - 1)) {
+                        playerMessage.append(LocaleManager.getString("admin.list.separator"));
+                    }
+
+                    count++;
+                }
+
+
+                sender.sendMessage(playerMessage.toString());
             }
         }
     }
