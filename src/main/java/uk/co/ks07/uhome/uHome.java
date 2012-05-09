@@ -1,16 +1,12 @@
 package uk.co.ks07.uhome;
 
 import uk.co.ks07.uhome.storage.ConnectionManager;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 
 import uk.co.ks07.uhome.griefcraft.Updater;
 import uk.co.ks07.uhome.griefcraft.Metrics;
@@ -21,8 +17,6 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import uk.co.ks07.uhome.importers.ImporterManager;
 
