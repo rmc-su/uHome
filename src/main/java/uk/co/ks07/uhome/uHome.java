@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,6 +109,12 @@ public class uHome extends JavaPlugin {
                 this.getLogger().info("Trying to import MultipleHomes homes from multiplehomes_homes directory.");
                 this.importMultipleHomes(importFrom);
             }
+        }
+
+        File homespawnplusHomes = new File(this.getDataFolder(), "HomeSpawnPlus.db");
+        if (homespawnplusHomes.isFile()) {
+            this.getLogger().info("Trying to import HomeSpawnPlus homes from HomeSpawnPlus.db.");
+            this.importHomeSpawnPlus(homespawnplusHomes);
         }
 
         File customLocale = new File(this.getDataFolder(), "customlocale.properties");
@@ -479,6 +488,48 @@ public class uHome extends JavaPlugin {
 
                     this.getLogger().info("Imported " + (lineCount - notImported) + " homes.");
                 }
+            }
+        }
+    }
+
+    private void importHomeSpawnPlus(File db) {
+        Connection sqliteconn = null;
+        Statement slstatement = null;
+        ResultSet slset = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + db.getAbsolutePath());
+            sqliteconn.setAutoCommit(false);
+            slstatement = sqliteconn.createStatement();
+            slset = slstatement.executeQuery("SELECT * FROM hsp_home");
+
+            int size = 0;
+            while (slset.next()) {
+                size++;
+                String owner = slset.getString("player_name");
+                String homeName = slset.getString("name");
+                World world = this.getServer().getWorld(slset.getString("world"));
+                Location loc = new Location(world, slset.getDouble("x"), slset.getDouble("y"), slset.getDouble("z"), slset.getFloat("yaw"), slset.getFloat("pitch"));
+                this.homeList.adminAddHome(loc, owner, name, this.getLogger());
+            }
+            this.getLogger().info("Imported " + Integer.toString(size) + " homes.");
+        } catch (Exception ex) {
+            this.getLogger().log(Level.WARNING, "HomeSpawnPlus Import Exception", ex);
+        } finally {
+            try {
+                if (slstatement != null) {
+                    slstatement.close();
+                }
+                if (slset != null) {
+                    slset.close();
+                }
+
+                if (sqliteconn != null) {
+                    sqliteconn.close();
+                }
+            } catch (Exception e) {
+                this.getLogger().log(Level.WARNING, "HomeSpawnPlus Import Exception (on close)", e);
             }
         }
     }
