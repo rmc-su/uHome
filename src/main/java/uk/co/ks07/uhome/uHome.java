@@ -506,15 +506,21 @@ public class uHome extends JavaPlugin {
             slstatement = sqliteconn.createStatement();
             slset = slstatement.executeQuery("SELECT * FROM hsp_home");
 
-            int size = 0;
+            int imported = 0;
             while (slset.next()) {
-                size++;
                 int id = slset.getInt("id");
                 String owner = slset.getString("player_name");
                 String homeName = slset.getString("name");
                 World world = this.getServer().getWorld(slset.getString("world"));
+
+                if (world == null) {
+                    this.getLogger().log(Level.WARNING, "Could not import " + owner + "'s home " + homeName + ". World not loaded!");
+                    continue;
+                }
+
                 Location loc = new Location(world, slset.getDouble("x"), slset.getDouble("y"), slset.getDouble("z"), slset.getFloat("yaw"), slset.getFloat("pitch"));
                 this.homeList.adminAddHome(loc, owner, homeName, this.getLogger());
+                imported++;
 
                 if (HomeConfig.enableInvite) {
                     invslstatement = sqliteconn.createStatement();
@@ -524,7 +530,8 @@ public class uHome extends JavaPlugin {
                     }
                 }
             }
-            this.getLogger().info("Imported " + Integer.toString(size) + " homes.");
+
+            this.getLogger().info("Imported " + Integer.toString(imported) + " homes.");
         } catch (Exception ex) {
             this.getLogger().log(Level.WARNING, "HomeSpawnPlus Import Exception", ex);
         } finally {
