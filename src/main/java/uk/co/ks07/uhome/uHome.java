@@ -553,6 +553,8 @@ public class uHome extends JavaPlugin {
                 }
             } catch (Exception e) {
                 this.getLogger().log(Level.WARNING, "HomeSpawnPlus Import Exception (on close)", e);
+            } finally {
+                db.renameTo(new File(this.getDataFolder(), db.getName() + ".old"));
             }
         }
     }
