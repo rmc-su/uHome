@@ -511,6 +511,11 @@ public class uHome extends JavaPlugin {
                 int id = slset.getInt("id");
                 String owner = slset.getString("player_name");
                 String homeName = slset.getString("name");
+
+                if (homeName == null) {
+                    homeName = uHome.DEFAULT_HOME;
+                }
+
                 World world = this.getServer().getWorld(slset.getString("world"));
 
                 if (world == null) {
