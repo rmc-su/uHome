@@ -42,7 +42,7 @@ public class LocaleManager {
         } else {
             try {
                 locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale(locale));
-                log.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ")");
+                log.info("Using localization: " + locResBundle.getString("locale.name") + " (" + locale + ") by " + locResBundle.getString("locale.author"));
             } catch (MissingResourceException e) {
                 // Failed to load requested locale file so fallback to en
                 locResBundle = ResourceBundle.getBundle(LOCALE_BUNDLE, new Locale("en"));
