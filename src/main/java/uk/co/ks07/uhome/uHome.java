@@ -496,6 +496,8 @@ public class uHome extends JavaPlugin {
         Connection sqliteconn = null;
         Statement slstatement = null;
         ResultSet slset = null;
+        Statement invslstatement = null;
+        ResultSet invslset = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -507,11 +509,20 @@ public class uHome extends JavaPlugin {
             int size = 0;
             while (slset.next()) {
                 size++;
+                int id = slset.getInt("id");
                 String owner = slset.getString("player_name");
                 String homeName = slset.getString("name");
                 World world = this.getServer().getWorld(slset.getString("world"));
                 Location loc = new Location(world, slset.getDouble("x"), slset.getDouble("y"), slset.getDouble("z"), slset.getFloat("yaw"), slset.getFloat("pitch"));
-                this.homeList.adminAddHome(loc, owner, name, this.getLogger());
+                this.homeList.adminAddHome(loc, owner, homeName, this.getLogger());
+
+                if (HomeConfig.enableInvite) {
+                    invslstatement = sqliteconn.createStatement();
+                    invslset = invslstatement.executeQuery("SELECT invited_player FROM hsp_homeinvite WHERE home_id = " + Integer.toString(id));
+                    while (invslset.next()) {
+                        this.homeList.invitePlayer(owner, invslset.getString("invited_player"), homeName);
+                    }
+                }
             }
             this.getLogger().info("Imported " + Integer.toString(size) + " homes.");
         } catch (Exception ex) {
