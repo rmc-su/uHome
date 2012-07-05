@@ -83,7 +83,7 @@ public class HomeConfig {
             respawnToHome = settings.getBoolean("respawnToHome", true);
             bedsCanSethome = settings.getInt("bedsCanSetHome", 0);
             bedsDuringDay = settings.getBoolean("bedsDuringDay", false);
-            loadChunks = settings.getBoolean("loadChunks", false);
+            loadChunks = settings.getBoolean("loadChunks", true);
             enableInvite = settings.getBoolean("enableInvite", true);
             enableDefaultPerms = settings.getBoolean("enableDefaultPerms", true);
             enableSethome = settings.getBoolean("enableSethome", false);
