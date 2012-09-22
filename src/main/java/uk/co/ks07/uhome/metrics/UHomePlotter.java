@@ -1,4 +1,4 @@
-package uk.co.ks07.uhome.griefcraft;
+package uk.co.ks07.uhome.metrics;
 
 import uk.co.ks07.uhome.HomeList;
 

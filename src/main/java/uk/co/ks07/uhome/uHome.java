@@ -17,8 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import uk.co.ks07.uhome.griefcraft.Updater;
-import uk.co.ks07.uhome.griefcraft.Metrics;
-import uk.co.ks07.uhome.griefcraft.UHomePlotter;
+import uk.co.ks07.uhome.metrics.Metrics;
+import uk.co.ks07.uhome.metrics.UHomePlotter;
 import uk.co.ks07.uhome.locale.LocaleManager;
 
 import net.milkbowl.vault.economy.Economy;
@@ -56,8 +56,6 @@ public class uHome extends JavaPlugin {
 
         this.getLogger().setLevel(Level.INFO);
 
-        SuperPermsManager.initialize(this);
-
         try {
             this.getConfig().options().copyDefaults(true);
             HomeConfig.initialize(this.getConfig(), getDataFolder(), this.getLogger());
@@ -65,6 +63,8 @@ public class uHome extends JavaPlugin {
         } catch (Exception ex) {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }
+
+        SuperPermsManager.initialize(this);
         
         if (HomeConfig.enableEcon) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {
@@ -235,7 +235,7 @@ public class uHome extends JavaPlugin {
             Metrics.Graph limitGraph = metrics.createGraph("Active Limits");
 
             // Plot the number of dynamic home limits registered
-            limitGraph.addPlotter(new UHomePlotter("Registered Home Limits", this.homeList) {
+            limitGraph.addPlotter(new Metrics.Plotter("Registered Home Limits") {
 
                 @Override
                 public int getValue() {
@@ -244,7 +244,7 @@ public class uHome extends JavaPlugin {
 
             });
             // Plot the number of dynamic home invite limits registered
-            limitGraph.addPlotter(new UHomePlotter("Registered Invite Limits", this.homeList) {
+            limitGraph.addPlotter(new Metrics.Plotter("Registered Invite Limits") {
 
                 @Override
                 public int getValue() {
@@ -258,7 +258,7 @@ public class uHome extends JavaPlugin {
             });
 
             if (metrics.start()) {
-                this.getLogger().info("Sending anonymous usage statistics to metrics.griefcraft.com.");
+                this.getLogger().info("Sending anonymous usage statistics to https://mcstats.org/.");
             }
         } catch (IOException e ) {
             this.getLogger().log(Level.WARNING, "Failed to connect to plugin metrics.", e);
