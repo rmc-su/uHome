@@ -58,13 +58,11 @@ public class uHome extends JavaPlugin {
 
         try {
             this.getConfig().options().copyDefaults(true);
-            HomeConfig.initialize(this.getConfig(), getDataFolder(), this.getLogger());
+            HomeConfig.initialize(this, this.getConfig(), getDataFolder(), this.getLogger());
             this.saveConfig();
         } catch (Exception ex) {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }
-
-        SuperPermsManager.initialize(this);
         
         if (HomeConfig.enableEcon) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {

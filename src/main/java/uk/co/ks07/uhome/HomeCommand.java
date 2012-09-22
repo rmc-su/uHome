@@ -773,7 +773,7 @@ public class HomeCommand implements CommandExecutor {
 
     public void reloadSettings(CommandSender user) {
         user.sendMessage(LocaleManager.getString("admin.reload.ok"));
-        HomeConfig.initialize(plugin.getConfig(), plugin.getDataFolder(), plugin.getLogger());
+        HomeConfig.initialize(plugin, plugin.getConfig(), plugin.getDataFolder(), plugin.getLogger());
     }
 
     public void toggleDebug() {

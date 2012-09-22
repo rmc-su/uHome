@@ -59,7 +59,7 @@ public class HomeConfig {
     public static Map<String, Integer> permWarmUps;
     public static Map<String, Integer> permCoolDowns;
 
-    public static void initialize(FileConfiguration config, File pluginDir, Logger log) {
+    public static void initialize(uHome plugin, FileConfiguration config, File pluginDir, Logger log) {
         try {
             dataDir = pluginDir;
             if (!dataDir.exists()) {
@@ -127,6 +127,9 @@ public class HomeConfig {
                 log.warning("abortOnDamage was set to an invalid value. Valid values are 0, 1, 2 or 3. Presuming 0.");
                 abortOnDamage = 0;
             }
+            
+            // Initialize permissions handler ready for the registration of nodes.
+            SuperPermsManager.initialize(plugin);
 
             // Begin filling maps for custom variable nodes.
             int count = 0;
