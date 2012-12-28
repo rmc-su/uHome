@@ -11,6 +11,7 @@ import java.util.MissingResourceException;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 import org.bukkit.ChatColor;
 
@@ -72,14 +73,14 @@ public class LocaleManager {
             }
             
             if (home != null) {
-                output = output.replaceAll("(?i)\\Q{{HOME}}\\E", home.name);
-                output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", home.owner);
-                output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", home.world);
+                output = output.replaceAll("(?i)\\Q{{HOME}}\\E", Matcher.quoteReplacement(home.name));
+                output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", Matcher.quoteReplacement(home.owner));
+                output = output.replaceAll("(?i)\\Q{{WORLD}}\\E", Matcher.quoteReplacement(home.world));
                 output = output.replaceAll("(?i)\\Q{{X}}\\E", decLocFormatter.format(home.x));
                 output = output.replaceAll("(?i)\\Q{{Y}}\\E", decLocFormatter.format(home.y));
                 output = output.replaceAll("(?i)\\Q{{Z}}\\E", decLocFormatter.format(home.z));
                 if (home.hasInvitees()) {
-                    output = output.replaceAll("(?i)\\Q{{INVITED}}\\E", home.inviteesToString());
+                    output = output.replaceAll("(?i)\\Q{{INVITED}}\\E", Matcher.quoteReplacement(home.inviteesToString()));
                 }
             }
 
