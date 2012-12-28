@@ -4,21 +4,12 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 public class SuperPermsManager {
     private static uHome plugin;
 
     public static void initialize(uHome plugin) {
         SuperPermsManager.plugin = plugin;
-
-        // Enable defaults if necessary.
-        if (HomeConfig.enableDefaultPerms) {
-            plugin.getLogger().info("Giving default permissions to players.");
-            plugin.pm.getPermission("uhome.own").setDefault(PermissionDefault.TRUE);
-            plugin.pm.getPermission("uhome.admin").setDefault(PermissionDefault.OP);
-            plugin.pm.getPermission("uhome.bypass").setDefault(PermissionDefault.OP);
-        }
     }
 
     // Home owners

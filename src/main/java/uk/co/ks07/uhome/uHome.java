@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class uHome extends JavaPlugin {
@@ -129,6 +130,11 @@ public class uHome extends JavaPlugin {
         this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
 
         this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
+        
+        // We must defer registration of defaults. See BUKKIT-932
+        if (HomeConfig.enableDefaultPerms) {
+            this.getServer().getScheduler().scheduleSyncDelayedTask(this, new SetupTask(this), 1L);
+        }
     }
 
     private void libCheck() {
@@ -557,4 +563,19 @@ public class uHome extends JavaPlugin {
         }
     }
 
+    private class SetupTask implements Runnable {
+        private final uHome plugin;
+        
+        public SetupTask(uHome plugin) {
+            this.plugin = plugin;
+        }
+        
+        @Override
+        public void run() {
+            plugin.getLogger().info("Giving default permissions to players.");
+            plugin.pm.getPermission("uhome.own").setDefault(PermissionDefault.TRUE);
+            plugin.pm.getPermission("uhome.admin").setDefault(PermissionDefault.OP);
+            plugin.pm.getPermission("uhome.bypass").setDefault(PermissionDefault.OP);
+        }
+    }
 }
