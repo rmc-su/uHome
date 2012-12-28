@@ -1,5 +1,5 @@
 name: uHome
-version: 1.5.1
+version: 1.5.2
 author: ks07
 authors: [spathizilla, tkelly]
 main: uk.co.ks07.uhome.uHome
@@ -57,6 +57,7 @@ permissions:
       uhome.admin.listinvites: true
       uhome.admin.reload: true
       uhome.admin.info: true
+      uhome.admin.send: true
   uhome.admin.set:
     description: Allows you to set other people's homes.
   uhome.admin.warp:
@@ -71,6 +72,8 @@ permissions:
     description: Allows you to reload uHome.
   uhome.admin.info:
     description: Allows you to lookup a home's location.
+  uhome.admin.send:
+    description: Allows you to send a player to another home. You must also have uhome.admin.warp.
   uhome.bypass:
     description: Allows you to bypass all restrictions.
     children:

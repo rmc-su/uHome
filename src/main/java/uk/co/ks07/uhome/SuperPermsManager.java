@@ -38,6 +38,7 @@ public class SuperPermsManager {
     public static final String adminDelete = "uhome.admin.delete";
     public static final String adminInfo = "uhome.admin.info";
     public static final String adminReload = "uhome.admin.reload";
+    public static final String adminSend = "uhome.admin.send";
     // Limit bypasses
     public static final String bypassLimit = "uhome.bypass.limit";
     public static final String bypassBed = "uhome.bypass.bed";

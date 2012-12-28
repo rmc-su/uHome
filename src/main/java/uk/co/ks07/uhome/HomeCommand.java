@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -152,6 +153,9 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("delete".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminDelete)) {
                         // /home delete (player) (name)
                         this.deleteOtherHome(player, args[1], args[2]);
+                    } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminSend) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
+                        // /home (player) (owner) (name)
+                        this.sendOtherToHome(args[0], args[1], args[2]);
                     }
                     break;
                 default:
@@ -208,6 +212,9 @@ public class HomeCommand implements CommandExecutor {
                         } else if ("requests".equalsIgnoreCase(args[0])) {
                             this.showRequestList(sender, args[1], getPageNo(args[2]));
                         }
+                    } else {
+                        // /home (player) (owner) (name)
+                        this.sendOtherToHome(args[0], args[1], args[2]);
                     }
                     break;
                 default:
@@ -215,6 +222,17 @@ public class HomeCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public void sendOtherToHome(String player, String owner, String name) {
+        Player targetPlayer = this.plugin.getServer().getPlayer(player);
+        
+        if (this.homeList.homeExists(owner, name)) {
+            // Bypass usual warp permission  and cooldowns.
+            Home h = this.homeList.getNamedHome(owner, name);
+            Location location = h.getLocation(this.plugin.getServer());
+            targetPlayer.teleport(location);
+        }
     }
 
     public void unlockHome(Player player, String name) {
