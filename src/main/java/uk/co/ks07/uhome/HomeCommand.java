@@ -205,13 +205,12 @@ public class HomeCommand implements CommandExecutor {
                     } else if ("delete".equalsIgnoreCase(args[0])) {
                         // /home delete (player) (name)
                         this.deleteOtherHome(sender, args[1], args[2]);
-                    } else if (HomeConfig.enableInvite && isPageNo(args[2])) {
-                        // /home invites|requests (player) (page)
-                        if ("invites".equalsIgnoreCase(args[0])) {
-                            this.showInviteList(sender, args[1], getPageNo(args[2]));
-                        } else if ("requests".equalsIgnoreCase(args[0])) {
-                            this.showRequestList(sender, args[1], getPageNo(args[2]));
-                        }
+                    } else if (HomeConfig.enableInvite && "invites".equalsIgnoreCase(args[0]) && isPageNo(args[2])) {
+                        // /home invites (player) (page)
+                        this.showInviteList(sender, args[1], getPageNo(args[2]));
+                    } else if (HomeConfig.enableInvite && "requests".equalsIgnoreCase(args[0]) && isPageNo(args[2])) {
+                        // /home requests (player) (page)
+                        this.showRequestList(sender, args[1], getPageNo(args[2]));
                     } else {
                         // /home (player) (owner) (name)
                         this.sendOtherToHome(sender, args[0], args[1], args[2]);
