@@ -89,17 +89,6 @@ public class UHomeListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (HomeConfig.loadChunks && (! event.isCancelled())) {
-            World world = event.getPlayer().getWorld();
-            Chunk chunk = world.getChunkAt(event.getTo());
-            int x = chunk.getX();
-            int z = chunk.getZ();
-            world.refreshChunk(x, z);
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (HomeConfig.respawnToHome && HomeConfig.isHomeRespawnWorld(event.getPlayer().getLocation().getWorld().getName()) && homeList.homeExists(event.getPlayer().getName(), "home")) {
