@@ -232,20 +232,21 @@ public class HomeCommand implements CommandExecutor {
         Player targetPlayer = this.plugin.getServer().getPlayer(player);
         
         if (targetPlayer != null) {
+            params.put("PLAYER", targetPlayer.getName());
+            
             if (this.homeList.homeExists(owner, name)) {
                 // Bypass usual warp permission  and cooldowns.
                 Home h = this.homeList.getNamedHome(owner, name);
                 Location location = h.getLocation(this.plugin.getServer());
                 targetPlayer.teleport(location);
                 
-                params.put("PLAYER", targetPlayer.getName());
                 sender.sendMessage(LocaleManager.getString("admin.send.ok", params));
                 targetPlayer.sendMessage(LocaleManager.getString("admin.send.notify", params));
             } else {
-                params.put("PLAYER", player);
                 sender.sendMessage(LocaleManager.getString("admin.send.notexists", params));
             }
         } else {
+            params.put("PLAYER", player);
             sender.sendMessage(LocaleManager.getString("admin.send.offline", params));
         }
     }
