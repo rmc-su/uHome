@@ -49,6 +49,7 @@ public class HomeConfig {
     public static int setCost;
     public static boolean enableATime;
     public static boolean enableUnlock;
+    public static boolean notifyOnSend;
 
     // Other classes should check the list via isHomeRespawnWorld()
     private static List<String> respawnToHomeWorlds;
@@ -90,6 +91,7 @@ public class HomeConfig {
             debugLog = settings.getBoolean("debugLog", false);
             enableATime = settings.getBoolean("recordLastAccess", false);
             enableUnlock = settings.getBoolean("enableUnlock", false);
+            notifyOnSend = settings.getBoolean("notifyOnSend", true);
 
             respawnToHomeWorlds = settings.getStringList("respawnToHomeWorlds");
 

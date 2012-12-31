@@ -12,6 +12,7 @@ settings:
   debugLog: false
   recordLastAccess: false
   enableUnlock: false
+  notifyOnSend: true
   downloadLibs:
     enable: true
     mysqlLib: true

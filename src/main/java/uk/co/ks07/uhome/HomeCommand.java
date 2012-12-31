@@ -241,7 +241,9 @@ public class HomeCommand implements CommandExecutor {
                 targetPlayer.teleport(location);
                 
                 sender.sendMessage(LocaleManager.getString("admin.send.ok", params));
-                targetPlayer.sendMessage(LocaleManager.getString("admin.send.notify", params));
+                if (HomeConfig.notifyOnSend) {
+                    targetPlayer.sendMessage(LocaleManager.getString("admin.send.notify", params));
+                }
             } else {
                 sender.sendMessage(LocaleManager.getString("admin.send.notexists", params));
             }
