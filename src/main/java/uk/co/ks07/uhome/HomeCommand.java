@@ -155,7 +155,7 @@ public class HomeCommand implements CommandExecutor {
                         this.deleteOtherHome(player, args[1], args[2]);
                     } else if (SuperPermsManager.hasPermission(player, SuperPermsManager.adminSend) && SuperPermsManager.hasPermission(player, SuperPermsManager.adminWarp)) {
                         // /home (player) (owner) (name)
-                        this.sendOtherToHome(args[0], args[1], args[2]);
+                        this.sendOtherToHome(player, args[0], args[1], args[2]);
                     }
                     break;
                 default:
@@ -214,7 +214,7 @@ public class HomeCommand implements CommandExecutor {
                         }
                     } else {
                         // /home (player) (owner) (name)
-                        this.sendOtherToHome(args[0], args[1], args[2]);
+                        this.sendOtherToHome(sender, args[0], args[1], args[2]);
                     }
                     break;
                 default:
@@ -224,14 +224,29 @@ public class HomeCommand implements CommandExecutor {
         return true;
     }
 
-    public void sendOtherToHome(String player, String owner, String name) {
+    public void sendOtherToHome(CommandSender sender, String player, String owner, String name) {
+        HashMap<String, String> params = new HashMap<String, String>(3);
+        params.put("HOME", name);
+        params.put("OWNER", owner);
+        
         Player targetPlayer = this.plugin.getServer().getPlayer(player);
         
-        if (this.homeList.homeExists(owner, name)) {
-            // Bypass usual warp permission  and cooldowns.
-            Home h = this.homeList.getNamedHome(owner, name);
-            Location location = h.getLocation(this.plugin.getServer());
-            targetPlayer.teleport(location);
+        if (targetPlayer != null) {
+            if (this.homeList.homeExists(owner, name)) {
+                // Bypass usual warp permission  and cooldowns.
+                Home h = this.homeList.getNamedHome(owner, name);
+                Location location = h.getLocation(this.plugin.getServer());
+                targetPlayer.teleport(location);
+                
+                params.put("PLAYER", targetPlayer.getName());
+                sender.sendMessage(LocaleManager.getString("admin.send.ok", params));
+                targetPlayer.sendMessage(LocaleManager.getString("admin.send.notify", params));
+            } else {
+                params.put("PLAYER", player);
+                sender.sendMessage(LocaleManager.getString("admin.send.notexists", params));
+            }
+        } else {
+            sender.sendMessage(LocaleManager.getString("admin.send.offline", params));
         }
     }
 
