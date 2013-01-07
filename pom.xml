@@ -45,7 +45,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${artifcatID}-${version}</finalName>
+		<finalName>${artifactID}-${version}</finalName>
 		<defaultGoal>install</defaultGoal>
 		<directory>${basedir}/target</directory>
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
