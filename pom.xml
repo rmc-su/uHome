@@ -1,56 +1,67 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>uk.co.ks07.uhome</groupId>
-	<artifactId>uHome</artifactId>
-	<version>1.5</version>
+	<groupId>uk.co.ks07</groupId>
+	<artifactId>uhome</artifactId>
+	<version>1.5.2</version>
+	<packaging>jar</packaging>
 
+	<name>uHome</name>
+	<description>A multiple home plugin for Bukkit.</description>
+	<url>http://dev.bukkit.org/server-mods/uhome/</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-
-	<scm>
-		<connection>scm:git:git://github.com/ks07/uHome.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/ks07/uHome.git</developerConnection>
-		<url>https://github.com/ks07/uHome</url>
-	</scm>
 
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
+		<repository>
+			<id>vault-repo</id>
+			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+		</repository>
 	</repositories>
-
 
 	<dependencies>
 		<dependency>
-			<groupId>org.bukkit</groupId>
+		        <groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.1-R5-SNAPSHOT</version>
+			<version>1.4.6-R0.3</version>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.2.9-SNAPSHOT</version>
+			<version>1.2.22-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
+		<finalName>${artifcatID}-${version}</finalName>
+		<defaultGoal>install</defaultGoal>
+		<directory>${basedir}/target</directory>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<outputDirectory>${basedir}/target/classes</outputDirectory>
+
 		<resources>
 			<resource>
 				<targetPath>.</targetPath>
+				<filtering>false</filtering>
 				<directory>${basedir}/src/main/resources/</directory>
-				<filtering>true</filtering>
 				<includes>
 					<include>config.yml</include>
 					<include>plugin.yml</include>
 					<include>customlocale.properties</include>
 					<include>uk/co/ks07/uhome/locale/uhome/uhome_en.properties</include>
+					<include>uk/co/ks07/uhome/locale/uhome/uhome_ru.properties</include>
 				</includes>
 			</resource>
 		</resources>
@@ -62,8 +73,49 @@
 				<version>2.3.2</version>
 				<configuration>
 					<showDeprecation>true</showDeprecation>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-jar-plugin</artifactId>
+                                <version>2.3.2</version>
+                        </plugin>
 		</plugins>
 	</build>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3.0 (GPLv3)</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>The GNU General Public License is a free, copyleft license for software and other kinds of works.</comments>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/ks07/uHome.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/ks07/uHome.git</developerConnection>
+		<url>https://github.com/ks07/uHome</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<issueManagement>
+		<system>Bukkit Dev</system>
+		<url>http://dev.bukkit.org/server-mods/uhome/tickets/</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>ks07</id>
+			<name>ks07</name>
+			<email>ks07@ultimateminecraft.net</email>
+			<url>https://github.com/ks07/</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
 </project>

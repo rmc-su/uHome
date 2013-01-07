@@ -7,3 +7,4 @@ build
 *.jardesc
 manifest.mf
 dist
+/target/
