@@ -88,7 +88,7 @@ public class WarmUp {
     }
 
     public static int getTimer(Player player) {
-        int timer = 0;
+        int timer;
         if (HomeConfig.timerByPerms) {
             timer = SuperPermsManager.getWarmup(player);
             if (HomeConfig.additionalTime) {
@@ -112,6 +112,7 @@ public class WarmUp {
             this.plugin = plugin;
         }
 
+        @Override
         public void run() {
             sendPlayer(player, home, plugin, plugin.getServer());
             players.remove(player.getName());

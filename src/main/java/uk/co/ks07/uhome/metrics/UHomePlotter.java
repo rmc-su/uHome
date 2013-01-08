@@ -10,5 +10,6 @@ public abstract class UHomePlotter extends Metrics.Plotter {
         this.homeList = hl;
     }
 
+    @Override
     public abstract int getValue();
 }

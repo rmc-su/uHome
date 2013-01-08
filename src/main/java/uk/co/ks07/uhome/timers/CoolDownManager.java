@@ -103,7 +103,7 @@ public abstract class CoolDownManager {
      * @return Total cooldown in seconds for the specified player.
      */
     public int getTimer(Player player) {
-        int timer = 0;
+        int timer;
         if (HomeConfig.timerByPerms) {
             timer = playerGetPermissionsCooldown(player);
             if (HomeConfig.additionalTime) {

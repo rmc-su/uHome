@@ -142,7 +142,7 @@ public class Updater {
      */
     private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[1024];
-        int len = 0;
+        int len;
 
         while ((len = inputStream.read(buffer)) > 0) {
             outputStream.write(buffer, 0, len);

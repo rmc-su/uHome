@@ -33,6 +33,7 @@ public class HomeCommand implements CommandExecutor {
         this.homeList = hL;
     }
 
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -603,10 +604,10 @@ public class HomeCommand implements CommandExecutor {
                 // Initialise the first line.
                 playerMessages[count] = "";
                 for (Home h : hList) {
-                    playerMessages[count].concat(LocaleManager.getString("own.list.item", null, h));
+                    playerMessages[count] += LocaleManager.getString("own.list.item", null, h);
 
                     if (count < (hList.length - 1)) {
-                        playerMessages[count].concat(separators[0]);
+                        playerMessages[count] += separators[0];
                         playerMessages[count + 1] = separators[1];
                     }
 
@@ -663,10 +664,10 @@ public class HomeCommand implements CommandExecutor {
                 // Initialise the first line.
                 playerMessages[count] = "";
                 for (Home h : hList) {
-                    playerMessages[count].concat(LocaleManager.getString("admin.list.item", null, h));
+                    playerMessages[count] += LocaleManager.getString("admin.list.item", null, h);
 
                     if (count < (hList.length - 1)) {
-                        playerMessages[count].concat(separators[0]);
+                        playerMessages[count] += separators[0];
                         playerMessages[count + 1] = separators[1];
                     }
 

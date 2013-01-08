@@ -85,7 +85,7 @@ public class Home {
     }
 
     public void warp(Player player, Plugin plugin, Server server) {
-        World currWorld = null;
+        World currWorld;
         if (world.equals("0")) {
             currWorld = server.getWorlds().get(0);
         } else {

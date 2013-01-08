@@ -153,9 +153,9 @@ public class WarpDataSource {
         HashMap<String, HashMap<String, Home>> retHL = new HashMap<String, HashMap<String, Home>>();
         HashMap<String, HashSet<Home>> retIL = new HashMap<String, HashSet<Home>>();
         Statement statement = null;
-        Statement invStatement = null;
+        Statement invStatement;
         ResultSet set = null;
-        ResultSet invSet = null;
+        ResultSet invSet;
         
         try {
             Connection conn = ConnectionManager.getConnection(log);
@@ -794,7 +794,7 @@ public class WarpDataSource {
             Connection conn = ConnectionManager.getConnection(log);
             DatabaseMetaData meta = conn.getMetaData();
 
-            ResultSet colRS = null;
+            ResultSet colRS;
             colRS = meta.getColumns(null, null, TABLE_NAME, null);
             while (colRS.next()) {
                 String colName = colRS.getString("COLUMN_NAME");
