@@ -33,6 +33,7 @@ public class HomeCommand implements CommandExecutor {
         this.homeList = hL;
     }
 
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
