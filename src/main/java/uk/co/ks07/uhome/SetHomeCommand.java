@@ -15,6 +15,7 @@ public class SetHomeCommand implements CommandExecutor {
         this.homeList = hL;
     }
 
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (HomeConfig.enableSethome) {
             if (sender instanceof Player) {
