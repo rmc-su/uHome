@@ -500,8 +500,8 @@ public class uHome extends JavaPlugin {
         Connection sqliteconn = null;
         Statement slstatement = null;
         ResultSet slset = null;
-        Statement invslstatement = null;
-        ResultSet invslset = null;
+        Statement invslstatement;
+        ResultSet invslset;
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -551,7 +551,6 @@ public class uHome extends JavaPlugin {
                 if (slset != null) {
                     slset.close();
                 }
-
                 if (sqliteconn != null) {
                     sqliteconn.close();
                 }
