@@ -10,6 +10,9 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import uk.co.ks07.uhome.telefix.NoOp;
+import uk.co.ks07.uhome.telefix.TeleportFix;
+
 public class HomeConfig {
     private static final String HOME_LIMIT_SECTION = "homeLimits";
     private static final String INV_LIMIT_SECTION = "homeInvLimits";
@@ -49,6 +52,8 @@ public class HomeConfig {
     public static boolean enableATime;
     public static boolean enableUnlock;
     public static boolean notifyOnSend;
+    
+    public static TeleportFix teleFix = new NoOp();
 
     // Other classes should check the list via isHomeRespawnWorld()
     private static List<String> respawnToHomeWorlds;

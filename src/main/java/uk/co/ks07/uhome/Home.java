@@ -100,7 +100,7 @@ public class Home {
                     WarpDataSource.updateATime(this, plugin.getLogger());
                 }
 
-                Location location = new Location(currWorld, x, y, z, yaw, pitch);
+                Location location = HomeConfig.teleFix.notifyTeleport(player, this);
                 player.teleport(location);
                 HomeCoolDown.getInstance().addPlayer(player, plugin);
                 
