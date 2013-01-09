@@ -2,6 +2,7 @@ package uk.co.ks07.uhome.telefix;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,8 +38,9 @@ public abstract class EntityDamageFix implements TeleportFix {
     }
 
     @Override
-    public void notifyTeleport(Player player, Home home) {
+    public Location notifyTeleport(Player player, Home home) {
         lastWarps.put(player, new LastWarp(home, System.currentTimeMillis() / 1000L));
+        return home.getLocation(player.getServer());
     }
     
     private static class LastWarp {
