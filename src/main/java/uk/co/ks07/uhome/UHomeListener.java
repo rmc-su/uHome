@@ -1,7 +1,9 @@
 package uk.co.ks07.uhome;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -17,6 +19,7 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import uk.co.ks07.uhome.timers.WarmUp;
 
 public class UHomeListener implements Listener {
@@ -91,9 +94,11 @@ public class UHomeListener implements Listener {
         if (HomeConfig.loadChunks && (! event.isCancelled())) {
             World world = event.getPlayer().getWorld();
             Chunk chunk = world.getChunkAt(event.getTo());
-            int x = chunk.getX();
-            int z = chunk.getZ();
-            world.refreshChunk(x, z);
+            if (!chunk.isLoaded()) {
+                int x = chunk.getX();
+                int z = chunk.getZ();
+                world.refreshChunk(x, z);
+            }
         }
     }
 
