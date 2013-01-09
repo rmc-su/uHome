@@ -3,6 +3,7 @@ settings:
   respawnToHome: true
   bedsCanSetHome: 0
   bedsDuringDay: false
+  loadChunks: true
   locale: 'en'
   useColors: true
   enableInvite: true

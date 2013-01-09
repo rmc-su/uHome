@@ -36,6 +36,7 @@ public class HomeConfig {
     public static boolean enableSethome;
     public static int bedsCanSethome;
     public static boolean bedsDuringDay;
+    public static boolean loadChunks;
     public static boolean usemySQL;
     public static String mySQLuname;
     public static String mySQLpass;
@@ -83,6 +84,7 @@ public class HomeConfig {
             respawnToHome = settings.getBoolean("respawnToHome", true);
             bedsCanSethome = settings.getInt("bedsCanSetHome", 0);
             bedsDuringDay = settings.getBoolean("bedsDuringDay", false);
+            loadChunks = settings.getBoolean("loadChunks", true);
             enableInvite = settings.getBoolean("enableInvite", true);
             enableDefaultPerms = settings.getBoolean("enableDefaultPerms", true);
             enableSethome = settings.getBoolean("enableSethome", false);
