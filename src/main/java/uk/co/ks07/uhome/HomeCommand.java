@@ -602,7 +602,7 @@ public class HomeCommand implements CommandExecutor {
 
                 int count = 0;
                 // Initialise the first line.
-                playerMessages[count] = "";
+                playerMessages[count] = separators[1];
                 for (Home h : hList) {
                     playerMessages[count] += LocaleManager.getString("own.list.item", null, h);
 
@@ -662,7 +662,7 @@ public class HomeCommand implements CommandExecutor {
 
                 int count = 0;
                 // Initialise the first line.
-                playerMessages[count] = "";
+                playerMessages[count] = separators[1];
                 for (Home h : hList) {
                     playerMessages[count] += LocaleManager.getString("admin.list.item", null, h);
 
