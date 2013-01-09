@@ -16,14 +16,14 @@ public abstract class EntityDamageFix implements TeleportFix {
     private Map<Player, LastWarp> lastWarps;
 
     @Override
-    public void init(uHome plugin) {
+    public void enable(uHome plugin) {
         lastWarps = new HashMap<Player, LastWarp>();
         plugin.pm.registerEvents(listener, plugin);
         plugin.getLogger().info("Enabled " + this.getName());
     }
 
     @Override
-    public void end(uHome plugin) {
+    public void disable(uHome plugin) {
         if (listener != null) {
             EntityDamageEvent.getHandlerList().unregister(listener);
             listener = null;

@@ -15,9 +15,9 @@ public class RetryOnSuffocate extends EntityDamageFix {
     }
 
     @Override
-    public void init(uHome plugin) {
+    public void enable(uHome plugin) {
         listener = new RetryOnSuffocateListener();
-        super.init(plugin);
+        super.enable(plugin);
     }
     
     private class RetryOnSuffocateListener extends EntityDamageListener {
