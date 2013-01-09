@@ -68,7 +68,7 @@ public class LocaleManager {
                 for (Map.Entry<String, String> e : params.entrySet()) {
                     String ekey = e.getKey();
                     String evalue = e.getValue();
-                    output = output.replaceAll("(?i)\\Q{{" + ekey + "}}\\E", evalue);
+                    output = output.replaceAll("(?i)\\Q{{" + ekey + "}}\\E", Matcher.quoteReplacement(evalue));
                 }
             }
             
