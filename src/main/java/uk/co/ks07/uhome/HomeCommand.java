@@ -297,61 +297,69 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(LocaleManager.getString("usage.sleep"));
             return;
         }
-                    
-        ExitStatus es = homeList.addHome(player, plugin, name, plugin.getLogger());
 
-        switch (es) {
-            case SUCCESS:
-                player.sendMessage(LocaleManager.getString("own.set.new"));
-                break;
-            case SUCCESS_FIRST:
-                player.sendMessage(LocaleManager.getString("own.set.first"));
-                break;
-            case SUCCESS_MOVED:
-                player.sendMessage(LocaleManager.getString("own.set.moved"));
-                break;
-            case AT_LIMIT:
-                Integer mustDelete = (homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player)) + 1;
-                HashMap<String, String> vars = new HashMap<String, String>();
-                vars.put("DELETE", mustDelete.toString());
-                vars.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
+        if (Home.isSilent(name) && !player.hasPermission(SuperPermsManager.adminSilent)) {
+            player.sendMessage(LocaleManager.getString("error.set.invalid"));
+        } else {
+            ExitStatus es = homeList.addHome(player, plugin, name, plugin.getLogger());
 
-                player.sendMessage(LocaleManager.getString("own.set.atlimit", vars));
-                break;
-            case NEED_COOLDOWN:
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("CD_REMAINING", Integer.toString(SetHomeCoolDown.getInstance().estimateTimeLeft(player)));
-                params.put("CD_TOTAL", Integer.toString(SetHomeCoolDown.getInstance().getTimer(player)));
+            switch (es) {
+                case SUCCESS:
+                    player.sendMessage(LocaleManager.getString("own.set.new"));
+                    break;
+                case SUCCESS_FIRST:
+                    player.sendMessage(LocaleManager.getString("own.set.first"));
+                    break;
+                case SUCCESS_MOVED:
+                    player.sendMessage(LocaleManager.getString("own.set.moved"));
+                    break;
+                case AT_LIMIT:
+                    Integer mustDelete = (homeList.getPlayerHomeCount(player.getName()) - SuperPermsManager.getHomeLimit(player)) + 1;
+                    HashMap<String, String> vars = new HashMap<String, String>();
+                    vars.put("DELETE", mustDelete.toString());
+                    vars.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
 
-                player.sendMessage(LocaleManager.getString("own.set.cooldown", params));
-                break;
-            case NOT_ENOUGH_MONEY:
-                HashMap<String, String> costs = new HashMap<String, String>();
-                costs.put("COST", Integer.toString(HomeConfig.setCost));
-                costs.put("CURRENCY", plugin.economy.currencyNamePlural());
+                    player.sendMessage(LocaleManager.getString("own.set.atlimit", vars));
+                    break;
+                case NEED_COOLDOWN:
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("CD_REMAINING", Integer.toString(SetHomeCoolDown.getInstance().estimateTimeLeft(player)));
+                    params.put("CD_TOTAL", Integer.toString(SetHomeCoolDown.getInstance().getTimer(player)));
 
-                player.sendMessage(LocaleManager.getString("econ.insufficient.set", costs));
-                break;
+                    player.sendMessage(LocaleManager.getString("own.set.cooldown", params));
+                    break;
+                case NOT_ENOUGH_MONEY:
+                    HashMap<String, String> costs = new HashMap<String, String>();
+                    costs.put("COST", Integer.toString(HomeConfig.setCost));
+                    costs.put("CURRENCY", plugin.economy.currencyNamePlural());
+
+                    player.sendMessage(LocaleManager.getString("econ.insufficient.set", costs));
+                    break;
+            }
         }
     }
 
     public void setOtherHome(Player player, String homeName, String owner) {
-        ExitStatus es = this.homeList.adminAddHome(player.getLocation(), owner, homeName, plugin.getLogger());
+        if (Home.isSilent(homeName) && !player.hasPermission(SuperPermsManager.adminSilent)) {
+            player.sendMessage(LocaleManager.getString("error.set.invalid"));
+        } else {
+            ExitStatus es = this.homeList.adminAddHome(player.getLocation(), owner, homeName, plugin.getLogger());
 
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("OWNER", owner);
-        params.put("HOME", homeName);
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("OWNER", owner);
+            params.put("HOME", homeName);
 
-        switch (es) {
-            case SUCCESS:
-                player.sendMessage(LocaleManager.getString("admin.set.new", params));
-                break;
-            case SUCCESS_FIRST:
-                player.sendMessage(LocaleManager.getString("admin.set.first", params));
-                break;
-            case SUCCESS_MOVED:
-                player.sendMessage(LocaleManager.getString("admin.set.moved", params));
-                break;
+            switch (es) {
+                case SUCCESS:
+                    player.sendMessage(LocaleManager.getString("admin.set.new", params));
+                    break;
+                case SUCCESS_FIRST:
+                    player.sendMessage(LocaleManager.getString("admin.set.first", params));
+                    break;
+                case SUCCESS_MOVED:
+                    player.sendMessage(LocaleManager.getString("admin.set.moved", params));
+                    break;
+            }
         }
     }
 
