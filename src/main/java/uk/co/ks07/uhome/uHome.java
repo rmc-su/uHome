@@ -561,6 +561,10 @@ public class uHome extends JavaPlugin {
             }
         }
     }
+    
+    public HomeList getHomeList() {
+        return this.homeList;
+    }
 
     private class SetupTask implements Runnable {
         private final uHome plugin;
