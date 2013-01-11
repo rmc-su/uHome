@@ -107,7 +107,10 @@ public class Home {
                 if (playerIsCreator(player.getName())) {
                     player.sendMessage(LocaleManager.getString("own.warp.ok", null, this));
                 } else {
-                    player.sendMessage(LocaleManager.getString("other.warp.ok", null, this));
+                    // Do not print a welcome message if the home name begins and ends with '**'.
+                    if (this.name != null && !this.name.startsWith("**") && !this.name.endsWith("**")) {
+                        player.sendMessage(LocaleManager.getString("other.warp.ok", null, this));
+                    }
                 }
             } else {
                 player.sendMessage(LocaleManager.getString("error.warp.nocrossworld"));
