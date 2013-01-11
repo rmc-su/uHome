@@ -58,6 +58,7 @@ permissions:
       uhome.admin.reload: true
       uhome.admin.info: true
       uhome.admin.send: true
+      uhome.admin.createsilent: true
   uhome.admin.set:
     description: Allows you to set other people's homes.
   uhome.admin.warp:
@@ -74,6 +75,8 @@ permissions:
     description: Allows you to lookup a home's location.
   uhome.admin.send:
     description: Allows you to send a player to another home. You must also have uhome.admin.warp.
+  uhome.admin.createsilent:
+    description: Allows you to create 'silent' homes, using names beginning and ending with '**'.
   uhome.bypass:
     description: Allows you to bypass all restrictions.
     children:
