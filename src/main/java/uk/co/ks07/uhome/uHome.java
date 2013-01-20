@@ -124,10 +124,16 @@ public class uHome extends JavaPlugin {
 
         LocaleManager.init(customLocale, this.getLogger());
 
-        this.beginMetrics();
+        try {
+            this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
+            this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
+        } catch (NullPointerException npe) {
+            this.getLogger().severe("Could not load uHome - another plugin is trying to use /home or /sethome!");
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
 
-        this.getCommand("sethome").setExecutor(new SetHomeCommand(this, homeList));
-        this.getCommand("home").setExecutor(new HomeCommand(this, homeList));
+        this.beginMetrics();
 
         this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
         
