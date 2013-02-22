@@ -122,7 +122,7 @@ public class UHomeListener implements Listener {
             Location from = event.getFrom();
             Location to = event.getTo();
             // Don't cancel if the player is only looking around.
-            if (from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()) {
+            if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
                 Player player = event.getPlayer();
                 if (WarmUp.isWarming(player)) {
                     WarmUp.cancelWarming(player, plugin, WarmUp.Reason.MOVEMENT);
