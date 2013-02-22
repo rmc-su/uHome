@@ -114,11 +114,7 @@ public class UHomeListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-        
-        if (HomeConfig.abortOnMove) {
+        if (HomeConfig.abortOnMove && (!event.isCancelled())) {
             Location from = event.getFrom();
             Location to = event.getTo();
             // Don't cancel if the player is only looking around.
