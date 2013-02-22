@@ -38,9 +38,9 @@ public class uHome extends JavaPlugin {
     private Updater updater;
     public PluginManager pm;
     public static final String DEFAULT_HOME = "home";
-    
+
     public Economy economy;
-    
+
     // MultipleHomes import regex.
     private static final Pattern filenamePattern = Pattern.compile("^home_(\\d+)\\.txt$");
 
@@ -64,7 +64,7 @@ public class uHome extends JavaPlugin {
         } catch (Exception ex) {
             this.getLogger().log(Level.SEVERE, "Could not load config!", ex);
         }
-        
+
         if (HomeConfig.enableEcon) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {
                 RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
@@ -103,7 +103,7 @@ public class uHome extends JavaPlugin {
         File multiplehomesHomes = new File(this.getDataFolder(), "multiplehomes_homes");
         if (multiplehomesHomes.isDirectory()) {
             File[] importFrom = multiplehomesHomes.listFiles();
-        
+
             if (importFrom.length > 0) {
                 this.getLogger().info("Trying to import MultipleHomes homes from multiplehomes_homes directory.");
                 this.importMultipleHomes(importFrom);
@@ -136,7 +136,7 @@ public class uHome extends JavaPlugin {
         this.beginMetrics();
 
         this.pm.registerEvents(new UHomeListener(this, this.homeList), this);
-        
+
         // We must defer registration of defaults. See BUKKIT-932
         if (HomeConfig.enableDefaultPerms) {
             this.getServer().getScheduler().scheduleSyncDelayedTask(this, new SetupTask(this), 1L);
@@ -365,7 +365,7 @@ public class uHome extends JavaPlugin {
                     // <username>;<x>;<y>;<z>;<pitch>;<yaw>;<world>;
                     // <username>;<x>;<y>;<z>;<pitch>;<yaw>;<world>;<name>
                     owner = split[0];
-                    
+
                     try {
                         World homeWorld = getServer().getWorld(split[6]);
 
@@ -381,7 +381,7 @@ public class uHome extends JavaPlugin {
                         this.getLogger().warning("Failed to parse line number " + lineCount + ", skipping.");
                         continue;
                     }
-                    
+
                     if (split.length == 8) {
                         homeName = split[7];
                     } else {
@@ -426,7 +426,7 @@ public class uHome extends JavaPlugin {
 
         for (File homeFile : importFrom) {
             Matcher match = filenamePattern.matcher(homeFile.getName());
-            
+
             // Ignore files that don't appear to be from MultipleHomes.
             if (match.matches()) {
                 // homeName is a number, and will be the same for all homes in each file
@@ -567,18 +567,18 @@ public class uHome extends JavaPlugin {
             }
         }
     }
-    
+
     public HomeList getHomeList() {
         return this.homeList;
     }
 
     private class SetupTask implements Runnable {
         private final uHome plugin;
-        
+
         public SetupTask(uHome plugin) {
             this.plugin = plugin;
         }
-        
+
         @Override
         public void run() {
             plugin.getLogger().info("Giving default permissions to players.");

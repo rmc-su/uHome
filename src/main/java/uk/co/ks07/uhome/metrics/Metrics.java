@@ -112,7 +112,7 @@ public class Metrics {
      * The plugin configuration file
      */
     private final YamlConfiguration configuration;
-    
+
     /**
      * The plugin configuration file
      */

@@ -156,7 +156,7 @@ public class WarpDataSource {
         Statement invStatement;
         ResultSet set = null;
         ResultSet invSet;
-        
+
         try {
             Connection conn = ConnectionManager.getConnection(log);
 
@@ -181,16 +181,16 @@ public class WarpDataSource {
                 Home warp = new Home(index, owner, name, world, x, y, z, yaw, pitch, aTime, unlocked);
 
                 HashSet<String> invitees = new HashSet<String>();
-                
+
                 // Probably better to do this with a join...
                 invStatement = conn.createStatement();
                 invSet = invStatement.executeQuery("SELECT player FROM " + INV_TABLE_NAME + " WHERE homeid=" + index);
                 while (invSet.next()) {
                     invSize++;
                     invitees.add(invSet.getString(1));
-                    
+
                     String lowerInvitee = invSet.getString(1).toLowerCase();
-                    
+
                     if (retIL.containsKey(lowerInvitee)) {
                         retIL.get(lowerInvitee).add(warp);
                     } else {
@@ -203,7 +203,7 @@ public class WarpDataSource {
                 if (!invitees.isEmpty()) {
                     warp.addInvitees(invitees);
                 }
-                
+
                 if (retHL.containsKey(owner.toLowerCase())) {
                     retHL.get(owner.toLowerCase()).put(name, warp);
                 } else {
@@ -755,7 +755,7 @@ public class WarpDataSource {
                         log.log(Level.SEVERE, "Database backup failed!", iex);
                     }
                 }
-                
+
                 Connection conn = ConnectionManager.getConnection(log);
                 log.info("Updating database.");
 
@@ -849,7 +849,7 @@ public class WarpDataSource {
 
                 while (set.next()) {
                     currentRow++;
-                    
+
                     int index = set.getInt("id");
                     String owner = set.getString("owner");
                     String name = set.getString("name");

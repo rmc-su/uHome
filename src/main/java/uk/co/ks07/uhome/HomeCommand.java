@@ -131,7 +131,7 @@ public class HomeCommand implements CommandExecutor {
                     break;
                 case 3:
                     if (HomeConfig.enableInvite && "invite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownInvite)) {
-                        // /home invite (player) (name) 
+                        // /home invite (player) (name)
                         this.inviteToHome(player, args[1], args[2]);
                     } else if (HomeConfig.enableInvite && "uninvite".equalsIgnoreCase(args[0]) && SuperPermsManager.hasPermission(player, SuperPermsManager.ownUninvite)) {
                         // /home uninvite (player) (name)
@@ -228,18 +228,18 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>(3);
         params.put("HOME", name);
         params.put("OWNER", owner);
-        
+
         Player targetPlayer = this.plugin.getServer().getPlayer(player);
-        
+
         if (targetPlayer != null) {
             params.put("PLAYER", targetPlayer.getName());
-            
+
             if (this.homeList.homeExists(owner, name)) {
                 // Bypass usual warp permission  and cooldowns.
                 Home h = this.homeList.getNamedHome(owner, name);
                 Location location = h.getLocation(this.plugin.getServer());
                 targetPlayer.teleport(location);
-                
+
                 sender.sendMessage(LocaleManager.getString("admin.send.ok", params));
                 if (HomeConfig.notifyOnSend) {
                     targetPlayer.sendMessage(LocaleManager.getString("admin.send.notify", params));
@@ -500,7 +500,7 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("HOME", targetHome);
         params.put("OWNER", targetOwner);
-        
+
         ExitStatus es = this.homeList.warpTo(targetOwner, targetHome, player, this.plugin);
 
         // If SUCCESS, the task has been passed on to the warmup handler.
@@ -528,7 +528,7 @@ public class HomeCommand implements CommandExecutor {
 
     public void inviteToHome(Player player, String targetPlayer, String targetHome) {
         Player tPlayer = plugin.getServer().getPlayer(targetPlayer);
-        
+
         if (tPlayer != null) {
             targetPlayer = tPlayer.getName();
         }
@@ -536,7 +536,7 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("HOME", targetHome);
         params.put("INVITED", targetPlayer);
-        
+
         if (homeList.homeExists(player.getName(), targetHome)) {
             ExitStatus result = homeList.invitePlayer(player.getName(), targetPlayer, targetHome);
             switch (result) {
@@ -560,7 +560,7 @@ public class HomeCommand implements CommandExecutor {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("HOME", targetHome);
         params.put("INVITED", targetPlayer);
-        
+
         if (homeList.homeExists(player.getName(), targetHome)) {
             if (homeList.uninvitePlayer(player.getName(), targetPlayer, targetHome)) {
                 player.sendMessage(LocaleManager.getString("own.uninvite.ok", params));
@@ -575,7 +575,7 @@ public class HomeCommand implements CommandExecutor {
     public void showHomeInfo(CommandSender user, String targetHome, String targetOwner) {
         if (homeList.homeExists(targetOwner, targetHome)) {
             Home home = homeList.getNamedHome(targetOwner, targetHome);
-            
+
             user.sendMessage(LocaleManager.getString("admin.info.output", null, home));
         } else {
             HashMap<String, String> params = new HashMap<String, String>();
@@ -593,7 +593,7 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(LocaleManager.getString("own.list.nohomes"));
         } else {
             player.sendMessage(LocaleManager.getString("own.list.ok"));
-            
+
             boolean hasNewlines = LocaleManager.getString("own.list.separator").contains("{{NEWLINE}}");
 
             if (hasNewlines) {
@@ -702,7 +702,7 @@ public class HomeCommand implements CommandExecutor {
             }
         }
     }
-    
+
     public void showInviteList(Player player, int page) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("INVITED", player.getName());
@@ -797,7 +797,7 @@ public class HomeCommand implements CommandExecutor {
     public void showHomeLimit(Player player) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("LIMIT", Integer.toString(SuperPermsManager.getHomeLimit(player)));
-        
+
         player.sendMessage(LocaleManager.getString("own.limit.ok", params));
     }
 
@@ -838,9 +838,9 @@ public class HomeCommand implements CommandExecutor {
     public void purgeHomes(CommandSender user, String argument) {
         if (purgeCommandTime > (System.currentTimeMillis() - PURGE_TIMEOUT_MILLIS) && "confirm".equals(argument)) {
             user.sendMessage("Now purging homes last accessed over " + Integer.toString(purgeCommandDays) + " days ago. This may take a long time, and may lag the server...");
-            
+
             int purgeTime = daysToSeconds(purgeCommandDays);
-            
+
             int purged = this.homeList.cleanupHomes(purgeTime);
 
             if (purged > 0) {
@@ -959,7 +959,7 @@ public class HomeCommand implements CommandExecutor {
 
     private static int getPageNo(String input) {
         int ret = 1;
-        
+
         try {
             ret = Integer.parseInt(input);
         } catch (NumberFormatException ex) {
@@ -982,7 +982,7 @@ public class HomeCommand implements CommandExecutor {
         int atPageRemains = messages.size() - ((printPage - 1) * pageLen);
         int startIndex = (printPage - 1) * pageLen;
         int endIndex;
-        
+
         if (atPageRemains < pageLen) {
             endIndex = startIndex + atPageRemains;
         } else {

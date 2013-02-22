@@ -53,7 +53,7 @@ public class HomeList {
                 homeList.put(player.getName().toLowerCase(), warps);
                 WarpDataSource.addWarp(warp, log);
                 setHomeCoolDown.addPlayer(player, plugin);
-                
+
                 if (this.checkSetCosts(player)) {
                     return ExitStatus.SUCCESS_FIRST;
                 } else {
@@ -66,7 +66,7 @@ public class HomeList {
                     homeList.get(player.getName().toLowerCase()).put(name, warp);
                     WarpDataSource.addWarp(warp, log);
                     setHomeCoolDown.addPlayer(player, plugin);
-                    
+
                     if (this.checkSetCosts(player)) {
                         return ExitStatus.SUCCESS;
                     } else {
@@ -130,7 +130,7 @@ public class HomeList {
     public ExitStatus warpTo(String target, Player player, Plugin plugin) {
         return this.warpTo(player.getName(), target, player, plugin);
     }
-    
+
     public boolean checkWarpCosts(Player player) {
     	if ((HomeConfig.enableEcon) && (this.plugin.economy != null) && (! SuperPermsManager.hasPermission(player, SuperPermsManager.bypassEcon))) {
             if (HomeConfig.warpCost > 0) {
@@ -249,7 +249,7 @@ public class HomeList {
     public ExitStatus invitePlayer(String owner, String player, String name) {
         Home inviteTo = homeList.get(owner.toLowerCase()).get(name);
         InviteStatus result = inviteTo.addInvitee(player);
-        
+
         switch (result) {
             case SUCCESS:
                 WarpDataSource.addInvite(inviteTo.index, player, this.plugin.getLogger());
@@ -455,12 +455,12 @@ public class HomeList {
     public Home getPlayerDefaultHome(String player) {
         return homeList.get(player.toLowerCase()).get(uHome.DEFAULT_HOME);
     }
-    
+
     public String guessHomeName(Player player, String owner, String name) {
         MatchList matches = this.getMatches(name, player, owner);
         return matches.getMatch(name);
     }
-    
+
     public Home getNamedHome(String owner, String name) {
         return homeList.get(owner.toLowerCase()).get(name);
     }
@@ -487,7 +487,7 @@ public class HomeList {
 
     public static String getOnlinePlayerCapitalisation(String name) {
         Player player = Bukkit.getPlayer(name);
-        
+
         if (player != null && name.equalsIgnoreCase(player.getName())) {
             return player.getName();
         } else {

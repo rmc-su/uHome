@@ -53,7 +53,7 @@ public class HomeConfig {
 
     // Other classes should check the list via isHomeRespawnWorld()
     private static List<String> respawnToHomeWorlds;
-    
+
     // Dynamic limit permissions
     public static Map<String, Integer> permLimits;
     public static Map<String, Integer> permInvLimits;
@@ -129,7 +129,7 @@ public class HomeConfig {
                 log.warning("abortOnDamage was set to an invalid value. Valid values are 0, 1, 2 or 3. Presuming 0.");
                 abortOnDamage = 0;
             }
-            
+
             // Initialize permissions handler ready for the registration of nodes.
             SuperPermsManager.initialize(plugin);
 
@@ -151,7 +151,7 @@ public class HomeConfig {
                 }
             }
             log.info("Loaded " + Integer.toString(count) + " permission based home limits.");
-            
+
             // If we're not using invites, don't bother creating the limit map.
             if (enableInvite) {
                 count = 0;
@@ -231,7 +231,7 @@ public class HomeConfig {
 
     private static ConfigurationSection fillLimitDefaults(ConfigurationSection parent) {
         ConfigurationSection ret;
-        
+
         if (! parent.isConfigurationSection(HOME_LIMIT_SECTION)) {
             parent.set(HOME_LIMIT_SECTION, null);
             ret = parent.createSection(HOME_LIMIT_SECTION);

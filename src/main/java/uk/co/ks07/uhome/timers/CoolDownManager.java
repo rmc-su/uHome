@@ -22,7 +22,7 @@ public abstract class CoolDownManager {
      * Activates cooldown for the specified player, using the current
      * confuration settings. Players that are configured to bypass cooldown will
      * be ignored.
-     * 
+     *
      * @param player
      *            Player for whom cooldown is active.
      * @param plugin
@@ -52,7 +52,7 @@ public abstract class CoolDownManager {
      * Whether or not the specified player has cooled down. This includes when
      * the estimated cooldown time has been reached, so that players may be
      * cooled down before the timed task has been executed.
-     * 
+     *
      * @param player
      *            Player to check.
      * @return True if the player has cooled down, otherwise false.
@@ -63,7 +63,7 @@ public abstract class CoolDownManager {
 
     /**
      * Whether or not a cooling timer for the specified player is present.
-     * 
+     *
      * @param player
      *            Player to check
      * @return True if the cooling timer is not present, otherwise false.
@@ -77,7 +77,7 @@ public abstract class CoolDownManager {
      * the player is not currently cooling down, returns 0. Note that small
      * discrepancies in timing between the expected and actual cooldown expiry,
      * may exist.
-     * 
+     *
      * @param player
      *            Player for whom the remaining cooldown is calculated and
      *            returned.
@@ -97,7 +97,7 @@ public abstract class CoolDownManager {
     /**
      * Gets the total cooldown currently configured for the specified player,
      * including global cooldown and group/player-specific time.
-     * 
+     *
      * @param player
      *            Player for whom cooldown is returned.
      * @return Total cooldown in seconds for the specified player.
@@ -131,7 +131,7 @@ public abstract class CoolDownManager {
 
     /**
      * Removes the player with the specified name from the cooldown list.
-     * 
+     *
      * @param playerName
      *            Name of the player to remove.
      */
@@ -142,7 +142,7 @@ public abstract class CoolDownManager {
     /**
      * Returns true if cooldown is bypassed for the specified player, otherwise
      * false.
-     * 
+     *
      * @param player
      *            Player to check for cooldown bypass.
      * @return True if cooldown is bypassed, otherwise false.
@@ -151,7 +151,7 @@ public abstract class CoolDownManager {
 
     /**
      * Invoked when cooldown has expired for the specified player, before the player is removed from cooldown list.
-     * 
+     *
      * @param player
      *            Player for whom the cooldown has expired.
      */

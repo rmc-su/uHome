@@ -10,7 +10,7 @@ class PlayerTaskDetails {
 
     /**
      * Constructor with data values.
-     * 
+     *
      * @param taskIndex
      *            Index of the task in the scheduler.
      * @param finishTime

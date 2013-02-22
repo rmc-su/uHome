@@ -52,7 +52,7 @@ public class SuperPermsManager {
                 plugin.getLogger().info(player.getName() + " returned false for the node " + permission);
             }
         }
-        
+
         return ret;
     }
 

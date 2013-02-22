@@ -71,7 +71,7 @@ public class LocaleManager {
                     output = output.replaceAll("(?i)\\Q{{" + ekey + "}}\\E", Matcher.quoteReplacement(evalue));
                 }
             }
-            
+
             if (home != null) {
                 output = output.replaceAll("(?i)\\Q{{HOME}}\\E", Matcher.quoteReplacement(home.name));
                 output = output.replaceAll("(?i)\\Q{{OWNER}}\\E", Matcher.quoteReplacement(home.owner));
