@@ -1,4 +1,4 @@
-uHome - A multiple private home warp plugin for Bukkit and Minecraft.
+Fork of uHome for rmc.su
 ===========
 
 
