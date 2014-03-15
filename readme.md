@@ -1,4 +1,4 @@
-Fork of uHome for rmc.su
+Fork of uHome for RMC.SU
 ===========
 
 
